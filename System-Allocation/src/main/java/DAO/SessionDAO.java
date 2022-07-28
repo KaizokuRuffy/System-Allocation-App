@@ -149,7 +149,8 @@ public class SessionDAO
 				  + ColumnName.LogOut_Time.value + " = ?, " + ColumnName.Total_Time.value + " = ? "
 				 + " WHERE " + ColumnName.Emp_ID.value + " = ? "
 		    	 + " AND " + ColumnName.Comp_ID.value + " = ? "
-			     + " AND " + ColumnName.LogIn_Date.value + " = ? ";
+			     + " AND " + ColumnName.LogIn_Date.value + " = ? "
+			     + " AND " + ColumnName.LogIn_Time.value + " = ? ";
 
 		try(Connection conn = JDBC_Connection.getConnection();
 			PreparedStatement ps = conn.prepareStatement(query);)
@@ -168,12 +169,13 @@ public class SessionDAO
 			ps.setInt(5, session.getComp_Id());
 //			ps.setString(12, ColumnName.LogIn_Date.value);
 			ps.setObject(6, session.getLogIn_Date());
+			ps.setObject(7, session.getLogIn_Time());
 			
 			int rs = ps.executeUpdate();
 			
 //			if(rs == 1)
 //				System.out.println("Current session data is updated successfully");
-			
+			System.out.println(rs);
 			return rs;
 		} 
 		catch (SQLException e) 
