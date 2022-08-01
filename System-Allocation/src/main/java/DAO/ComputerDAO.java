@@ -36,8 +36,9 @@ public class ComputerDAO
 		String query = "select count(*)"
 					 + "from " + TableName.getComputer();
 		
-		try (Connection conn = JDBC_Connection.getConnection();
-				 Statement st = conn.createStatement();
+		Connection conn = JDBC_Connection.getConnection();
+		 
+		try (Statement st = conn.createStatement();
 				 ResultSet rs = st.executeQuery(query))
 			{
 				int count = 0;
@@ -50,6 +51,7 @@ public class ComputerDAO
 			} 
 			catch (SQLException e) 
 			{
+				JDBC_Connection.close();
 				e.printStackTrace();
 			}
 		
@@ -61,8 +63,9 @@ public class ComputerDAO
 		String query = " INSERT INTO " + TableName.getComputer()
 				+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 	
-		try(Connection conn = JDBC_Connection.getConnection();
-			PreparedStatement ps = conn.prepareStatement(query)) 
+		Connection conn = JDBC_Connection.getConnection();
+		
+		try(PreparedStatement ps = conn.prepareStatement(query)) 
 		{
 //			System.out.println("Adding computer details to database");
 			
@@ -90,6 +93,7 @@ public class ComputerDAO
 		} 
 		catch (SQLException e) 
 		{
+			JDBC_Connection.close();
 			e.printStackTrace();
 		}
 		return 0;
@@ -102,8 +106,9 @@ public class ComputerDAO
 		String query = "SELECT * "
 				 + "FROM " + TableName.getComputer();
 
-		try(Connection conn = JDBC_Connection.getConnection();
-			PreparedStatement ps = conn.prepareStatement(query);
+		Connection conn = JDBC_Connection.getConnection();
+		
+		try(PreparedStatement ps = conn.prepareStatement(query);
 			ResultSet rs = ps.executeQuery())
 		{		
 			List<Computer> computerList = new ArrayList<>();
@@ -127,6 +132,7 @@ public class ComputerDAO
 		} 
 		catch (SQLException e) 
 		{
+			JDBC_Connection.close();
 			e.printStackTrace();
 		}
 		
@@ -159,8 +165,9 @@ public class ComputerDAO
 		
 		 System.out.println(query);
 		  
-		try(Connection conn = JDBC_Connection.getConnection();
-			PreparedStatement ps = conn.prepareStatement(query);)
+		Connection conn = JDBC_Connection.getConnection();
+			
+		try(PreparedStatement ps = conn.prepareStatement(query);)
 		{
 			
 			ps.setString(1, value);
@@ -174,6 +181,7 @@ public class ComputerDAO
 		} 
 		catch (SQLException e) 
 		{
+			JDBC_Connection.close();
 			e.printStackTrace();
 		} 
 		

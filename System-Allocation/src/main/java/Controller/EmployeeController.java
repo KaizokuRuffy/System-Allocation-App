@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Beans.Employee;
+import Controller.Util.Counter;
 import Controller.Util.Json;
 import Controller.Util.Message;
 import Service.EmployeeService;
@@ -92,7 +93,7 @@ public class EmployeeController extends HttpServlet
 				System.out.println("--- Authenticating admin ---");
 				
 				int emp_Id = Integer.parseInt(request.getParameter("emp_Id"));//var
-				String Password = request.getParameter("emp_Password");//var
+				String Password = new String(request.getParameter("emp_Password"));//var
 						
 				Boolean auth = employeeService.Authenticate(emp_Id, Password); // DB call
 				
@@ -106,6 +107,11 @@ public class EmployeeController extends HttpServlet
 				{
 					System.out.println("Logged in successfully");
 					System.out.println("After login");
+					
+					request.getSession().setAttribute("status", "logged in");
+
+					Counter.getcounter().atLogin();
+					
 					// Calling 'SessionController' servlet to add session data to database as the user logs in
 					RequestDispatcher rd = request.getRequestDispatcher("/SessionController/addSession");
 					rd.forward(request, response);
@@ -122,6 +128,12 @@ public class EmployeeController extends HttpServlet
 			case "/userLogout" :	
 				
 				System.out.println("\n-- User logging out of the web site --");
+				
+				request.getSession().invalidate();
+
+				Counter.getcounter().atLogout();
+				
+				// Calling 'SessionController' servlet to update session data to database as the user logs out
 				RequestDispatcher rd = request.getRequestDispatcher("/SessionController/updateSession");
 				rd.forward(request, response);
 				

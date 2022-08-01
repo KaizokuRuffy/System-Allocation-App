@@ -10,8 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Beans.Admin;
+import Controller.Util.Counter;
 import Controller.Util.Json;
-import Controller.Util.LoginFilter;
+//import Controller.Util.LoginFilter;
 import Controller.Util.Message;
 import Service.AdminService;
 
@@ -33,9 +34,9 @@ public class AdminController extends HttpServlet {
 				
 				System.out.println("\n-- Checking if there is admin is already present --");
 				
-				if(!AdminService.isEmpty())
+				if(!adminService.isEmpty())
 				{
-					if(AdminService.isAdminPresent())
+					if(adminService.isAdminPresent())
 					{
 						response.setContentType("application/text");
 						request.setAttribute("status", "yes");
@@ -57,6 +58,7 @@ public class AdminController extends HttpServlet {
 					response.getWriter().write("No - DB empty");
 					new Message().infoToClient(response);
 				}
+				Counter.getcounter().userNotPresent();
 				
 				break;
 			
@@ -66,6 +68,8 @@ public class AdminController extends HttpServlet {
 				System.out.println("\n-- Admin logging out of the web site --");
 				request.getSession().invalidate();
 				new Message().infoToClient(response);
+				
+				Counter.getcounter().atLogout();
 				
 				break;
 				
@@ -93,23 +97,27 @@ public class AdminController extends HttpServlet {
 			
 				System.out.println("\n-- Admin registration operation --");
 				
-				if(AdminService.isEmpty())
+				if(adminService.isEmpty())
 				{
 					if(AdminService.createDatabase()) // DB call
 					{
 						new Message().infoToClient(response);
+						AdminService.setEmpty(false);
 					}
 					else
 					{
 						response.sendError(403, "Database problem");
 						System.out.println("Database connection problem");
 					}
+
+					Counter.getcounter().userNotPresent();
 				}
 				else
 				{
 					System.out.println("Database already created");
 					new Message().infoToClient(response);
 				}
+				
 				
 				break;
 				
@@ -129,7 +137,7 @@ public class AdminController extends HttpServlet {
 				System.out.println("\n-- Authenticating admin --");
 				
 				int admin_id = Integer.parseInt(request.getParameter("admin_Id"));//var
-				String Password = request.getParameter("admin_Password");//var
+				String Password = new String(request.getParameter("admin_Password"));//var
 						
 				Boolean auth = adminService.Authenticate(admin_id, Password); // DB call
 				
@@ -143,9 +151,13 @@ public class AdminController extends HttpServlet {
 				{
 					System.out.println("Logged in successfully");
 					request.getSession().setAttribute("status", "logged in");
-					System.out.println(request.getSession().getId());
-					System.out.println(request.getSession().getAttribute("status"));
+					
+					Counter.getcounter().atLogin();
+					
+//					System.out.println(request.getSession().getId());
+//					System.out.println(request.getSession().getAttribute("status"));
 					new Message().infoToClient(response);
+					
 				}
 				else if(auth == false)			
 				{
@@ -163,7 +175,7 @@ public class AdminController extends HttpServlet {
 				Admin admin = new Json().toPojo(request, Admin.class);
 		
 //				System.out.println(admin);
-				boolean before = AdminService.isAdminPresent(); 
+				boolean before = adminService.isAdminPresent(); 
 				
 				if(admin != null)
 				{
@@ -180,14 +192,16 @@ public class AdminController extends HttpServlet {
 					}
 				}
 				
-				boolean after = AdminService.isAdminPresent(); 
+				boolean after = adminService.isAdminPresent(); 
 				
 				if(before ^ after)
-					LoginFilter.getExclude().accept(LoginFilter.getUrls().get("Admin present"));
+				{
+					AdminService.setAdminPresent(true);
+//					LoginFilter.getExclude().accept(LoginFilter.getUrls().get("Admin present"));
+				}
 					
 				break;
 				
-			
 		}
 	}
 

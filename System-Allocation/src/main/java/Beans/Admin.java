@@ -45,11 +45,11 @@ public class Admin implements Serializable
 	}
 
 	public String getAdmin_Password() {
-		return admin_Password;
+		return new String(admin_Password);
 	}
 
 	public void setAdmin_Password(String admin_Password) {
-		this.admin_Password = admin_Password;
+		this.admin_Password = new String(admin_Password);
 	}
 
 	public Admin()
@@ -72,7 +72,7 @@ public class Admin implements Serializable
 		this.admin_Name = admin_Name;
 		this.admin_Email = admin_Email;
 		this.admin_ContactNo = admin_ContactNo;
-		this.admin_Password = admin_Password;
+		this.admin_Password = new String(admin_Password);
 	}
 	
 	@Override

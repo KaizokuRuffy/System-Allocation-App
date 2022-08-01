@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import Beans.Employee;
 import DAO.Util.JDBC_Connection;
@@ -47,8 +49,9 @@ public class EmployeeDAO
 		String query = "select count(*)"
 					 + "from " + TableName.getEmployee();
 		
-		try (Connection conn = JDBC_Connection.getConnection();
-				 Statement st = conn.createStatement();
+		Connection conn = JDBC_Connection.getConnection();
+		 
+		try (Statement st = conn.createStatement();
 				 ResultSet rs = st.executeQuery(query))
 			{
 				int count = 0;
@@ -67,24 +70,30 @@ public class EmployeeDAO
 		return 0;
 	}
 	
-	public String getPassword(int emp_Id) {
+	public Map<String,String> getPassword(int emp_Id) {
 		
 //		System.out.println("Getting password of Employee " + emp_Id);
 		
-		String query = " SELECT " + ColumnName.Password
+		String query = " SELECT " + ColumnName.Password + ", " + ColumnName.Name
 				 + " FROM " + TableName.getEmployee()
 				 + " WHERE " + ColumnName.ID + " = " + emp_Id;
 		
-		try(Connection conn = JDBC_Connection.getConnection();
-			PreparedStatement ps = conn.prepareStatement(query);
+		Connection conn = JDBC_Connection.getConnection();
+		
+		try(PreparedStatement ps = conn.prepareStatement(query);
 			ResultSet rs = ps.executeQuery()) 
 		{
 			if(rs.next())
 			{
-				String emp_Password = rs.getString(ColumnName.Password.toString());
+				String emp_Password = new String(rs.getString(ColumnName.Password.toString()));
+				String emp_Name = rs.getString(ColumnName.Name.toString());
 //				System.out.println(ColumnName.Password + " " + emp_Password);
 				
-				return emp_Password ;
+				Map<String,String> map = new HashMap<>();
+				map.put("name", emp_Name);
+				map.put("password", emp_Password);
+				
+				return map ;
 			}
 		} 
 		catch (SQLException e) 
@@ -102,8 +111,9 @@ public class EmployeeDAO
 		String query = " INSERT INTO " + TableName.getEmployee() + 
 					   " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-		try(Connection conn = JDBC_Connection.getConnection();
-			PreparedStatement ps = conn.prepareStatement(query))
+		Connection conn = JDBC_Connection.getConnection();
+		
+		try(PreparedStatement ps = conn.prepareStatement(query))
 		{
 
 			if(emp.getEmp_Id() != 0)
@@ -144,8 +154,9 @@ public class EmployeeDAO
 					 + " FROM " + TableName.getEmployee()
 					 + " WHERE " + ColumnName.ID + " = " +emp_Id ;
 
-		try(Connection conn = JDBC_Connection.getConnection();
-			PreparedStatement ps = conn.prepareStatement(query);
+		Connection conn = JDBC_Connection.getConnection();
+
+		try(PreparedStatement ps = conn.prepareStatement(query);
 			ResultSet rs = ps.executeQuery())
 		{
 
@@ -172,6 +183,7 @@ public class EmployeeDAO
 		} 
 		catch (SQLException e) 
 		{
+			JDBC_Connection.close();
 			e.printStackTrace();
 		}
 		return null;
@@ -184,8 +196,9 @@ public class EmployeeDAO
 		String query = " SELECT * "
 				 + " FROM " + TableName.getEmployee() ;
 
-		try(Connection conn = JDBC_Connection.getConnection();
-			PreparedStatement ps = conn.prepareStatement(query);
+		Connection conn = JDBC_Connection.getConnection();
+		
+		try(PreparedStatement ps = conn.prepareStatement(query);
 			ResultSet rs = ps.executeQuery())
 		{
 			List<Employee> employeeList = new ArrayList<>();
@@ -199,7 +212,7 @@ public class EmployeeDAO
 				emp.setEmp_Email(rs.getString(ColumnName.Email_ID.value.replaceAll("`", "")));;
 				emp.setEmp_MobileNo(rs.getString
 										(ColumnName.Mobile_No.value.replaceAll("`", "")));;
-				emp.setEmp_Password(rs.getString(ColumnName.Password.toString()));;
+				emp.setEmp_Password(new String(rs.getString(ColumnName.Password.toString())));;
 				emp.setEmp_Role(rs.getString(ColumnName.Role.toString()));;
 				emp.setEmp_Dept(rs.getString(ColumnName.Department.toString()));;
 				emp.setEmp_WorkLoc(rs.getString
@@ -213,6 +226,7 @@ public class EmployeeDAO
 		} 
 		catch (SQLException e) 
 		{
+			JDBC_Connection.close();
 			e.printStackTrace();
 		}
 

@@ -1,5 +1,6 @@
 package Controller.Util;
 
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,15 +59,17 @@ public class LoginFilter implements Filter
 		URLs.put("Admin not present", "/System-Allocation,/adminPresent,/adminLogin,/create,/addAdmin,/userLogin");
 		URLs.put("Admin present","/System-Allocation,/adminPresent,/adminLogin,/userLogin");
 		
-		exclude.accept(AdminService.isAdminPresent() 
+		exclude.accept(new AdminService().isAdminPresent() 
 				? URLs.get("Admin present") : URLs.get("Admin not present"));
+
+		System.out.println(exludeURLs);
 	}
 	
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
 			throws IOException, ServletException {
 		
-		System.out.println("Inside doFilter()....");
+//		System.out.println("Inside doFilter()....");
 		
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
@@ -82,16 +85,17 @@ public class LoginFilter implements Filter
 		System.out.println(request.getSession().getId());
 		System.out.println(request.getSession().getAttribute("status"));
 		*/
-		chain.doFilter(req, res);
 		
-//		if( ((HttpServletRequest)req).getPathInfo() == null
-//				|| exludeURLs.contains(((HttpServletRequest)req).getPathInfo()) 
-//				|| request.getSession().getAttribute("status") != null )
-//			
-//			chain.doFilter(req, res);
-//		
-//		else 
-//			response.sendError(403, "User not logged in");
+//		chain.doFilter(req, res);
+		
+		if( ((HttpServletRequest)req).getPathInfo() == null
+				|| exludeURLs.contains(((HttpServletRequest)req).getPathInfo()) 
+				|| request.getSession().getAttribute("status") != null )
+			
+			chain.doFilter(req, res);
+		
+		else 
+			response.sendError(403, "User not logged in");
 		
 	}
 
@@ -126,4 +130,5 @@ public class LoginFilter implements Filter
 	}
 
 }
+
 

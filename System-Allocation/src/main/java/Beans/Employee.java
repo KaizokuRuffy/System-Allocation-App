@@ -1,4 +1,4 @@
-package Beans;
+ package Beans;
 
 import java.io.Serializable;
 
@@ -57,11 +57,11 @@ public class Employee implements Serializable
 	}
 
 	public String getEmp_Password() {
-		return emp_Password;
+		return new String(emp_Password);
 	}
 
 	public void setEmp_Password(String emp_Password) {
-		this.emp_Password = emp_Password;
+		this.emp_Password = new String(emp_Password);
 	}
 
 	public String getEmp_Role() {
@@ -109,7 +109,7 @@ public class Employee implements Serializable
 		this.emp_AdhaarId = emp_AdhaarId;
 		this.emp_Email = emp_Email;
 		this.emp_MobileNo = emp_MobileNo;
-		this.emp_Password = emp_Password;
+		this.emp_Password = new String(emp_Password);
 		this.emp_Role = emp_Role;
 		this.emp_Dept = emp_Dept;
 		this.emp_WorkLoc = emp_WorkLoc;

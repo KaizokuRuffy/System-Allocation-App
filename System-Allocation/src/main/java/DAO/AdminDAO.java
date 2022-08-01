@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 
 import Beans.Admin;
 import DAO.Util.JDBC_Connection;
@@ -33,12 +35,13 @@ public class AdminDAO
 			 +  ColumnName.Contact_No.value + " varchar(255), "
 			 +  ColumnName.Password + " varchar(255),"
 			+ " PRIMARY KEY (" + ColumnName.ID  +") )" ;
-	
+
+    
 	public static int[] createTable()  
 	{
-
-		try (Connection conn = JDBC_Connection.getConnection();
-			 Statement st = conn.createStatement())
+		Connection conn = JDBC_Connection.getConnection();
+		 
+		try (Statement st = conn.createStatement())
 		{
 			int[] result = null;
 			st.addBatch(AdminDAO.getCreateTable());
@@ -57,20 +60,24 @@ public class AdminDAO
 		}
 		catch(Exception e)
 		{
+			JDBC_Connection.close();
 			System.out.println(e);
 		}
 		
 		return null;
 	}
 	
-	public static boolean isDatabaseEmpty()
+	public boolean isDatabaseEmpty()
 	{
 		String show = "SELECT count(*) "
 				+ " FROM INFORMATION_SCHEMA.TABLES "
 				+ " WHERE TABLE_SCHEMA = '" + TableName.getDatabase() +"'"  ;
+		
 //		System.out.println(show);
-		try (Connection conn = JDBC_Connection.getConnection();
-			 Statement st = conn.createStatement();
+		
+		Connection conn = JDBC_Connection.getConnection();
+		 
+		try (Statement st = conn.createStatement();
 			 ResultSet rs = st.executeQuery(show))
 		{
 			
@@ -84,19 +91,21 @@ public class AdminDAO
 		} 
 		catch (SQLException e) 
 		{
+			JDBC_Connection.close();
 			e.printStackTrace();
 		}
 		
 		return true;
 	}
 	
-	public static int noOfRows()
+	public int noOfRows()
 	{
 		String query = "select count(*)"
 					 + "from " + TableName.getAdmin();
 		
-		try (Connection conn = JDBC_Connection.getConnection();
-				 Statement st = conn.createStatement();
+		Connection conn = JDBC_Connection.getConnection();
+		 
+		try (Statement st = conn.createStatement();
 				 ResultSet rs = st.executeQuery(query))
 			{
 				int count = 0;
@@ -109,34 +118,42 @@ public class AdminDAO
 			} 
 			catch (SQLException e) 
 			{
+				JDBC_Connection.close();
 				e.printStackTrace();
 			}
 		
 		return 0;
 	}
 	
-	public String getPassword(int admin_ID) {
+	public Map<String,String> getPassword(int admin_ID) {
 		
 //		System.out.println("Getting password of Admin " + admin_ID);
 		
-		String query = "SELECT " + ColumnName.Password
+		String query = "SELECT " + ColumnName.Password + ", " + ColumnName.Name
 					 + " FROM " + TableName.getAdmin()
 					 + " WHERE " + ColumnName.ID + " = " + admin_ID;
-
-		try  (Connection conn = JDBC_Connection.getConnection();
-			  PreparedStatement ps = conn.prepareStatement(query);
+		
+		Connection conn = JDBC_Connection.getConnection();
+		 
+		try  (PreparedStatement ps = conn.prepareStatement(query);
 		      ResultSet rs = ps.executeQuery())
 		{
 			if(rs.next())
 			{
-				String admin_Password = rs.getString(ColumnName.Password.toString());
+				String admin_Password = new String(rs.getString(ColumnName.Password.toString()));
+				String admin_Name = rs.getString(ColumnName.Name.toString());
 //				System.out.println(ColumnName.Password + " " +admin_Password);
 				
-				return admin_Password;
+				Map<String,String> map = new HashMap<>();
+				map.put("name", admin_Name);
+				map.put("password", admin_Password);
+				
+				return map;
 			}
 		} 
 		catch (SQLException e) 
 		{
+			JDBC_Connection.close();
 			e.printStackTrace();
 		}
 		return null;
@@ -148,8 +165,9 @@ public class AdminDAO
 		String query = "INSERT INTO " + TableName.getAdmin() + 
 											" VALUES (?, ?, ?, ?, ?)";
 
-		try (Connection conn = JDBC_Connection.getConnection();
-			 PreparedStatement ps = conn.prepareStatement(query))
+		Connection conn = JDBC_Connection.getConnection();
+		 
+		try (PreparedStatement ps = conn.prepareStatement(query))
 		{
 
 			if(admin.getAdmin_Id() != 0)
@@ -174,6 +192,7 @@ public class AdminDAO
 		} 
 		catch (SQLException e) 
 		{
+			JDBC_Connection.close();
 			e.printStackTrace();
 		}
 		return 0;
@@ -187,8 +206,9 @@ public class AdminDAO
 					 + " FROM " + TableName.getAdmin()
 					 + " WHERE " + ColumnName.ID + " = " + admin_ID;
 		
-		try(Connection conn = JDBC_Connection.getConnection();
-			PreparedStatement ps = conn.prepareStatement(query);
+		Connection conn = JDBC_Connection.getConnection();
+		
+		try(PreparedStatement ps = conn.prepareStatement(query);
 			ResultSet rs = ps.executeQuery())
 		{
 			if(rs.next())
@@ -206,6 +226,7 @@ public class AdminDAO
 		} 
 		catch (SQLException e) 
 		{
+			JDBC_Connection.close();
 			e.printStackTrace();
 		}
 	
