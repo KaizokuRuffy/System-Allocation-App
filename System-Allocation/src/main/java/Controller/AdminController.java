@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import Beans.Admin;
 import Controller.Util.Counter;
 import Controller.Util.Json;
+import Controller.Util.LoginFilter;
 //import Controller.Util.LoginFilter;
 import Controller.Util.Message;
 import Service.AdminService;
@@ -33,7 +34,7 @@ public class AdminController extends HttpServlet {
 			case "/adminPresent" :
 				
 				System.out.println("\n-- Checking if there is admin is already present --");
-				
+//				System.out.println(request.getSession().getId());
 				if(!adminService.isEmpty())
 				{
 					if(adminService.isAdminPresent())
@@ -87,7 +88,7 @@ public class AdminController extends HttpServlet {
 				}
 				else
 				{
-					System.out.println("Admin fetched successfully --> " + admin);
+					System.out.println("Admin fetched successfully ");
 					new Message().infoToClient(request, response, admin);
 				}
 				
@@ -150,8 +151,8 @@ public class AdminController extends HttpServlet {
 				else if(auth == true)
 				{
 					System.out.println("Logged in successfully");
-					request.getSession().setAttribute("status", "logged in");
-					
+					request.getSession(true).setAttribute("status", "admin logged in");
+//					request.getSession(true).set
 					Counter.getcounter().atLogin();
 					
 //					System.out.println(request.getSession().getId());
@@ -186,18 +187,19 @@ public class AdminController extends HttpServlet {
 					}
 					else
 					{
-						response.sendError(500, "Database error");
-						System.out.println("Database connection error");
+						response.sendError(500, "Duplicate user not allowed");
+						System.out.println("Duplicate user not allowed");
 						break;
 					}
 				}
 				
 				boolean after = adminService.isAdminPresent(); 
 				
-				if(before ^ after)
+				if(!before && after)
 				{
 					AdminService.setAdminPresent(true);
-//					LoginFilter.getExclude().accept(LoginFilter.getUrls().get("Admin present"));
+					LoginFilter.getExclude().accept(LoginFilter.getUrls().get("Admin present"));
+//					System.out.println(LoginFilter.getExludeURLs());
 				}
 					
 				break;

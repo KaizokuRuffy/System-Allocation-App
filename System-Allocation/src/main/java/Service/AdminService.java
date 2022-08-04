@@ -51,12 +51,14 @@ public class AdminService
 		if(isAdminPresent)
 			return true;
 		
-//		if(adminDAO.isDatabaseEmpty() || adminDAO.noOfRows() == 0)
-//			return false;
+		/*
+		if(adminDAO.isDatabaseEmpty() || adminDAO.noOfRows() == 0)
+			return false;
 		
-//		System.out.println("isEmpty -> "+isEmpty);
-//		System.out.println("adminDAO.isDatabaseEmpty() -> " + adminDAO.isDatabaseEmpty());
-//		System.out.println("isEmpty() -> " +isEmpty());
+		System.out.println("isEmpty -> "+isEmpty);
+		System.out.println("adminDAO.isDatabaseEmpty() -> " + adminDAO.isDatabaseEmpty());
+		System.out.println("isEmpty() -> " +isEmpty());
+		*/
 		
 		if(isEmpty())
 			return false;
@@ -77,7 +79,7 @@ public class AdminService
 
 			admin_Password = map.get("password");
 			
-			Cipher cipher = new Cipher(admin_Password, ((Integer)admin_Id).toString(), map.get("name"));
+			Cipher cipher = new Cipher(admin_Password, ((Integer)admin_Id).toString(), map.get("name"), "admin");
 			admin_Password = cipher.decrypt();
 		}
 		catch (NullPointerException e) 
@@ -94,7 +96,7 @@ public class AdminService
 	public boolean createUser(Admin admin)
 	{
 		Cipher cipher = new Cipher(admin.getAdmin_Password(), 
-										((Integer)admin.getAdmin_Id()).toString(), admin.getAdmin_Name(), true);
+										((Integer)admin.getAdmin_Id()).toString(), admin.getAdmin_Name(),"admin", true);
 		
 		admin.setAdmin_Password(cipher.encrypt());
 		
@@ -111,7 +113,7 @@ public class AdminService
 		admin = adminDAO.selectRecord(admin_Id);
 		
 		Cipher cipher = new Cipher(admin.getAdmin_Password(), 
-				((Integer)admin.getAdmin_Id()).toString(), admin.getAdmin_Name());
+				((Integer)admin.getAdmin_Id()).toString(), admin.getAdmin_Name(), "admin");
 		
 		admin.setAdmin_Password(cipher.decrypt());
 		

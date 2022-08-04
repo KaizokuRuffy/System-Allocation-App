@@ -22,13 +22,16 @@ public class EmployeeService
 
 			emp_Password = map.get("password");
 			
-			Cipher cipher = new Cipher(Password, ((Integer)emp_Id).toString(), map.get("name"), true);
-			Password = cipher.encrypt();
+			Cipher cipher = new Cipher(emp_Password, ((Integer)emp_Id).toString(), map.get("name"), "user");
+			emp_Password = cipher.decrypt();
 		}
 		catch (NullPointerException e) 
 		{
 			return null;
 		}
+		
+//		System.out.println("Entered password -- " + Password);
+//		System.out.println("Password in db -- " + emp_Password);
 		
 		if(Password.equals(emp_Password))
 			return true;
@@ -40,7 +43,7 @@ public class EmployeeService
 	{
 		
 		Cipher cipher = new Cipher(emp.getEmp_Password(), 
-				((Integer)emp.getEmp_Id()).toString(), emp.getEmp_Name(), true);
+				((Integer)emp.getEmp_Id()).toString(), emp.getEmp_Name(), "user", true);
 
 		emp.setEmp_Password(cipher.encrypt());
 		
@@ -57,7 +60,7 @@ public class EmployeeService
 		emp = employeeDAO.selectRecord(emp_Id);
 		
 		Cipher cipher = new Cipher(emp.getEmp_Password(), 
-				((Integer)emp.getEmp_Id()).toString(), emp.getEmp_Name());
+				((Integer)emp.getEmp_Id()).toString(), emp.getEmp_Name(), "user");
 		
 		emp.setEmp_Password(cipher.decrypt());;
 		
@@ -73,7 +76,7 @@ public class EmployeeService
 		for(Employee emp : employeeList)
 		{
 			Cipher cipher = new Cipher(emp.getEmp_Password(), 
-					((Integer)emp.getEmp_Id()).toString(), emp.getEmp_Name());
+					((Integer)emp.getEmp_Id()).toString(), emp.getEmp_Name(), "user");
 
 			emp.setEmp_Password(cipher.decrypt());
 		}

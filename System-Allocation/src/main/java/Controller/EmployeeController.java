@@ -90,7 +90,7 @@ public class EmployeeController extends HttpServlet
 		{		
 			case "/userLogin" :
 				
-				System.out.println("--- Authenticating admin ---");
+				System.out.println("--- Authenticating user ---");
 				
 				int emp_Id = Integer.parseInt(request.getParameter("emp_Id"));//var
 				String Password = new String(request.getParameter("emp_Password"));//var
@@ -108,8 +108,8 @@ public class EmployeeController extends HttpServlet
 					System.out.println("Logged in successfully");
 					System.out.println("After login");
 					
-					request.getSession().setAttribute("status", "logged in");
-
+					request.getSession(true).setAttribute("status", "employee logged in");
+//					System.out.println(request.getSession().getId());
 					Counter.getcounter().atLogin();
 					
 					// Calling 'SessionController' servlet to add session data to database as the user logs in
@@ -128,7 +128,7 @@ public class EmployeeController extends HttpServlet
 			case "/userLogout" :	
 				
 				System.out.println("\n-- User logging out of the web site --");
-				
+//				System.out.println(request.getSession().getId());
 				request.getSession().invalidate();
 
 				Counter.getcounter().atLogout();
@@ -157,8 +157,8 @@ public class EmployeeController extends HttpServlet
 					}
 					else
 					{
-						System.out.println("Database error");
-						response.sendError(500, "Database error");
+						System.out.println("Duplicate user not allowed");
+						response.sendError(500, "Duplicate user not allowed");
 					}
 				}
 				

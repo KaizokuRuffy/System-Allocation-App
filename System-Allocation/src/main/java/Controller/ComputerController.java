@@ -78,6 +78,7 @@ public class ComputerController extends HttpServlet
 					}
 					else
 					{
+						System.out.println("Duplicate resource cannot be added.");
 						response.sendError(500, "Database error");
 					}
 				}

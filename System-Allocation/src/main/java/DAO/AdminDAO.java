@@ -31,8 +31,8 @@ public class AdminDAO
 	private static String createTable = "CREATE TABLE IF NOT EXISTS " + TableName.getAdmin() +
 			 " ( " + ColumnName.ID + " INT NOT NULL AUTO_INCREMENT, "
 			 +  ColumnName.Name + " varchar(255), "
-			 +  ColumnName.Email_ID.value + " varchar(255), "
-			 +  ColumnName.Contact_No.value + " varchar(255), "
+			 +  ColumnName.Email_ID.value + " varchar(255) UNIQUE, "
+			 +  ColumnName.Contact_No.value + " varchar(255) UNIQUE, "
 			 +  ColumnName.Password + " varchar(255),"
 			+ " PRIMARY KEY (" + ColumnName.ID  +") )" ;
 

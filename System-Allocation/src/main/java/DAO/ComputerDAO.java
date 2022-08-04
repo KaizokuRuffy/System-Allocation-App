@@ -22,7 +22,7 @@ public class ComputerDAO
 	
 	private static String createTable = "CREATE TABLE IF NOT EXISTS " + TableName.getComputer() +
 			" ( " + ColumnName.ID + " INT NOT NULL AUTO_INCREMENT, "
-			  	  + ColumnName.MAC + " varchar(255), "
+			  	  + ColumnName.MAC + " varchar(255) UNIQUE, "
 			  	  + ColumnName.Password + " varchar(255), "
 			  	  + ColumnName.Available + " varchar(255), "
 			  	  + ColumnName.Working + " varchar(255), "
@@ -125,7 +125,7 @@ public class ComputerDAO
 				comp.setModel(rs.getString(ColumnName.Model.toString()));
 				comp.setYear(rs.getInt(ColumnName.Year.toString()));
 				
-				System.out.println(comp);
+//				System.out.println(comp);
 				computerList.add(comp);
 			}
 			return computerList;
@@ -163,7 +163,7 @@ public class ComputerDAO
 		      + ", " + ColumnName.Available + " = '" + yes + "' "
 			  + " WHERE " + ColumnName.ID.toString() + " = " + comp_Id ;
 		
-		 System.out.println(query);
+//		 System.out.println(query);
 		  
 		Connection conn = JDBC_Connection.getConnection();
 			

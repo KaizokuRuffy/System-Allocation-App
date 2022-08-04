@@ -41,7 +41,7 @@ public class SessionService
 	{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat SDF = new SimpleDateFormat("yyyy-mm-dd HH:mm");
-//		System.out.println(session);
+
 		Date d1 = null;
 		try 
 		{

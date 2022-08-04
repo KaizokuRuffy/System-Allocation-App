@@ -3,6 +3,7 @@ package Controller.Util;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import Service.AdminService;
 
@@ -35,18 +37,29 @@ import Service.AdminService;
 		urlPatterns = "/*", 
 		initParams = @WebInitParam
 					(	name = "excludeURLs", 
-						value = "/adminPresnt,/adminLogin,/create,/addAdmin,/userLogin") 
+						value = "/adminPresent,/adminLogin,/create,/addAdmin,/userLogin") 
 )
 public class LoginFilter implements Filter
 {	
 	static private final Map<String, String> URLs = new HashMap<>();
 	private static List<String> exludeURLs = new ArrayList<>();
+	private static List<String> commonURLs = Arrays.asList(new String[]
+			{"/getUser", "/getAllSession"}
+			);
+	private static List<String> adminURLs = Arrays.asList(new String[]
+			{"/adminLogout", "/getAdmin", "/create", "/addAdmin", "/getAllUsers", "/addUser", 
+					"/getAllSystems", "/addSystem", "/updateStatus",}
+			);
+	private static List<String> employeeURLs = Arrays.asList( new String[]
+			{"/userLogout"}
+			);
 	
 	private static Consumer<String> exclude = (String urls) -> {
 		String[] s = urls.split(",");
 		
 		synchronized (exludeURLs) 
 		{
+			exludeURLs.clear();
 			for(String temp : s)
 				exludeURLs.add(temp);
 		}
@@ -56,12 +69,13 @@ public class LoginFilter implements Filter
 	static
 	{
 		System.out.println("Loading LoginFilter class");
-		URLs.put("Admin not present", "/System-Allocation,/adminPresent,/adminLogin,/create,/addAdmin,/userLogin");
-		URLs.put("Admin present","/System-Allocation,/adminPresent,/adminLogin,/userLogin");
+//		URLs.put("Admin not present", "/System-Allocation,/adminPresent,/adminLogin,/create,/addAdmin,/userLogin");
+//		URLs.put("Admin present","/System-Allocation,/adminPresent,/adminLogin,/userLogin");
+		URLs.put("Admin not present", "/adminPresent,/adminLogin,/create,/addAdmin,/userLogin");
+		URLs.put("Admin present","/adminPresent,/adminLogin,/userLogin");
 		
 		exclude.accept(new AdminService().isAdminPresent() 
 				? URLs.get("Admin present") : URLs.get("Admin not present"));
-
 		System.out.println(exludeURLs);
 	}
 	
@@ -73,6 +87,9 @@ public class LoginFilter implements Filter
 		
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
+		HttpSession sess = request.getSession(false);
+		
+//		System.out.println(request.getRequestURI() + " " + (sess != null ? sess.getId() : null));
 		
 		/*
 		System.out.println(request.getContextPath());
@@ -87,15 +104,50 @@ public class LoginFilter implements Filter
 		*/
 		
 //		chain.doFilter(req, res);
+//		System.out.println(request.getPathInfo());
 		
-		if( ((HttpServletRequest)req).getPathInfo() == null
-				|| exludeURLs.contains(((HttpServletRequest)req).getPathInfo()) 
-				|| request.getSession().getAttribute("status") != null )
+//		System.out.println(request.getContextPath() + " " + request.getPathInfo());
+		
+		if( request.getPathInfo() == null
+				|| exludeURLs.contains(request.getPathInfo()) )
 			
 			chain.doFilter(req, res);
 		
-		else 
-			response.sendError(403, "User not logged in");
+		else if(commonURLs.contains(request.getPathInfo()))
+		{
+//			System.out.println("in common url");
+			if(sess != null && sess.getAttribute("status") != null )
+				
+				chain.doFilter(req, res);
+			
+			else
+				response.sendError(403, "Cannot perform unauthorized operation.");
+		}
+		
+		else if(adminURLs.contains(request.getPathInfo()))
+		{
+//			System.out.println("in admin url");
+			if(sess != null && sess.getAttribute("status") != null 
+					&& sess.getAttribute("status").equals("admin logged in") )
+			{
+//				System.out.println(request.getPathInfo());
+				chain.doFilter(req, res);
+			}
+			else
+				response.sendError(403, "Cannot perform unauthorized operation.");
+		}
+		
+		else if(employeeURLs.contains(request.getPathInfo()))
+		{
+//			System.out.println("in employee url");
+			if(sess != null && sess.getAttribute("status") != null  && 
+					sess.getAttribute("status").equals("employee logged in") )
+				
+				chain.doFilter(req, res);
+			
+			else
+				response.sendError(403, "Cannot perform unauthorized operation.");
+		}
 		
 	}
 
@@ -113,16 +165,8 @@ public class LoginFilter implements Filter
 		return exludeURLs;
 	}
 
-	public static void setExludeURLs(List<String> exludeURLs) {
-		LoginFilter.exludeURLs = exludeURLs;
-	}
-
 	public static Consumer<String> getExclude() {
 		return exclude;
-	}
-
-	public static void setExclude(Consumer<String> exclude) {
-		LoginFilter.exclude = exclude;
 	}
 
 	public static Map<String, String> getUrls() {

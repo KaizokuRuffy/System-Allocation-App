@@ -13,9 +13,12 @@ public class Counter
 		counter = new Counter();
 	}
 	
-	private static long loginCount = 0l;
+	private long loginCount = 0l;
 	
-	
+	public long getLoginCount() {
+		return loginCount;
+	}
+
 	public static Counter getcounter() {
 		
 		return counter;
@@ -64,7 +67,10 @@ class SchedulerTask extends TimerTask {
 			
 		  try 
 		  {
-			  JDBC_Connection.close();
+			  if(Counter.getcounter().getLoginCount() == 0)
+				  JDBC_Connection.close();
+//			  else
+//				  Counter.getcounter().userNotPresent();
 		  }
 		  catch (Exception ex) 
 		  {

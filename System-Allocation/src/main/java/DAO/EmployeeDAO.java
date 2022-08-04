@@ -35,8 +35,8 @@ public class EmployeeDAO
 	private static String createTable = "CREATE TABLE IF NOT EXISTS " + TableName.getEmployee() +
 			" ( " + ColumnName.ID + " INT NOT NULL AUTO_INCREMENT, "
 			  	  + ColumnName.Name + " varchar(255), "
-			  	  + ColumnName.Adhaar_ID.value + " varchar(255), "
-			  	  + ColumnName.Email_ID.value + " varchar(255), "
+			  	  + ColumnName.Adhaar_ID.value + " varchar(255) UNIQUE, "
+			  	  + ColumnName.Email_ID.value + " varchar(255) UNIQUE, "
 			  	  + ColumnName.Mobile_No.value + " varchar(255), "
 			  	  + ColumnName.Password + " varchar(255), "
 			  	  + ColumnName.Role + " varchar(255), "

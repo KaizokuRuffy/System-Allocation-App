@@ -112,24 +112,24 @@ public class Cipher {
 		return new String(decrypted, StandardCharsets.ISO_8859_1);
 	}
 	
-	public Cipher(String plaintext, String iD, String name, boolean encrypt) {
+	public Cipher(String plaintext, String iD, String name, String who, boolean encrypt) {
 		
 		this.plaintext = plaintext;
 		ID = iD;
 		Name = name;
 		 
 		keysetFilename = "C:\\Users\\Kishore\\git\\System-Allocation-App\\System-Allocation"
-									+ "\\src\\main\\java\\Service\\Util\\Secret Key\\" + ID + Name + ".json";
+							+ "\\src\\main\\java\\Service\\Util\\Secret Key\\" + who + "\\" + ID + Name + ".json";
 	}
 	
-	public Cipher(String ciphertext, String iD, String name) {
+	public Cipher(String ciphertext, String iD, String name, String who) {
 		
 		this.ciphertext = ciphertext;
 		ID = iD;
 		Name = name;
 		 
 		keysetFilename = "C:\\Users\\Kishore\\git\\System-Allocation-App\\System-Allocation"
-									+ "\\src\\main\\java\\Service\\Util\\Secret Key\\" + ID + Name + ".json";
+							+ "\\src\\main\\java\\Service\\Util\\Secret Key\\" + who + "\\"  + ID + Name + ".json";
 	}
 	
 }
