@@ -1,7 +1,9 @@
 package Controller;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
+import java.util.TimerTask;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,8 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Beans.Computer;
+import Controller.Util.DATE;
 import Controller.Util.Json;
 import Controller.Util.Message;
+import Controller.Util.SchedulerTask;
 import Service.ComputerService;
 
 @WebServlet(urlPatterns = {"/SystemController/*"})
@@ -64,6 +68,12 @@ public class ComputerController extends HttpServlet
 		
 		switch(CRUD)
 		{
+			case "/updateStatus":
+				
+				doPut(request, response);
+				
+				break;
+				
 			case "/addSystem":
 				
 				System.out.println("\n-- Saving resource details to database --");
@@ -97,22 +107,78 @@ public class ComputerController extends HttpServlet
 		{
 			case "/updateStatus":
 				
-				int comp_Id = Integer.parseInt(request.getParameter("comp_Id"));
-				String colName = request.getParameter("colName");
-				String status = request.getParameter("status");
+				int comp_Id = 0;
+				String colName = null;
+				String status = null;
+				boolean flag = false;
+				
+				try
+				{
+					comp_Id = Integer.parseInt(request.getParameter("comp_Id"));
+					colName = request.getParameter("colName");
+					status = request.getParameter("status");
+				}
+				catch(NumberFormatException e)
+				{
+					flag = true;
+					comp_Id = (Integer)request.getAttribute("comp_Id");
+					colName = (String) request.getAttribute("colName");
+					status = (String) request.getAttribute("status");
+				}
 				
 				System.out.println("\n-- Updating " + colName + " status of system --");
 				
-				if(computerService.updateStatus(comp_Id, colName, status))
+				if(flag)
 				{
-					System.out.println("Status of system '" + comp_Id + 
-												"' is updated succesfully");
-					new Message().infoToClient(response);
+//					System.out.println(comp_Id + " " + colName + " " + status);
+					if(computerService.updateStatus(comp_Id, colName, status))
+					{
+						System.out.println("Status of system '" + comp_Id + 
+													"' is updated succesfully");
+						new Message().infoToClient(response);
+						
+						final int id = comp_Id;
+						final String cname = colName;
+						
+						Date date = null;
+//						System.out.println(new Date());
+//						System.out.println(DATE.getDate(8, 0, 0));
+//						System.out.println(DATE.getDate(16, 0, 0));
+//						System.out.println(DATE.getDate(23, 59, 59));
+						
+						if(DATE.getDate(8, 0, 0).toString().compareTo(new Date().toString()) >= 0)
+							date = DATE.getDate(8, 0, 0);
+						else if(DATE.getDate(16, 0, 0).toString().compareTo(new Date().toString()) >= 0)
+							date = DATE.getDate(14, 21, 0);
+						else if(DATE.getDate(23, 59, 59).toString().compareTo(new Date().toString()) >= 0)
+							date = DATE.getDate(0, 0, 0);
+						
+//						System.out.println(date);
+						
+						SchedulerTask st = new SchedulerTask();
+						st.schedule(new TimerTask() {
+							@Override
+							public void run() {
+								if(computerService.updateStatus(id, cname, "Yes"))
+								{
+									System.err.println("Status of system '" + id + 
+																"' is updated succesfully");
+								}
+							}
+						}, date); //1000*60*60*8L);
+					}
+					else
+					{
+						System.out.println("System not present in database. Wrong id entered.");
+						response.sendError(403, "System not present in database");
+					}
 				}
 				else
 				{
-					System.out.println("System not present in database. Wrong id entered.");
-					response.sendError(403, "System not present in database");
+					if(computerService.updateStatus(comp_Id, colName, status))
+						System.out.println("System availability status set as '" + status + "'");
+					new Message().infoToClient(response);
+//					request.getSession().invalidate();
 				}
 				
 				break;

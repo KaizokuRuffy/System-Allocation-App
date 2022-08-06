@@ -152,7 +152,7 @@ public class AdminController extends HttpServlet {
 				{
 					System.out.println("Logged in successfully");
 					request.getSession(true).setAttribute("status", "admin logged in");
-//					request.getSession(true).set
+					request.getSession(false).setMaxInactiveInterval(60*60);
 					Counter.getcounter().atLogin();
 					
 //					System.out.println(request.getSession().getId());

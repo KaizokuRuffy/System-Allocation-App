@@ -37,6 +37,14 @@ public class SessionService
 		return sessionList;
 	}
 	
+	public List<Session> getEmpSession(int emp_Id)
+	{
+		List<Session> sessionList = null;
+		
+		sessionList = sessionDAO.select(emp_Id);
+		return sessionList;
+	}
+	
 	public boolean updateSession(Session session)
 	{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

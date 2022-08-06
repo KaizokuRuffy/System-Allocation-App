@@ -2,7 +2,9 @@ package Controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.TimerTask;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,12 +12,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import Beans.Employee;
+import Beans.Session;
 import Controller.Util.Counter;
 import Controller.Util.Json;
 import Controller.Util.Message;
+import Controller.Util.SchedulerTask;
 import Service.EmployeeService;
+import Service.SessionService;
 
 @WebServlet(urlPatterns = {"/EmployeeController/*"})
 public class EmployeeController extends HttpServlet
@@ -44,8 +50,24 @@ public class EmployeeController extends HttpServlet
 				}
 				else
 				{
-					System.out.println("\nUser profile fetched successfully --> " + emp);
-					new Message().infoToClient(request, response, emp);
+					if(request.getSession(false).getAttribute("status").equals("admin logged in"))
+					{
+						System.out.println("\nUser profile fetched successfully");
+						List<Session> sessionList = new SessionService().getEmpSession(emp_Id);
+						List<Object> list = new ArrayList<>();
+						list.add(emp);
+						list.add(sessionList);
+						
+//						String s1 = new Gson().toJson(list);
+//						s1 = s1.substring(1, s1.length() - 1);
+//						s1 = "{" + s1 + "}";
+						new Message().infoToClient(request, response, list);
+					}
+					else if(request.getSession(false).getAttribute("status").equals("employee logged in"))
+					{
+						System.out.println("\nUser profile fetched successfully");
+						new Message().infoToClient(request, response, emp);
+					}
 				}
 				
 				break;
@@ -106,15 +128,41 @@ public class EmployeeController extends HttpServlet
 				else if(auth == true)
 				{
 					System.out.println("Logged in successfully");
-					System.out.println("After login");
 					
-					request.getSession(true).setAttribute("status", "employee logged in");
+					HttpSession sess = request.getSession(true);
+					sess.setAttribute("status", "employee logged in");
 //					System.out.println(request.getSession().getId());
-					Counter.getcounter().atLogin();
 					
 					// Calling 'SessionController' servlet to add session data to database as the user logs in
 					RequestDispatcher rd = request.getRequestDispatcher("/SessionController/addSession");
 					rd.forward(request, response);
+					
+					SchedulerTask st = new SchedulerTask();
+					st.schedule(new TimerTask() {
+						@Override
+						public void run() {
+							boolean flag = true;
+							try {
+//								System.out.println(emp_Id + " In try block");
+//								System.out.println(emp_Id + " " + sess.getAttribute("status"));
+								sess.getAttribute("status");
+							}
+							catch(IllegalStateException e)
+							{
+//								System.out.println(emp_Id + " In catch block");
+								flag = false;
+							}
+							if(flag)
+							{
+								System.err.println("Session of user '" + emp_Id + "' invalidated");
+								sess.invalidate();
+								Counter.getcounter().atLogout();
+							}
+							
+						}
+					}, 30000L); //*60*60*24L);
+					
+					Counter.getcounter().atLogin();
 				}
 				else if(auth == false)			
 				{
@@ -129,13 +177,16 @@ public class EmployeeController extends HttpServlet
 				
 				System.out.println("\n-- User logging out of the web site --");
 //				System.out.println(request.getSession().getId());
-				request.getSession().invalidate();
+//				request.getSession().invalidate();
 
-				Counter.getcounter().atLogout();
 				
 				// Calling 'SessionController' servlet to update session data to database as the user logs out
 				RequestDispatcher rd = request.getRequestDispatcher("/SessionController/updateSession");
 				rd.forward(request, response);
+				
+				request.getSession(false).invalidate();
+				Counter.getcounter().atLogout();
+				System.out.println("User logged out successfully");
 				
 				break;
 			

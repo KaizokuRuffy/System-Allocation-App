@@ -3,6 +3,7 @@ package Controller;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -79,7 +80,14 @@ public class SessionController extends HttpServlet
 					if(sessionService.addSession(session))
 					{
 						System.out.println("Session data of employee '" + session.getEmp_Id() + "' is added to database successfully");
-						new Message().infoToClient(response);
+//						new Message().infoToClient(response);
+						
+						RequestDispatcher rd = request.getRequestDispatcher("/SystemController/updateStatus");
+						request.setAttribute("comp_Id", session.getComp_Id());
+						request.setAttribute("colName", "available");
+						request.setAttribute("status", "No");
+						rd.forward(request, response);
+						
 					}
 					else
 					{
@@ -109,8 +117,15 @@ public class SessionController extends HttpServlet
 					if(sessionService.updateSession(session))
 					{
 						System.out.println("Session data for employee '" + session.getEmp_Id() + ", is updated successfully");
-						new Message().infoToClient(response);
-						request.getSession().invalidate();
+//						new Message().infoToClient(response);
+						
+						RequestDispatcher rd = request.getRequestDispatcher("/SystemController/updateStatus");
+						request.setAttribute("comp_Id", session.getComp_Id());
+						request.setAttribute("colName", "available");
+						request.setAttribute("status", "Yes");
+						rd.forward(request, response);
+						
+//						request.getSession().invalidate();
 					}
 					else
 					{

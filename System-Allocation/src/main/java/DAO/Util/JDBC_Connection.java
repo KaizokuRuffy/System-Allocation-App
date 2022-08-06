@@ -35,7 +35,7 @@ public class JDBC_Connection
 						synchronized (conn) {
 							if(!conn.isClosed())
 								conn.close();
-							System.out.println("Connecion closed...");
+							System.err.println("Connecion closed...");
 						}
 						
 						return true;

@@ -1,6 +1,5 @@
 package Controller.Util;
 
-import java.util.Timer;
 import java.util.TimerTask;
 
 import DAO.Util.JDBC_Connection;
@@ -30,8 +29,24 @@ public class Counter
 			synchronized (counter) {
 				if(loginCount == 0)
 				{
-					 Timer timer = new Timer();
-					 timer.schedule(new SchedulerTask(), 5000L); 
+					 SchedulerTask st = new SchedulerTask();
+					 st.schedule(new TimerTask() {
+						 
+						 @Override
+						  public void run() {
+							  try 
+							  {
+								  if(Counter.getcounter().getLoginCount() == 0)
+									  JDBC_Connection.close();
+//									  else
+//										  Counter.getcounter().userNotPresent();
+							  }
+							  catch (Exception ex) 
+							  {
+								 ex.printStackTrace();
+							  }
+						  }
+					 }, 5000L);
 				}
 //					JDBC_Connection.close();
 			}
@@ -60,21 +75,3 @@ public class Counter
 	}
 
 }
-
-class SchedulerTask extends TimerTask {
-	  @Override
-	  public void run() {
-			
-		  try 
-		  {
-			  if(Counter.getcounter().getLoginCount() == 0)
-				  JDBC_Connection.close();
-//			  else
-//				  Counter.getcounter().userNotPresent();
-		  }
-		  catch (Exception ex) 
-		  {
-			 ex.printStackTrace();
-		  }
-	  }
-	}
