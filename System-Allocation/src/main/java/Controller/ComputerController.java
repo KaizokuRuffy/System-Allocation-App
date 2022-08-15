@@ -149,11 +149,12 @@ public class ComputerController extends HttpServlet
 						if(DATE.getDate(8, 0, 0).toString().compareTo(new Date().toString()) >= 0)
 							date = DATE.getDate(8, 0, 0);
 						else if(DATE.getDate(16, 0, 0).toString().compareTo(new Date().toString()) >= 0)
-							date = DATE.getDate(14, 21, 0);
+							date = DATE.getDate(16, 0, 0);
 						else if(DATE.getDate(23, 59, 59).toString().compareTo(new Date().toString()) >= 0)
-							date = DATE.getDate(0, 0, 0);
+							date = DATE.getDate(23, 59, 59);
 						
-//						System.out.println(date);
+						
+						//System.out.println(date);
 						
 						SchedulerTask st = new SchedulerTask();
 						st.schedule(new TimerTask() {

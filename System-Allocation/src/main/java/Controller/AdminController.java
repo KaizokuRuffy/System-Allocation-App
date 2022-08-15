@@ -67,7 +67,7 @@ public class AdminController extends HttpServlet {
 			case "/adminLogout" :	
 				
 				System.out.println("\n-- Admin logging out of the web site --");
-				request.getSession().invalidate();
+				request.getSession(false).invalidate();
 				new Message().infoToClient(response);
 				
 				Counter.getcounter().atLogout();
@@ -137,22 +137,28 @@ public class AdminController extends HttpServlet {
 				
 				System.out.println("\n-- Authenticating admin --");
 				
-				int admin_id = Integer.parseInt(request.getParameter("admin_Id"));//var
-				String Password = new String(request.getParameter("admin_Password"));//var
-						
-				Boolean auth = adminService.Authenticate(admin_id, Password); // DB call
+				int admin_id = 0;
+				String Password = null;
+				Boolean auth = null;
 				
-				if(auth == null)
-				{
+				try {
+					admin_id = Integer.parseInt(request.getParameter("admin_Id"));//var
+					Password = new String(request.getParameter("admin_Password"));//var
+							
+					auth = adminService.Authenticate(admin_id, Password); // DB call
+				} catch (NumberFormatException e) {
 					out.write("Invalid username");
 					response.sendError(403, "Invalid username / password");
 					System.out.println("Username doesn't exist");
+					break;
 				}
-				else if(auth == true)
+
+				if(auth == true)
 				{
 					System.out.println("Logged in successfully");
 					request.getSession(true).setAttribute("status", "admin logged in");
-					request.getSession(false).setMaxInactiveInterval(60*60);
+					
+					request.getSession(false).setMaxInactiveInterval(60*30);
 					Counter.getcounter().atLogin();
 					
 //					System.out.println(request.getSession().getId());

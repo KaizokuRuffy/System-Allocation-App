@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-
+    <!-- src="http://127.0.0.1:8887/JavaScript/Event/Admin.js" -->
+    <script type="module" src="../JavaScript/Event/Admin.js"></script>
     <style>
       a {
         font-size: x-large;
@@ -16,9 +17,20 @@
         text-underline-position: below;
         text-decoration-thickness: 2px;
       }
-      th {
-        padding-right: 75px;
+      table {
+        border-collapse: collapse;
+        border-spacing: 0;
+      }
+      th,
+      td {
+        padding: 10px 20px;
+        border: 1px solid #000;
+      }
+
+      #Links th {
+        padding-right: 50px;
         padding-bottom: 10px;
+        border: none;
       }
     </style>
   </head>
@@ -36,6 +48,7 @@
     </h1>
     <div style="position: absolute; top: 40px; right: 75px">
       <button
+        id="adminLogout"
         type="button"
         style="
           width: 100px;
@@ -48,13 +61,47 @@
     </div>
 
     <div align="center">
-      <table>
-        <th><a href="">Profile</a></th>
-        <th><a href="">Employee data</a></th>
-        <th><a href="">Resource data</a></th>
-        <th><a href="">Session data</a></th>
+      <table id="Links">
+        <th>
+          <a href="javascript:;" id="getAdmin">Profile</a
+          >&nbsp;&nbsp;&nbsp;&nbsp;<button
+            type="button"
+            id="regAdmin"
+            style="font-size: 15px"
+          >
+            Add Admin
+          </button>
+        </th>
+        <th>
+          <a href="javascript:;" id="getAllUsers">Employee data</a
+          >&nbsp;&nbsp;&nbsp;&nbsp;<button
+            type="button"
+            id="regUser"
+            style="font-size: 15px"
+          >
+            Add Employee
+          </button>
+        </th>
+        <th>
+          <a href="javascript:;" id="getAllSystems">Resource data</a
+          >&nbsp;&nbsp;&nbsp;&nbsp;<button
+            id="regSystem"
+            type="button"
+            style="font-size: 15px"
+          >
+            Add System
+          </button>
+        </th>
+        <th><a href="javascript:;" id="getAllSession">Session data</a></th>
+        <!-- <tr>
+          <td><a href="javascript:;" id="getAdmin">Profile</a></td>
+          <td><a href="javascript:;" id="getAllUsers">Employee data</a></td>
+          <td><a href="javascript:;" id="getAllSystems">Resource data</a></td>
+          <td><a href="javascript:;" id="getAllSession">Session data</a></td>
+        </tr> -->
       </table>
       <hr style="width: 1080px" />
     </div>
+    <div id="display"></div>
   </body>
 </html>

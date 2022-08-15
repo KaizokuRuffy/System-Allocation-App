@@ -52,7 +52,7 @@ public class EmployeeController extends HttpServlet
 				{
 					if(request.getSession(false).getAttribute("status").equals("admin logged in"))
 					{
-						System.out.println("\nUser profile fetched successfully");
+						System.out.println("\nUser profile fetched successfully - from admin");
 						List<Session> sessionList = new SessionService().getEmpSession(emp_Id);
 						List<Object> list = new ArrayList<>();
 						list.add(emp);
@@ -65,7 +65,7 @@ public class EmployeeController extends HttpServlet
 					}
 					else if(request.getSession(false).getAttribute("status").equals("employee logged in"))
 					{
-						System.out.println("\nUser profile fetched successfully");
+						System.out.println("\nUser profile fetched successfully - from user");
 						new Message().infoToClient(request, response, emp);
 					}
 				}
@@ -112,22 +112,30 @@ public class EmployeeController extends HttpServlet
 		{		
 			case "/userLogin" :
 				
-				System.out.println("--- Authenticating user ---");
+				System.out.println("\n--- Authenticating user ---");
 				
-				int emp_Id = Integer.parseInt(request.getParameter("emp_Id"));//var
-				String Password = new String(request.getParameter("emp_Password"));//var
-						
-				Boolean auth = employeeService.Authenticate(emp_Id, Password); // DB call
+				int emp_Id = 0;
+				String Password = null;
+				Boolean auth = null;
 				
-				if(auth == null)
-				{
+				try {
+					emp_Id = Integer.parseInt(request.getParameter("emp_Id"));//var
+					Password = new String(request.getParameter("emp_Password"));//var
+					auth = employeeService.Authenticate(emp_Id, Password); // DB call
+					
+				} 
+				catch (NumberFormatException e) {
 					out.write("Invalid username");
 					response.sendError(403, "Invalid username / password");
 					System.out.println("Username doesn't exist");
+					break;
 				}
-				else if(auth == true)
+				
+				if(auth == true)
 				{
 					System.out.println("Logged in successfully");
+					
+					final int id = emp_Id;
 					
 					HttpSession sess = request.getSession(true);
 					sess.setAttribute("status", "employee logged in");
@@ -154,13 +162,13 @@ public class EmployeeController extends HttpServlet
 							}
 							if(flag)
 							{
-								System.err.println("Session of user '" + emp_Id + "' invalidated");
+								System.err.println("Session of user '" + id + "' invalidated");
 								sess.invalidate();
 								Counter.getcounter().atLogout();
 							}
 							
 						}
-					}, 30000L); //*60*60*24L);
+					}, 1000*60*60*24L); //*60*60*24L);
 					
 					Counter.getcounter().atLogin();
 				}

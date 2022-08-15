@@ -2,15 +2,14 @@ package Beans;
 
 import java.io.Serializable;
 
-public class Admin implements Serializable
-{
+public class Admin implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int admin_Id;
 	private String admin_Name;
 	private String admin_Email;
 	private String admin_ContactNo;
 	private String admin_Password;
-	
+
 	public int getAdmin_Id() {
 		return admin_Id;
 	}
@@ -51,21 +50,19 @@ public class Admin implements Serializable
 		this.admin_Password = new String(admin_Password);
 	}
 
-	public Admin()
-	{
-		
+	public Admin() {
+
 	}
-	
+
 	public Admin(String admin_Name, String admin_Email, String admin_ContactNo, String admin_Password) {
 		super();
 		this.admin_Name = admin_Name;
 		this.admin_Email = admin_Email;
 		this.admin_ContactNo = admin_ContactNo;
-		this.admin_Password = admin_Password;
+		this.admin_Password = new String(admin_Password);
 	}
 
-	public Admin(int admin_Id, String admin_Name, String admin_Email, String admin_ContactNo, String admin_Password) 
-	{
+	public Admin(int admin_Id, String admin_Name, String admin_Email, String admin_ContactNo, String admin_Password) {
 		super();
 		this.admin_Id = admin_Id;
 		this.admin_Name = admin_Name;
@@ -73,39 +70,38 @@ public class Admin implements Serializable
 		this.admin_ContactNo = admin_ContactNo;
 		this.admin_Password = new String(admin_Password);
 	}
-	
+
 	@Override
-	public String toString() 
-	{
+	public String toString() {
 		return "Admin [Id=" + admin_Id + ", Name=" + admin_Name + ", Email=" + admin_Email
 				+ ", Contact No=" + admin_ContactNo + ", Password=" + admin_Password + "]";
 	}
-	
+
 }
 
 /*
-public boolean auth(String password)
-	{
-		if(password.equals(this.admin_Password))
-			return true;
-		
-		return false;
-	}
-	
-	int request ()
-	{
-		//Call to database to check if computer is available
-		int id = 0;
-		
-		return id;
-	}
-	
-	boolean request (String comp_id)
-	{
-		//Call to database to check if computer is available
-		boolean availability = true;
-		
-		return availability;
-	}
-
-*/
+ * public boolean auth(String password)
+ * {
+ * if(password.equals(this.admin_Password))
+ * return true;
+ * 
+ * return false;
+ * }
+ * 
+ * int request ()
+ * {
+ * //Call to database to check if computer is available
+ * int id = 0;
+ * 
+ * return id;
+ * }
+ * 
+ * boolean request (String comp_id)
+ * {
+ * //Call to database to check if computer is available
+ * boolean availability = true;
+ * 
+ * return availability;
+ * }
+ * 
+ */
