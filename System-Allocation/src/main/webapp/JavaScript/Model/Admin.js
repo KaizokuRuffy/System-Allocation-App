@@ -61,7 +61,7 @@ export class Admin {
     this.XHR = new U.XHR(this.request, this.response);
     this.response = this.XHR.sendRequest();
 
-    return this.response();
+    return this.response;
   }
   login() {
     this.data = new D.AdminBuilder()
@@ -170,8 +170,10 @@ export class Admin {
     return this.response;
   }
   add() {
+    let id = U.gEBI(U.Admin.Id).value;
+
     this.data = new D.AdminBuilder()
-      .setId(Number(U.gEBI(U.Admin.Id).value))
+      .setId(id === "" ? -1 : Number(id))
       .setName(U.gEBI(U.Admin.Name).value)
       .setEmail(U.gEBI(U.Admin.Email).value)
       .setContactNo(U.gEBI(U.Admin["Mobile No"]).value)

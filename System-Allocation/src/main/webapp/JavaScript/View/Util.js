@@ -57,7 +57,8 @@ export let displayAsTable = function (fields, data, element, name) {
   element.setAttribute("align", "center");
   element.style.fontFamily = "consolas";
   element.style.fontSize = "15px";
-  element.style.paddingTop = "50px";
+
+  if (element.id !== "display session") element.style.paddingTop = "50px";
 
   let field_key = Object.keys(fields);
 
@@ -120,11 +121,13 @@ export let displayAsTable = function (fields, data, element, name) {
       ip.id = fields[field_key[i]];
       ip.placeholder = field_key[i];
 
-      if (name === "Employee" && fields[field_key[i]] === "emp_Id")
+      /* if (name === "Employee" && fields[field_key[i]] === "emp_Id")
         ip.addEventListener("keyup", (e) => {
           if (e.key === "Enter") new User().getPlus(e.target.value);
         });
-      else ip.addEventListener("keyup", (e) => filter(e));
+      else  */
+
+      ip.addEventListener("keyup", (e) => filter(e));
 
       cell.appendChild(ip);
       fltr.appendChild(cell);
@@ -230,6 +233,8 @@ export let displayAsTable = function (fields, data, element, name) {
   Array.prototype.forEach.call(els, (el) => {
     el.style.width = len[el.id] * 9 + "px";
   });
+
+  element.style.paddingBottom = "50px";
 };
 
 /* export let getObject = (Class) => {

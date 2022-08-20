@@ -34,7 +34,7 @@ public class AdminDAO
 			 +  ColumnName.Email_ID.value + " varchar(255) UNIQUE, "
 			 +  ColumnName.Contact_No.value + " varchar(255) UNIQUE, "
 			 +  ColumnName.Password + " varchar(255),"
-			+ " PRIMARY KEY (" + ColumnName.ID  +") )" ;
+			+ " PRIMARY KEY (" + ColumnName.ID + ") )" ;
 
     
 	public static int[] createTable()  
@@ -48,6 +48,8 @@ public class AdminDAO
 			st.addBatch(EmployeeDAO.getCreateTable());
 			st.addBatch(ComputerDAO.getCreateTable());
 			st.addBatch(SessionDAO.getCreateTable());
+	
+			//System.out.println(SessionDAO.getCreateTable());
 			
 			result = st.executeBatch();
 			
@@ -61,7 +63,7 @@ public class AdminDAO
 		catch(Exception e)
 		{
 			JDBC_Connection.close();
-			System.out.println(e);
+			e.printStackTrace();
 		}
 		
 		return null;
@@ -85,8 +87,8 @@ public class AdminDAO
 			
 			if(rs.next())
 				count = Integer.parseInt(rs.getString(1));
-
-			if(count > 0)
+			
+			if(count == 4)
 				return false;
 		} 
 		catch (SQLException e) 

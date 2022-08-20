@@ -37,7 +37,7 @@ public class EmployeeDAO
 			  	  + ColumnName.Name + " varchar(255), "
 			  	  + ColumnName.Adhaar_ID.value + " varchar(255) UNIQUE, "
 			  	  + ColumnName.Email_ID.value + " varchar(255) UNIQUE, "
-			  	  + ColumnName.Mobile_No.value + " varchar(255), "
+			  	  + ColumnName.Mobile_No.value + " varchar(255) UNIQUE, "
 			  	  + ColumnName.Password + " varchar(255), "
 			  	  + ColumnName.Role + " varchar(255), "
 			  	  + ColumnName.Department + " varchar(255), "
@@ -58,7 +58,7 @@ public class EmployeeDAO
 				
 				if(rs.next())
 				{
-					count = Integer.parseInt(rs.getString(0));
+					count = Integer.parseInt(rs.getString(1));
 					return count;
 				}
 			} 

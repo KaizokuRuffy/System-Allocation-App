@@ -26,6 +26,9 @@
         padding: 10px 20px;
         border: 1px solid #000;
       }
+      div[id="display session"] {
+        padding-top: 0px;
+      }
 
       #Links th {
         padding-right: 50px;
@@ -62,43 +65,47 @@
 
     <div align="center">
       <table id="Links">
-        <th>
-          <a href="javascript:;" id="getAdmin">Profile</a
-          >&nbsp;&nbsp;&nbsp;&nbsp;<button
-            type="button"
-            id="regAdmin"
-            style="font-size: 15px"
-          >
-            Add Admin
-          </button>
-        </th>
-        <th>
-          <a href="javascript:;" id="getAllUsers">Employee data</a
-          >&nbsp;&nbsp;&nbsp;&nbsp;<button
-            type="button"
-            id="regUser"
-            style="font-size: 15px"
-          >
-            Add Employee
-          </button>
-        </th>
-        <th>
-          <a href="javascript:;" id="getAllSystems">Resource data</a
-          >&nbsp;&nbsp;&nbsp;&nbsp;<button
-            id="regSystem"
-            type="button"
-            style="font-size: 15px"
-          >
-            Add System
-          </button>
-        </th>
-        <th><a href="javascript:;" id="getAllSession">Session data</a></th>
-        <!-- <tr>
-          <td><a href="javascript:;" id="getAdmin">Profile</a></td>
-          <td><a href="javascript:;" id="getAllUsers">Employee data</a></td>
-          <td><a href="javascript:;" id="getAllSystems">Resource data</a></td>
-          <td><a href="javascript:;" id="getAllSession">Session data</a></td>
-        </tr> -->
+        <thead>
+          <tr>
+            <th>
+              <a href="javascript:;" id="getAdmin">Profile</a
+              >&nbsp;&nbsp;&nbsp;&nbsp;<button
+                type="button"
+                id="regAdmin"
+                style="font-size: 15px"
+              >
+                Add Admin
+              </button>
+            </th>
+            <th>
+              <a href="javascript:;" id="getAllUsers">Employee data</a
+              >&nbsp;&nbsp;&nbsp;&nbsp;<button
+                type="button"
+                id="regUser"
+                style="font-size: 15px"
+              >
+                Add Employee
+              </button>
+            </th>
+            <th>
+              <a href="javascript:;" id="getAllSystems">Resource data</a
+              >&nbsp;&nbsp;&nbsp;&nbsp;<button
+                id="regSystem"
+                type="button"
+                style="font-size: 15px"
+              >
+                Add System
+              </button>
+            </th>
+            <th><a href="javascript:;" id="getAllSession">Session data</a></th>
+            <!-- <tr>
+              <td><a href="javascript:;" id="getAdmin">Profile</a></td>
+              <td><a href="javascript:;" id="getAllUsers">Employee data</a></td>
+              <td><a href="javascript:;" id="getAllSystems">Resource data</a></td>
+              <td><a href="javascript:;" id="getAllSession">Session data</a></td>
+            </tr> -->
+          </tr>
+        </thead>
       </table>
       <hr style="width: 1080px" />
     </div>

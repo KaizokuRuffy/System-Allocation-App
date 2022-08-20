@@ -1,6 +1,8 @@
 package Service;
 
+import java.io.File;
 import java.util.Map;
+
 
 import Beans.Admin;
 import DAO.AdminDAO;
@@ -29,10 +31,20 @@ public class AdminService
 	
 	public static boolean createDatabase()
 	{
-		if(AdminDAO.createTable() != null)
-			return true;
+		int[] res = AdminDAO.createTable();
+		int count = 0;
 		
-		return true;
+		//System.out.println(Arrays.toString(res));
+		
+		for(int i = 0; i < res.length; i++)
+		if(res[i] == 0)
+			count++;
+		
+		if(count == 4)
+			return true;
+		else 
+			return false;
+	
 	}
 	
 	public boolean isEmpty()
@@ -71,7 +83,7 @@ public class AdminService
 	public Boolean Authenticate(int admin_Id, String Password)
 	{
 		String admin_Password = null;
-		StringBuilder temp = null;
+		//StringBuilder temp = null;
 		
 		try 
 		{
@@ -95,6 +107,10 @@ public class AdminService
 	
 	public boolean createUser(Admin admin)
 	{
+		//System.out.println(adminDAO.noOfRows());
+		if(admin.getAdmin_Id() == -1)
+			admin.setAdmin_Id(adminDAO.noOfRows() + 1);
+		
 		Cipher cipher = new Cipher(admin.getAdmin_Password(), 
 										((Integer)admin.getAdmin_Id()).toString(), admin.getAdmin_Name(),"admin", true);
 		
@@ -102,6 +118,8 @@ public class AdminService
 		
 		if(adminDAO.insertInto(admin) == 1)
 			return true;
+		
+		new File(cipher.getKeysetFilename()).delete();
 		
 		return false;
 	}
@@ -112,10 +130,13 @@ public class AdminService
 		
 		admin = adminDAO.selectRecord(admin_Id);
 		
-		Cipher cipher = new Cipher(admin.getAdmin_Password(), 
-				((Integer)admin.getAdmin_Id()).toString(), admin.getAdmin_Name(), "admin");
-		
-		admin.setAdmin_Password(cipher.decrypt());
+		if(admin != null)
+		{
+			Cipher cipher = new Cipher(admin.getAdmin_Password(), 
+					((Integer)admin.getAdmin_Id()).toString(), admin.getAdmin_Name(), "admin");
+			
+			admin.setAdmin_Password(cipher.decrypt());
+		}
 		
 		return admin;
 	}

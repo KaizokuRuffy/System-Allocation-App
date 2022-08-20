@@ -1,3 +1,4 @@
+
 package Controller.Util;
 
 import java.io.IOException;
@@ -73,12 +74,13 @@ public class LoginFilter implements Filter {
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
 			throws IOException, ServletException {
 
+//		chain.doFilter(req, res);
 		// System.out.println("Inside doFilter()....");
 
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 		HttpSession sess = request.getSession(false);
-		
+	
 		/*
 		 * System.err.println("----------------------------");
 		 * System.out.println(request.getRequestURI());
@@ -137,7 +139,9 @@ public class LoginFilter implements Filter {
 				chain.doFilter(req, res);
 
 			else
-				response.sendError(403, "Cannot perform unauthorized operation.");
+				new Message().infoToClient(HttpServletResponse.SC_FORBIDDEN,
+													response, "Cannot perform unauthorized operation.");
+				//response.sendError(403, "Cannot perform unauthorized operation.");
 		}
 
 		else if (adminURLs.contains(request.getPathInfo())) {
@@ -147,7 +151,9 @@ public class LoginFilter implements Filter {
 				// System.out.println(request.getPathInfo());
 				chain.doFilter(req, res);
 			} else
-				response.sendError(403, "Cannot perform unauthorized operation.");
+				new Message().infoToClient(HttpServletResponse.SC_FORBIDDEN,
+									response, "Cannot perform unauthorized operation.");
+				//response.sendError(403, "Cannot perform unauthorized operation.");
 		}
 
 		else if (employeeURLs.contains(request.getPathInfo())) {
@@ -158,15 +164,17 @@ public class LoginFilter implements Filter {
 				chain.doFilter(req, res);
 
 			else
-				response.sendError(403, "Cannot perform unauthorized operation.");
+				new Message().infoToClient(HttpServletResponse.SC_FORBIDDEN,
+								response, "Cannot perform unauthorized operation.");
+				//response.sendError(403, "Cannot perform unauthorized operation.");
 		} 
 		
 		//Authenticating request for html files made by client
 		else if(request.getServletPath() != null && request.getServletPath().contains(".html")) {
 			
-			System.out.println("URL : "+request.getRequestURL());
-			System.out.println("URI : "+request.getRequestURI());
-			System.out.println("Path : "+request.getPathInfo());
+//			System.out.println("URL : "+request.getRequestURL());
+//			System.out.println("URI : "+request.getRequestURI());
+//			System.out.println("Path : "+request.getPathInfo());
 			
 			if(request.getServletPath().contains("index.html"))
 				chain.doFilter(request, response);
@@ -203,7 +211,9 @@ public class LoginFilter implements Filter {
 			System.out.println(sess != null ? sess.getId() : "No session");
 			System.err.println("Cannot perform unauthorized operation");
 			System.err.println("----------------------------------------------------------------------------");
-			response.sendError(403, "Cannot perform unauthorized operation.");
+			new Message().infoToClient(HttpServletResponse.SC_FORBIDDEN,
+					response, "Cannot perform unauthorized operation.");
+			//response.sendError(403, "Cannot perform unauthorized operation.");
 		}
 
 	}

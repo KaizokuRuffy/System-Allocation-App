@@ -20,7 +20,7 @@ public class SessionService
 				((session.getLogIn_Time().compareTo("08:00") >= 0) && 
 				(session.getLogIn_Time().compareTo("16:00") <= 0)) ? "Morning" : 
 				((session.getLogIn_Time().compareTo("16:00") >= 0) && 
-			    (session.getLogIn_Time().compareTo("00:00") <= 0)) ? "Evening" : "Night"
+			    (session.getLogIn_Time().compareTo("23:59") <= 0)) ? "Evening" : "Night"
 		);
 		
 		if(sessionDAO.insertInto(session) == 1)
@@ -47,6 +47,15 @@ public class SessionService
 	
 	public boolean updateSession(Session session)
 	{
+		List<Session> temp = sessionDAO.select(session.getEmp_Id());
+		
+		for(Session s : temp)
+			if(s.getLogIn_Date().equals(session.getLogIn_Date()))
+			{
+				session.setLogIn_Time(s.getLogIn_Time());
+				break;
+			}
+		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat SDF = new SimpleDateFormat("yyyy-mm-dd HH:mm");
 

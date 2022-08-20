@@ -42,18 +42,22 @@ public class ComputerController extends HttpServlet
 					if(computerList.size() > 0)
 					{
 						System.out.println("All system details fetched successfully");
-						new Message().infoToClient(request, response, computerList);
+						new Message().infoToClient(response, computerList);
 					}
 					else
 					{
-						response.sendError(500, "No resources data in database. Add system details and then try fetching data.");
+						new Message().infoToClient(HttpServletResponse.SC_NOT_FOUND, 
+								response, "No resources data in database. Add system details and then try fetching data.");	
+//						response.sendError(500, "No resources data in database. Add system details and then try fetching data.");
 						System.out.println("No resource data present in table");
 					}
 				}
 				else
 				{
-					System.out.println("Database is empty");
-					response.sendError(500, "Database is empty");
+					new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
+										response, "Database error");
+					System.out.println("Database error");
+					//response.sendError(500, "Database error");
 				}
 				
 				break;
@@ -83,13 +87,16 @@ public class ComputerController extends HttpServlet
 				{
 					if(computerService.addSystem(comp))
 					{
+						new Message().infoToClient(HttpServletResponse.SC_CREATED, 
+																response, "Resource details saved."); ;
 						System.out.println("Resource details saved ");
-						new Message().infoToClient(response);
 					}
 					else
 					{
+						new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
+										response, "Duplicate resource cannot be added. MAC address should be unique");
 						System.out.println("Duplicate resource cannot be added.");
-						response.sendError(500, "Database error");
+//						response.sendError(500, "Database error");
 					}
 				}
 				
@@ -133,10 +140,13 @@ public class ComputerController extends HttpServlet
 //					System.out.println(comp_Id + " " + colName + " " + status);
 					if(computerService.updateStatus(comp_Id, colName, status))
 					{
+
+						//new Message().infoToClient("Status updated successfully",response);
+						response.getWriter().append("Status updated successfully");
+						
 						System.out.println("Status of system '" + comp_Id + 
 													"' is updated succesfully");
-						new Message().infoToClient(response);
-						
+				
 						final int id = comp_Id;
 						final String cname = colName;
 						
@@ -170,15 +180,26 @@ public class ComputerController extends HttpServlet
 					}
 					else
 					{
+						new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
+											response, "System not present in database. Wrong id entered.");
 						System.out.println("System not present in database. Wrong id entered.");
-						response.sendError(403, "System not present in database");
+//						response.sendError(403, "System not present in database");
 					}
 				}
 				else
 				{
 					if(computerService.updateStatus(comp_Id, colName, status))
+					{
+						new Message().infoToClient("Status updated successfully",response);
 						System.out.println("System availability status set as '" + status + "'");
-					new Message().infoToClient(response);
+					}
+					else 
+					{
+						new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
+											response, "System not present in database. Wrong id entered.");
+						System.out.println("System not present in database. Wrong id entered.");
+					}
+					
 //					request.getSession().invalidate();
 				}
 				

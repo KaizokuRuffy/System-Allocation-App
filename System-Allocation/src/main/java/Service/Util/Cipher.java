@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
 
 import com.google.crypto.tink.Aead;
 import com.google.crypto.tink.CleartextKeysetHandle;
@@ -94,6 +95,14 @@ public class Cipher {
 		return new String(encrypted, StandardCharsets.ISO_8859_1);
 	}
 	
+	public String getKeysetFilename() {
+		return keysetFilename;
+	}
+
+	public void setKeysetFilename(String keysetFilename) {
+		this.keysetFilename = keysetFilename;
+	}
+
 	public String decrypt() 
 	{
 		initTink();
@@ -131,5 +140,14 @@ public class Cipher {
 		keysetFilename = "C:\\Users\\Kishore\\git\\System-Allocation-App\\System-Allocation"
 							+ "\\src\\main\\java\\Service\\Util\\Secret Key\\" + who + "\\"  + ID + Name + ".json";
 	}
+
+	@Override
+	public String toString() {
+		return "Cipher [plaintext=" + plaintext + ", ciphertext=" + ciphertext + ", ID=" + ID + ", Name=" + Name
+				+ ", keysetFilename=" + keysetFilename + ", keysetHandle=" + keysetHandle + ", aead=" + aead
+				+ ", encrypted=" + Arrays.toString(encrypted) + ", decrypted=" + Arrays.toString(decrypted) + "]";
+	}
 	
 }
+
+

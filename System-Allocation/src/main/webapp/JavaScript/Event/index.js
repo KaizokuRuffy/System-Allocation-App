@@ -1,12 +1,25 @@
 import * as Ctrl from "../Controller/C.js";
 import * as U from "../Model/Util.js";
 import { userLogin } from "./User.js";
+import { firstTime } from "./User.js";
 
 U.Admin.init();
 var AdminController = new Ctrl.Admin();
 
 let isPresent = () => {
   AdminController.isPresent();
+};
+isPresent();
+
+let onEnter = () => {
+  if (U.gEBI("emp_Password") !== null)
+    U.gEBI("emp_Password").addEventListener("keyup", (e) => {
+      // console.log(e.key);
+      if (e.key === "Enter") U.gEBI("userLogin").click();
+    });
+  U.gEBI("admin_Password").addEventListener("keyup", (e) => {
+    if (e.key === "Enter") U.gEBI("adminLogin").click();
+  });
 };
 
 let login = document
@@ -16,19 +29,19 @@ let login = document
   });
 
 let create = () => {
-  let temp = document.getElementById("regAdmin");
+  let temp = U.gEBI("regAdmin");
   if (temp !== null)
     temp.addEventListener("click", () => {
-      window.location.href = "HTML/Admin-Reg.html";
       AdminController.create();
     });
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  isPresent();
   login;
   create();
   userLogin();
+  onEnter();
+  firstTime();
 
   /*
   function login() {
@@ -48,8 +61,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let xhr = new XMLHttpRequest();
     if (who === "Admin") {
-      id = document.getElementById(Admin.id).value;
-      pass = document.getElementById(Admin.pass).value;
+      id = U.gEBI(Admin.id).value;
+      pass = U.gEBI(Admin.pass).value;
 
       url =
         "http://localhost:8080/System-Allocation/" +
@@ -62,8 +75,8 @@ document.addEventListener("DOMContentLoaded", () => {
       url = url + "?" + query_params;
     }
     if (who === "User") {
-      id = document.getElementById(User.id).value;
-      pass = document.getElementById(User.pass).value;
+      id = U.gEBI(User.id).value;
+      pass = U.gEBI(User.pass).value;
 
       url =
         "http://localhost:8080/System-Allocation/" +
@@ -93,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
     xhr.send();
   }
   */
-  //var user = document.getElementById("User");
+  //var user = U.gEBI("User");
   //console.log(user);
   //who = "User";
   //user.addEventListener("click", login);

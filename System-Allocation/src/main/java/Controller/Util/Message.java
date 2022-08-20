@@ -3,11 +3,12 @@ package Controller.Util;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class Message {
-	public void infoToClient(HttpServletResponse response) {
+	
+	//For 200 OK Status code response with response body as plain text
+	public void infoToClient(String Message, HttpServletResponse response) {
 		PrintWriter out = null;
 
 		try {
@@ -17,12 +18,18 @@ public class Message {
 		}
 
 		response.setStatus(HttpServletResponse.SC_OK);
+		
+		if(response.getContentType() == null)
 		response.setContentType("text/plain");
-		out.write("\n" + response.getStatus() + "");
-		System.out.println(response.getStatus() + " - Request processed succesfully ");
+		
+		out.write(Message);
+		//out.write("\n" + response.getStatus() + "");
+		System.out.println(response.getStatus() + " - " + Message);
 	}
 
-	public <T> void infoToClient(HttpServletRequest request, HttpServletResponse response, T obj) {
+	//HttpServletRequest request, 
+	//For 200 OK Status code response with response body as JSON
+	public <T> void infoToClient(HttpServletResponse response, T obj) {
 		String json = new Json().toJSON(obj);
 		PrintWriter out = null;
 
@@ -36,6 +43,22 @@ public class Message {
 		out.write(json);
 		response.setStatus(HttpServletResponse.SC_OK);
 		System.out.println(response.getStatus() + " - Request processed succesfully ");
+	}
+	
+	//For Other HTTP Status code response with response body as plain text
+	public void infoToClient(int status_Code, HttpServletResponse response, String Message) {
+		PrintWriter out = null;
+
+		try {
+			out = response.getWriter();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		response.setStatus(status_Code);
+		response.setContentType("text/plain");
+		out.write(Message);
+		//System.out.println(response.getStatus() + " - " + Message);
 	}
 
 }

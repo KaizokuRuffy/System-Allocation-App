@@ -41,8 +41,10 @@ export class System {
     return this.response;
   }
   add() {
+    let id = U.gEBI(U.System.Id).value;
+
     this.data = new D.SystemBuilder()
-      .setId(Number(U.gEBI(U.System.Id).value))
+      .setId(id === "" ? -1 : Number(id))
       .setMAC(U.gEBI(U.System.MAC).value)
       .setModel(U.gEBI(U.System.Model).value)
       .setPassword(U.gEBI(U.System.Password).value)

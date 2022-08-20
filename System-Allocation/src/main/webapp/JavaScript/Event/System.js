@@ -5,23 +5,23 @@ import * as U from "../Model/Util.js";
 U.System.init();
 var SystemController = new Ctrl.System();
 
-export let getAllSystems = document
-  .getElementById("getAllSystems")
-  .addEventListener("click", () => {
+export let getAllSystems = U.gEBI("getAllSystems").addEventListener(
+  "click",
+  () => {
     SystemController.getAll();
     updateStatus();
-  });
+  }
+);
 
-export let regSystem = document
-  .getElementById("regSystem")
-  .addEventListener("click", () => {
-    window.location.href = "../HTML/System-Reg.html";
-  });
+export let regSystem = U.gEBI("regSystem").addEventListener("click", () => {
+  window.location.href = "../HTML/System-Reg.html";
+});
 
 export let updateStatus = function () {
   let comp = new SystemBuilder();
 
   let w_status = document.getElementsByClassName("working");
+  let a_status = document.getElementsByClassName("available");
 
   Array.prototype.forEach.call(w_status, (item) => {
     item.addEventListener("change", (e) => {
@@ -31,10 +31,12 @@ export let updateStatus = function () {
         .getSystem();
 
       SystemController.updateStatus(comp);
+      item.parentElement.previousSibling.firstChild.firstChild.value =
+        e.target.value;
+      item.parentElement.previousSibling.firstChild.firstChild.innerText =
+        e.target.value;
     });
   });
-
-  let a_status = document.getElementsByClassName("available");
 
   Array.prototype.forEach.call(a_status, (item) =>
     item.addEventListener("change", (event) => {

@@ -5,10 +5,32 @@ export class User {
   constructor() {
     this.fields = U.User;
   }
+
+  firstLogin(response) {
+    //console.log(response.body);
+    // let store = null;
+    //console.log(JSON.parse().includes("-1"));
+    if (response.status === 200) {
+      if (!response.body.includes("-1")) {
+        if (!response.body.includes("Available - No"))
+          sessionStorage.setItem(
+            U.System.Id,
+            response.body.replace("comp_Id :", "")
+          );
+        else sessionStorage.setItem("Available", "No");
+      } else if (response.body.includes("-1")) {
+        sessionStorage.setItem(U.System.Id, -1);
+      }
+    } else if (response.status === 404) {
+      sessionStorage.setItem("Username", JSON.stringify(response.body));
+    }
+  }
+
   login(response) {
     if (response.status === 200) {
       window.location.replace("HTML/User.html");
-    } else {
+    } else if (response.status === 403 || response.status === 404) {
+      // console.log(response);
       let bool = true;
       try {
         U.gEBI("Umsg").remove();
@@ -34,6 +56,15 @@ export class User {
           U.gEBI("Uerror").remove();
         }
       }, 3000);
+    } else if (
+      response.status === 400 ||
+      response.status === 409 ||
+      response.status === 500
+    ) {
+      //console.log("Duplicate entry");
+      window.alert(JSON.stringify(response.body).replaceAll('"', ""));
+    } else {
+      window.alert(response.replaceAll('"', ""));
     }
   }
   logout(response) {
@@ -61,8 +92,11 @@ export class User {
         display,
         "Employee"
       );
-    } else if (response.status === 500) {
-      window.alert("Something went wrong");
+    } else if (response.status === 403) {
+      window.alert("Session Timeout");
+      window.location.replace("../index.html");
+    } else {
+      window.alert(JSON.parse(response.body));
     }
   }
   getPlus(response) {
@@ -81,14 +115,28 @@ export class User {
       let session = data[1];
 
       Util.displayAsTable(this.fields, emp, display, "Employee");
-      document.getElementById("Filter").remove();
+      U.gEBI("Filter").remove();
 
-      let dsp = document.createElement("div");
-      dsp.id = "display session";
-      display.appendChild(dsp);
-      Util.displayAsTable(U.Session, session, dsp, "Session");
+      if (session.length != 0) {
+        //  console.log(session.length != 0);
+        let heading = document.createElement("h2");
+
+        heading.innerText = "'" + emp[0][U.User.Name] + "'" + " - Session data";
+        heading.style.paddingTop = "50px";
+        heading.style.fontWeight = "500";
+        display.appendChild(heading);
+
+        let dsp = document.createElement("div");
+        dsp.id = "display session";
+
+        display.appendChild(dsp);
+        Util.displayAsTable(U.Session, session, dsp, "Session");
+      }
+    } else if (response.status === 403) {
+      window.alert("Session Timeout");
+      window.location.replace("../index.html");
     } else if (response.status === 500) {
-      window.alert("Something went wrong");
+      window.alert(JSON.stringify(response.body).replaceAll('"', ""));
     }
   }
   getAll(response) {
@@ -101,9 +149,9 @@ export class User {
         display,
         "Employee"
       );
-    } else if (response.status === 500) {
+    } else if (response.status === 404 || response.status === 500) {
       Util.removeAllChildNodes(display);
-      window.alert("Table empty");
+      window.alert(JSON.stringify(response.body).replaceAll('"', ""));
     } else if (response.status === 403) {
       window.alert("Session Timeout");
       window.location.replace("../index.html");
@@ -111,12 +159,13 @@ export class User {
   }
 
   add(response) {
-    if (response.status === 200) window.location.replace("../HTML/Admin.html");
+    if (response.status === 201) window.location.replace("../HTML/Admin.html");
     else if (response.status === 403) {
       window.alert("Session Timeout");
       window.location.replace("../index.html");
     } else if (response.status === 500) {
-      window.alert("Something went wrong");
+      window.alert(JSON.stringify(response.body).replaceAll('"', ""));
+      window.location.href = "";
     }
   }
 }

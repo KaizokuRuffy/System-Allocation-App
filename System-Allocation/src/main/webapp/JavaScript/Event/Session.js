@@ -7,7 +7,7 @@ var SessionController = new Ctrl.Session();
 //if (sessionStorage.getItem("who") === "user") UserController.get();
 
 export let getAllSession = () => {
-  document.getElementById("getAllSession").addEventListener("click", () => {
+  U.gEBI("getAllSession").addEventListener("click", () => {
     SessionController.getAll();
   });
 };

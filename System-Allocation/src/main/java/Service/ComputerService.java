@@ -11,6 +11,9 @@ public class ComputerService
 	
 	public boolean addSystem(Computer comp)
 	{
+		if(comp.getComp_Id() == -1)
+			comp.setComp_Id(computerDAO.noOfRows() + 1);
+		
 		comp.setAvailable("Yes");
 		comp.setWorking("Yes");
 		
@@ -35,5 +38,10 @@ public class ComputerService
 			return true;
 		
 		return false;
+	}
+	
+	public Computer getSystem(int comp_Id)
+	{
+		return computerDAO.selectRecord(comp_Id);
 	}
 }

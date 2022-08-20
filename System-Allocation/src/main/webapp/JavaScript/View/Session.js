@@ -15,9 +15,9 @@ export class Session {
         display,
         "Session"
       );
-    } else if (response.status === 500) {
+    } else if (response.status === 404) {
       Util.removeAllChildNodes(display);
-      window.alert("Table empty");
+      window.alert(JSON.stringify(response.body).replaceAll('"', ""));
     } else if (response.status === 403) {
       window.alert("Session Timeout");
       window.location.replace("../index.html");

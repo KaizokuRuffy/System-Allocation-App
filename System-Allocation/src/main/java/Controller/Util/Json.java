@@ -46,6 +46,29 @@ public class Json
 		
 		Gson gson = new Gson();
 		T t = gson.fromJson(json, clazz);
+		//System.out.println(t);
+		
+		return t;
+	}
+	
+	public <T> T toPojo(String json, Class<T> clazz)
+	{
+//		String json = null;
+//		
+//		try 
+//		{
+//			json = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+//		} 
+//		catch (IOException e) 
+//		{
+//			e.printStackTrace();
+//		}
+		
+//		System.out.println(json);
+		
+		Gson gson = new Gson();
+		T t = gson.fromJson(json, clazz);
+		//System.out.println(t);
 		
 		return t;
 	}

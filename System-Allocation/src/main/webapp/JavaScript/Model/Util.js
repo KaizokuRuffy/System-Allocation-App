@@ -244,6 +244,12 @@ export var Session = {
   },
 };
 
+export let Shift = {
+  Morning: "Morning",
+  Evening: "Evening",
+  Night: "Night",
+};
+
 function initialize(name, data) {
   let obj_keys = Object.keys(data);
   let name_keys = Object.keys(name);
@@ -282,4 +288,12 @@ export let getTime = () => {
   let mm = temp.getMinutes();
   let time = (hh < 10 ? "0" + hh : hh) + ":" + (mm < 10 ? "0" + mm : mm);
   return time;
+};
+
+export let getShift = (time) => {
+  return time >= "08:00" && time <= "16:00"
+    ? Shift.Morning
+    : time >= "16:00" && time <= "23:59"
+    ? Shift.Evening
+    : Shift.Night;
 };

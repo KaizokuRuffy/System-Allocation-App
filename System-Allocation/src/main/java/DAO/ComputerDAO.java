@@ -45,7 +45,7 @@ public class ComputerDAO
 				
 				if(rs.next())
 				{
-					count = Integer.parseInt(rs.getString(0));
+					count = Integer.parseInt(rs.getString(1));
 					return count;
 				}
 			} 
@@ -188,14 +188,41 @@ public class ComputerDAO
 		return 0;
 	}
 	
-	@Deprecated
-	public void selectRecord(String emp_Id) throws SQLException {
+	public Computer selectRecord(int comp_Id) {
 		String query = "SELECT *"
-					 + "FROM ?"
-					 + "WHERE ? = ? ";
+					 + "FROM " + TableName.getComputer()
+					 + "WHERE " + ColumnName.ID + " =  " + comp_Id;
+		
+		Connection conn = JDBC_Connection.getConnection();
+		
+		try(PreparedStatement ps = conn.prepareStatement(query);
+			ResultSet rs = ps.executeQuery())
+		{
+			if(rs.next())
+			{
+				Computer comp = new Computer();
+				comp.setComp_Id(rs.getInt(ColumnName.ID.toString()));
+				comp.setMAC(rs.getString(ColumnName.MAC.toString()));
+				comp.setAvailable(rs.getString(ColumnName.Available.toString()));
+				comp.setComp_Loc(rs.getString(ColumnName.Location.toString()));
+				comp.setComp_Password(rs.getString(ColumnName.Password.toString()));
+				comp.setModel(rs.getString(ColumnName.Model.toString()));
+				comp.setWorking(rs.getString(ColumnName.Working.toString()));
+				comp.setYear(rs.getInt(ColumnName.Year.toString()));
+				
+				return comp;
+			}
+		} 
+		catch (SQLException e) 
+		{
+			JDBC_Connection.close();
+			e.printStackTrace();
+		}
+		return null;	
 	}
+	
 	@Deprecated
-	public void deleteRecord(String emp_Id) {
+	public void deleteRecord(String comp_Id) {
 		String query = "DELETE FROM ?"
 				 + "WHERE ? = ? ";
 	}

@@ -61,10 +61,15 @@ export class User {
     this.XHR = new U.XHR(this.request, this.response);
     this.response = this.XHR.sendRequest();
 
-    if (this.response.status === 200) {
+    if (
+      this.response.status === 200 &&
+      !this.response.body.includes("comp_Id")
+    ) {
+      afterLogin(comp_Id);
       sessionStorage.setItem("session", JSON.stringify(this.data));
       sessionStorage.setItem("who", "user");
     }
+    //sessionStorage.clear();
 
     return this.response;
   }
@@ -73,7 +78,7 @@ export class User {
 
     this.data[U.Session["Logout Date"]] = U.getDate();
     this.data[U.Session["Logout Time"]] = U.getTime();
-    console.log(this.data);
+    //console.log(this.data);
 
     this.request = new U.ReqBuilder()
       .setMethod(POST)
@@ -184,8 +189,10 @@ export class User {
     return this.response;
   }
   add() {
+    let id = U.gEBI(U.User.Id).value;
+
     this.data = new D.UserBuilder()
-      .setId(Number(U.gEBI(U.User.Id).value))
+      .setId(id === "" ? -1 : Number(id))
       .setName(U.gEBI(U.User.Name).value)
       .setAdhaarId(U.gEBI(U.User.AdhaarId).value)
       .setEmail(U.gEBI(U.User.Email).value)
@@ -216,3 +223,14 @@ export class User {
     return this.response;
   }
 }
+
+let afterLogin = (CID) => {
+  sessionStorage.removeItem(U.System.Id);
+  sessionStorage.removeItem("Username");
+  sessionStorage.removeItem("Available");
+
+  localStorage.setItem(U.User.Id, U.gEBI(U.User.Id).value);
+  localStorage.setItem(U.Session.comp_Id, CID);
+  localStorage.setItem(U.Session["Login Time"], U.getTime());
+  localStorage.setItem(U.Session["Login Date"], U.getDate());
+};

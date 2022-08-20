@@ -1,5 +1,6 @@
 import * as U from "../Model/Util.js";
 import * as Util from "./Util.js";
+import * as C from "../Controller/C.js";
 
 export class Admin {
   constructor() {
@@ -7,7 +8,14 @@ export class Admin {
   }
 
   isPresent(response) {
-    if (response.status === 200 && !response.body.includes("Yes")) {
+    if (response.status === 200 && response.body.includes("Yes")) {
+      if (!response.body.includes("Yes Yes")) {
+        let empTitle = document.getElementsByClassName("employee");
+        let empLogin = U.gEBI("employee");
+        empTitle[0].remove();
+        empLogin.remove();
+      }
+    } else if (response.status === 200 && !response.body.includes("Yes")) {
       let div = U.gEBI("Register button");
       let button = document.createElement("button");
       button.setAttribute("type", "button");
@@ -15,20 +23,34 @@ export class Admin {
       button.style.width = "85px";
       button.innerText = "Register";
       div.appendChild(button);
-      var tdTag = U.gEBI("admin");
-      tdTag.style.paddingBottom = "35px";
-    } else if (response.status === 200 && response.body.includes("Yes")) {
-    } else if (response.status === 500) {
+
+      let adminId = U.gEBI("admin_Id");
+      let adminPassword = U.gEBI("admin_Password");
+      let adminLogin = U.gEBI("adminLogin");
+      adminLogin.disabled = true;
+      adminId.disabled = true;
+      adminPassword.disabled = true;
+
+      // console.log("isPresent");
+      let empTitle = document.getElementsByClassName("employee");
+      let empLogin = U.gEBI("employee");
+      empTitle[0].remove();
+      empLogin.remove();
+
+      //var tdTag = U.gEBI("admin");
+      //tdTag.style.paddingBottom = "35px";
+    } else if (response.status !== 200) {
       window.alert("Something went wrong");
-    } else {
-      //window.location.href = "";
     }
+    // else {
+    //   window.location.href = "";
+    // }
   }
   create(response) {
-    if (response.status !== 200) {
+    if (response.status !== 201) {
+      window.alert(JSON.stringify(response.body));
       window.location.replace("");
-      window.alert("Something went wrong. Try again");
-    }
+    } else window.location.href = "HTML/Admin-Reg.html";
   }
   login(response) {
     if (response.status === 200) {
@@ -85,8 +107,8 @@ export class Admin {
     } else if (response.status === 403) {
       window.alert("Session Timeout");
       window.location.replace("../index.html");
-    } else if (response.status === 500) {
-      window.alert("Something went wrong");
+    } else {
+      window.alert(JSON.stringify(response.body).replaceAll('"', ""));
     }
   }
   logout(response) {
@@ -95,17 +117,18 @@ export class Admin {
     } else if (response.status === 403) {
       window.alert("Session Timeout");
       window.location.replace("../index.html");
-    } else if (response.status === 500) {
+    } else {
       window.alert("Something went wrong");
     }
   }
   add(response) {
-    if (response.status === 200) window.location.replace(response.redirect);
+    if (response.status === 201) window.location.replace(response.redirect);
     else if (response.status === 403) {
       window.alert("Session Timeout");
       window.location.replace("../index.html");
-    } else if (response.status === 500) {
-      window.alert("Something went wrong");
+    } else {
+      window.alert(JSON.stringify(response.body).replaceAll('"', ""));
+      window.location.href = "";
     }
   }
 }
@@ -113,3 +136,29 @@ export class Admin {
 // function insert(referenceNode, newNode) {
 //     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 //   }
+
+export function refresh() {
+  console.log("refresh called");
+  console.log(document);
+  let display = U.gEBI("display");
+  console.log(display);
+  if (display !== undefined && display !== null) {
+    let refresh = display.firstChild;
+    console.log(refresh);
+    if (refresh !== undefined && refresh !== null) {
+      let already = false;
+
+      if (!already) {
+        already = true;
+
+        refresh.id.includes("Employee")
+          ? new C.User().getAll()
+          : refresh.id.includes("System")
+          ? new C.System().getAll()
+          : new C.Session().getAll();
+
+        setTimeout(() => (refresh = false), 5000);
+      }
+    }
+  }
+}

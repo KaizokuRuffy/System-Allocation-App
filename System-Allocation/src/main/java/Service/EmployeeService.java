@@ -1,5 +1,6 @@
 package Service;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -11,10 +12,18 @@ public class EmployeeService
 {
 	private EmployeeDAO employeeDAO= new EmployeeDAO();
 	
+	public boolean isPresent()
+	{
+		if(employeeDAO.noOfRows() != 0)
+			return true;
+		
+		return false;	
+	}
+	
 	public Boolean Authenticate(int emp_Id, String Password)
 	{
 		String emp_Password = null;
-		StringBuilder temp = null;
+		//StringBuilder temp = null;
 		
 		try 
 		{
@@ -42,6 +51,9 @@ public class EmployeeService
 	public boolean createUser(Employee emp)
 	{
 		
+		if(emp.getEmp_Id() == -1)
+			emp.setEmp_Id(employeeDAO.noOfRows() + 1);
+		
 		Cipher cipher = new Cipher(emp.getEmp_Password(), 
 				((Integer)emp.getEmp_Id()).toString(), emp.getEmp_Name(), "user", true);
 
@@ -49,6 +61,9 @@ public class EmployeeService
 		
 		if(employeeDAO.insertInto(emp) == 1)
 			return true;
+		
+		new File(cipher.getKeysetFilename()).delete();
+		//System.out.println("Json KeySet file deleted");
 		
 		return false;
 	}

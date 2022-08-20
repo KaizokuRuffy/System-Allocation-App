@@ -37,19 +37,23 @@ public class SessionController extends HttpServlet
 				{
 					if(sessionList.size() > 0)
 					{
+						new Message().infoToClient(response, sessionList);
 						System.out.println("All session data fetched successfully");
-						new Message().infoToClient(request, response, sessionList);
 					}
 					else
 					{
+						new Message().infoToClient(HttpServletResponse.SC_NOT_FOUND, 
+															response, "No session data");
 						System.out.println("No session data in table");
-						response.sendError(500, "No session data in table");
+//						response.sendError(500, "No session");
 					}
 				}
 				else
 				{
-					System.out.println("Database is empty");
-					response.sendError(500, "Database is empty");
+					new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
+															response, "Database error");
+					System.out.println("Database error");
+//					response.sendError(500, "Database error");
 				}
 					
 				break;
@@ -73,7 +77,8 @@ public class SessionController extends HttpServlet
 				
 			case "/addSession" :
 				System.out.println("\n-- Adding session data to databse --");
-				Session session = new Json().toPojo(request, Session.class);
+				Session session = new Json().toPojo((String)request.getAttribute("Session"), Session.class);
+				request.removeAttribute("Session");
 				
 				if(session != null)
 				{
@@ -86,14 +91,24 @@ public class SessionController extends HttpServlet
 						request.setAttribute("comp_Id", session.getComp_Id());
 						request.setAttribute("colName", "available");
 						request.setAttribute("status", "No");
+						response.getWriter().append("Session data added successfully");
 						rd.forward(request, response);
 						
 					}
 					else
 					{
-						System.out.println("Database error");
-						response.sendError(500, "Databse error");
+						new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
+								response, "System already in use. Try another system");
+						System.out.println("System already in use. Try another system");
 					}
+				}
+				else
+				{
+					new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+																response, "JSON parse error");
+					System.out.println("JSON parse error");
+//					System.out.println("JSON to POJO");
+//					System.out.println(session);
 				}
 				
 				break;
@@ -123,16 +138,25 @@ public class SessionController extends HttpServlet
 						request.setAttribute("comp_Id", session.getComp_Id());
 						request.setAttribute("colName", "available");
 						request.setAttribute("status", "Yes");
+						response.getWriter().append("Session data updated successfully");
 						rd.forward(request, response);
 						
 //						request.getSession().invalidate();
 					}
 					else
 					{
+						new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+								, response,"Session data doesn't exist (or) database error");
 						System.out.println("Session data doesn't exist (or) database error");
-						response.sendError(500, "Session data doesn't exist (or) database error");
+//						response.sendError(500, "Session data doesn't exist (or) database error");
 					}
 				}
+				else {
+					new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+																, response, "JSON parse error");
+					System.out.println("JSON parse error");
+				}
+				
 				break;
 		}
 	}

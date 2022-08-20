@@ -6,6 +6,9 @@ export class User {
     this.Model = new M.User();
     this.View = new V.User();
   }
+  firstLogin() {
+    this.View.firstLogin(this.Model.login(-1));
+  }
   login(comp_Id) {
     //console.log(this.Model.login());
     this.View.login(this.Model.login(comp_Id));
