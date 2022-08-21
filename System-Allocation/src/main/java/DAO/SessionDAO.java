@@ -142,6 +142,54 @@ public class SessionDAO
 		return null;
 	}
 	
+	public List<Session> select(int emp_Id) {
+		
+		System.out.println("Fetching Employee '" + emp_Id + "' session details");
+		
+		String query = 
+				   "SELECT " + TableName.getSession() + ".*, "
+						 + TableName.getEmployee() + "." + EmployeeDAO.ColumnName.Name.toString()
+				 + " FROM " + TableName.getSession() + " , " + TableName.getEmployee()
+			     + " WHERE " + TableName.getSession() + "." + ColumnName.Emp_ID.value 
+			     + " = " + TableName.getEmployee() + "." + EmployeeDAO.ColumnName.ID.toString()
+			     + " AND " + TableName.getEmployee() + "." + EmployeeDAO.ColumnName.ID.toString()
+			     													+ " = '" + emp_Id + "' " ;
+		
+		//System.out.println(query);
+		Connection conn = JDBC_Connection.getConnection();
+		
+		try(PreparedStatement ps = conn.prepareStatement(query);
+			ResultSet rs = ps.executeQuery())
+		{		
+			List<Session> sessionList = new ArrayList<>();
+			
+			while(rs.next())
+			{
+				Session session = new Session();
+				session.setEmp_Id(rs.getInt(ColumnName.Emp_ID.value.replaceAll("`", "")));
+				session.setEmp_Name(rs.getString(EmployeeDAO.ColumnName.Name.toString()));
+				session.setComp_Id(rs.getInt(ColumnName.Comp_ID.value.replaceAll("`", "")));
+				session.setLogIn_Date(rs.getDate(ColumnName.LogIn_Date.value.replaceAll("`", "")));
+				session.setLogOut_Date(rs.getDate(ColumnName.LogOut_Date.value.replaceAll("`", "")));
+				session.setLogIn_Time(rs.getString(ColumnName.LogIn_Time.value.replaceAll("`", "")));
+				session.setLogOut_Time(rs.getString(ColumnName.LogOut_Time.value.replaceAll("`", "")));
+				session.setTotal_Time(rs.getString(ColumnName.Total_Time.value.replaceAll("`", "")));
+				session.setShift(rs.getString(ColumnName.Shift.toString()));
+				
+				sessionList.add(session);
+//				System.out.println(session);
+			}
+			//System.out.println(sessionList);
+			return sessionList;
+		} 
+		catch (SQLException e) 
+		{
+			JDBC_Connection.close();
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 	public int updateRecord(Session session) {
 		
 		String query = "UPDATE " + TableName.getSession()
