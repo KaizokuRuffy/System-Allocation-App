@@ -99,6 +99,11 @@ public class ComputerController extends HttpServlet
 //						response.sendError(500, "Database error");
 					}
 				}
+				else {
+					new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+																, response, "JSON parse error");
+					System.out.println("JSON parse error");
+				}
 				
 				break;
 		}
