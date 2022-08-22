@@ -189,6 +189,49 @@ public class EmployeeDAO
 		return null;
 	}
 	
+public Employee selectRecord(String emp_Email) {
+		
+//		System.out.println("Fetching User(Employee) details : ");
+		
+		String query = " SELECT * "
+					 + " FROM " + TableName.getEmployee()
+					 + " WHERE " + ColumnName.Email_ID.value + " = '" + emp_Email + "'" ;
+
+		Connection conn = JDBC_Connection.getConnection();
+
+		try(PreparedStatement ps = conn.prepareStatement(query);
+			ResultSet rs = ps.executeQuery())
+		{
+
+			if(rs.next())
+			{
+				Employee emp = new Employee();
+				emp.setEmp_Id(rs.getInt(ColumnName.ID.toString()));;
+				emp.setEmp_Name(rs.getString(ColumnName.Name.toString()));;
+				emp.setAdhaarId(rs.getString(ColumnName.Adhaar_ID.value.replaceAll("`", "")));
+				emp.setEmp_Email(rs.getString(ColumnName.Email_ID.value.replaceAll("`", "")));;
+				emp.setEmp_MobileNo(rs.getString
+										(ColumnName.Mobile_No.value.replaceAll("`", "")));;
+				emp.setEmp_Password(rs.getString(ColumnName.Password.toString()));;
+				emp.setEmp_Role(rs.getString(ColumnName.Role.toString()));;
+				emp.setEmp_Dept(rs.getString(ColumnName.Department.toString()));;
+				emp.setEmp_WorkLoc(rs.getString
+										(ColumnName.Work_Location.value.replaceAll("`", "")));;
+										
+//				System.out.println(emp);
+										
+				return emp;
+			}
+			
+		} 
+		catch (SQLException e) 
+		{
+			JDBC_Connection.close();
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public List<Employee> selectAll() {
 		
 //		System.out.println("Fetching All(Employee) details ");

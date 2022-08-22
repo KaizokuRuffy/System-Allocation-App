@@ -131,24 +131,22 @@ public class AdminController extends HttpServlet {
 
 				System.out.println("\n-- Authenticating admin --");
 
-				int admin_id = 0;
+				String username = null;
 				String Password = null;
 				Boolean auth = null;
 
+				username = request.getParameter("admin_Email");// var
+				Password = new String(request.getParameter("admin_Password"));// var
+				
+				int id = 0;
+				
 				try {
-					admin_id = Integer.parseInt(request.getParameter("admin_Id"));// var
-					Password = new String(request.getParameter("admin_Password"));// var
-
-					auth = adminService.Authenticate(admin_id, Password); // DB call
-				} catch (NumberFormatException e) {
-					// out.write("Invalid username");
-					new Message().infoToClient(HttpServletResponse.SC_FORBIDDEN, response,
-							"Invalid username / password");
-					// response.sendError(403, "Invalid username / password");
-					System.out.println("Username doesn't exist");
-					break;
+					id = adminService.getUser(username).getAdmin_Id();
+					auth = adminService.Authenticate(id, Password); // DB call
 				}
-
+				catch (NullPointerException e) {
+				}
+			
 				if (auth == null) {
 					// out.write("Invalid username");
 					// response.sendError(403, "Invalid username / password");
@@ -164,7 +162,7 @@ public class AdminController extends HttpServlet {
 
 					// System.out.println(request.getSession().getId());
 					// System.out.println(request.getSession().getAttribute("status"));
-					new Message().infoToClient("Logged in successfully", response);
+					new Message().infoToClient("admin_Id :" + id, response);
 
 				} else if (auth == false) {
 					// out.write("Invalid password");

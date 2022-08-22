@@ -19,7 +19,7 @@ public class SessionDAO
 	{
 		Emp_ID("`Employee ID`"), Comp_ID("`Computer ID`"), LogIn_Date("`LogIn Date`"), 
 					LogOut_Date("`LogOut Date`"),LogIn_Time("`LogIn Time`"), 
-					LogOut_Time("`LogOut Time`"), Total_Time("`Total Time`"), Shift;
+					LogOut_Time("`LogOut Time`"), Total_Time("`Total Time`"), Shift, SNO;
 		
 		String value;
 		
@@ -32,16 +32,17 @@ public class SessionDAO
 	}
 	
 	private static String createTable = "CREATE TABLE IF NOT EXISTS " + TableName.getSession()
-		+ " ( " + ColumnName.Emp_ID.value + " INT NOT NULL, "
-				+ ColumnName.Comp_ID.value + " INT NOT NULL, "
-				+ ColumnName.LogIn_Date.value + " DATE NOT NULL, "
-				+ ColumnName.LogOut_Date.value + " DATE, "
-				+ ColumnName.LogIn_Time.value + " varchar(255), "
-				+ ColumnName.LogOut_Time.value + " varchar(255), "
-				+ ColumnName.Total_Time.value + " varchar(255), "
-				+ ColumnName.Shift + " varchar(255), "
-		 		+ " PRIMARY KEY (" + ColumnName.Emp_ID.value + "," + ColumnName.Comp_ID.value+ 
-		 									"," + ColumnName.LogIn_Date.value+ "," + ColumnName.LogIn_Time.value + ") )" ;
+	+ " ( " + ColumnName.SNO + " INT AUTO_INCREMENT, "
+			+ ColumnName.Emp_ID.value + " INT NOT NULL, "
+			+ ColumnName.Comp_ID.value + " INT NOT NULL, "
+			+ ColumnName.LogIn_Date.value + " DATE NOT NULL, "
+			+ ColumnName.LogOut_Date.value + " DATE, "
+			+ ColumnName.LogIn_Time.value + " varchar(255), "
+			+ ColumnName.LogOut_Time.value + " varchar(255), "
+			+ ColumnName.Total_Time.value + " varchar(255), "
+			+ ColumnName.Shift + " varchar(255), "
+			+ "UNIQUE (" + ColumnName.Comp_ID.value + "," + ColumnName.LogIn_Date.value + "," + ColumnName.Shift + "),"
+	 		+ " PRIMARY KEY (" + ColumnName.SNO + "," + ColumnName.Emp_ID.value + "," + ColumnName.LogIn_Date.value + ") )" ;	
 	
 	public static int noOfRows()
 	{
@@ -70,7 +71,7 @@ public class SessionDAO
 	
 	public int insertInto(Session session) {
 //		System.out.println("Current session data stored in database");
-		String query = "INSERT INTO " + TableName.getSession() + " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		String query = "INSERT INTO " + TableName.getSession() + " VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?)";
 		
 		try(Connection conn = JDBC_Connection.getConnection();
 			PreparedStatement ps = conn.prepareStatement(query))

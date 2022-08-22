@@ -81,6 +81,21 @@ public class EmployeeService
 		
 		return emp;
 	}
+	public Employee getUser(String emp_Email)
+	{
+		Employee emp = null;
+		
+		emp = employeeDAO.selectRecord(emp_Email);
+		
+		Cipher cipher = new Cipher(emp.getEmp_Password(), 
+				((Integer)emp.getEmp_Id()).toString(), emp.getEmp_Name(), "user");
+		
+		emp.setEmp_Password(cipher.decrypt());;
+		
+		return emp;
+	}
+	
+	
 	
 	public List<Employee> getAllUser()
 	{

@@ -7,6 +7,7 @@ import java.util.Map;
 import Beans.Admin;
 import DAO.AdminDAO;
 import Service.Util.Cipher;
+import Service.Util.FileUtil;
 
 public class AdminService 
 {
@@ -52,8 +53,17 @@ public class AdminService
 		if(!isEmpty)
 			return false;
 		
-		if(adminDAO.isDatabaseEmpty())
+		if(adminDAO.isDatabaseEmpty()) {
+			
+			String path = "C:\\Users\\Kishore\\git\\System-Allocation-App\\System-Allocation"
+					+ "\\src\\main\\java\\Service\\Util\\Secret Key\\";
+			File dir = new File(path);
+			
+			if(dir.exists())
+				System.out.println(FileUtil.deleteDir(dir) ? "Keys deleted successfully" : "Keys couldn't be deleted");
+			
 			return true;
+		}
 		
 		return false;
 	}
@@ -129,6 +139,23 @@ public class AdminService
 		Admin admin = null;
 		
 		admin = adminDAO.selectRecord(admin_Id);
+		
+		if(admin != null)
+		{
+			Cipher cipher = new Cipher(admin.getAdmin_Password(), 
+					((Integer)admin.getAdmin_Id()).toString(), admin.getAdmin_Name(), "admin");
+			
+			admin.setAdmin_Password(cipher.decrypt());
+		}
+		
+		return admin;
+	}
+	
+	public Admin getUser(String admin_Email)
+	{
+		Admin admin = null;
+		
+		admin = adminDAO.selectRecord(admin_Email);
 		
 		if(admin != null)
 		{

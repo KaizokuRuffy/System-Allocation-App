@@ -25,16 +25,16 @@ export class User {
   login(comp_Id) {
     let params =
       "?" +
-      U.User.Id +
+      U.User.Email +
       "=" +
-      U.gEBI(U.User.Id).value +
+      U.gEBI(U.User.Email).value +
       "&" +
       U.User.Password +
       "=" +
       U.gEBI(U.User.Password).value;
 
     this.data = new D.SessionBuilder()
-      .setEmp_Id(Number(U.gEBI(U.User.Id).value))
+      .setEmp_Id(-1)
       .setComp_Id(Number(comp_Id))
       .setLogIn_Date(U.getDate())
       .setLogIn_Time(U.getTime())
@@ -60,11 +60,18 @@ export class User {
 
     this.XHR = new U.XHR(this.request, this.response);
     this.response = this.XHR.sendRequest();
-
     if (
       this.response.status === 200 &&
       !this.response.body.includes("comp_Id")
     ) {
+      // console.log(NaN);
+      // console.log(Number(this.response.body));
+      // console.log(Number(this.response.body) != NaN);
+      // this.data[U.Session.emp_Id] =
+      //   Number(this.response.body) != NaN
+      //     ? Number(this.response.body)
+      //     : Number(localStorage.getItem(U.User.Id));
+      this.data[U.Session.emp_Id] = Number(this.response.body);
       afterLogin(comp_Id);
       sessionStorage.setItem("session", JSON.stringify(this.data));
       sessionStorage.setItem("who", "user");
@@ -229,7 +236,9 @@ let afterLogin = (CID) => {
   sessionStorage.removeItem("Username");
   sessionStorage.removeItem("Available");
 
-  localStorage.setItem(U.User.Id, U.gEBI(U.User.Id).value);
+  localStorage.setItem(U.User.Id, Number(sessionStorage.getItem(U.User.Id)));
+  sessionStorage.removeItem(U.User.Id);
+
   localStorage.setItem(U.Session.comp_Id, CID);
   localStorage.setItem(U.Session["Login Time"], U.getTime());
   localStorage.setItem(U.Session["Login Date"], U.getDate());

@@ -12,16 +12,31 @@ export class User {
     //console.log(JSON.parse().includes("-1"));
     if (response.status === 200) {
       if (!response.body.includes("-1")) {
-        if (!response.body.includes("Available - No"))
+        if (!response.body.includes("Available - No")) {
+          let str = response.body.replace("comp_Id :", "");
+          sessionStorage.setItem(U.System.Id, str.substr(0, str.indexOf(",")));
           sessionStorage.setItem(
-            U.System.Id,
-            response.body.replace("comp_Id :", "")
+            U.User.Id,
+            Number(str.substr(str.indexOf(",") + 1), str.length + 1)
           );
-        else sessionStorage.setItem("Available", "No");
+        } else sessionStorage.setItem("Available", "No");
       } else if (response.body.includes("-1")) {
         sessionStorage.setItem(U.System.Id, -1);
+        // console.log(response.body.indexOf(","));
+        // console.log(response.body.length + 1);
+        // console.log(
+        //   response.body.substr(response.body.indexOf(",") + 1),
+        //   response.body.length + 1
+        // );
+        sessionStorage.setItem(
+          U.User.Id,
+          Number(
+            response.body.substr(response.body.indexOf(",") + 1),
+            response.body.length + 1
+          )
+        );
       }
-    } else if (response.status === 404) {
+    } else if (response.status === 403) {
       sessionStorage.setItem("Username", JSON.stringify(response.body));
     }
   }

@@ -82,7 +82,7 @@ public class ComputerController extends HttpServlet
 				
 				System.out.println("\n-- Saving resource details to database --");
 				Computer comp = new Json().toPojo(request, Computer.class);
-				
+				//System.out.println("asdad");
 				if(comp != null)
 				{
 					if(computerService.addSystem(comp))
@@ -101,7 +101,7 @@ public class ComputerController extends HttpServlet
 				}
 				else {
 					new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR
-																, response, "JSON parse error");
+																, response, "Invalid input format");
 					System.out.println("JSON parse error");
 				}
 				
@@ -145,9 +145,15 @@ public class ComputerController extends HttpServlet
 //					System.out.println(comp_Id + " " + colName + " " + status);
 					if(computerService.updateStatus(comp_Id, colName, status))
 					{
-
-						//new Message().infoToClient("Status updated successfully",response);
-						response.getWriter().append("Status updated successfully");
+//						Integer emp_Id = Integer.parseInt(response.getHeader("emp_Id"));
+//						new Message().infoToClient(emp_Id.toString(),response);
+						try {
+							Integer emp_Id = Integer.parseInt(response.getHeader("emp_Id"));
+							new Message().infoToClient(emp_Id.toString(),response);
+						} catch (NumberFormatException e) {
+							new Message().infoToClient("System updated successfully",response);
+						}
+//						response.getWriter().append(emp_Id.toString());
 						
 						System.out.println("Status of system '" + comp_Id + 
 													"' is updated succesfully");

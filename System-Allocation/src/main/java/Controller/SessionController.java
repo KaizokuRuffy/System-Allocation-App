@@ -91,7 +91,7 @@ public class SessionController extends HttpServlet
 						request.setAttribute("comp_Id", session.getComp_Id());
 						request.setAttribute("colName", "available");
 						request.setAttribute("status", "No");
-						response.getWriter().append("Session data added successfully");
+						//response.getWriter().append("Session data added successfully");
 						rd.forward(request, response);
 						
 					}

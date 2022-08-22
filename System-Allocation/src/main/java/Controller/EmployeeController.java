@@ -109,26 +109,27 @@ public class EmployeeController extends HttpServlet {
 
 				System.out.println("\n--- Authenticating user ---");
 
-				int emp_Id = 0;
+				String username = null;
 				String Password = null;
 
+				username = request.getParameter("emp_Email");
+				//emp_Id = Integer.parseInt(request.getParameter("emp_Id"));// var
+				Password = new String(request.getParameter("emp_Password"));// var
+				Boolean auth = null;
+				
+				int emp_Id = 0;
+				
 				try {
-					emp_Id = Integer.parseInt(request.getParameter("emp_Id"));// var
-					Password = new String(request.getParameter("emp_Password"));// var
-				} catch (NumberFormatException e) {
-
-					new Message().infoToClient(HttpServletResponse.SC_NOT_FOUND, response,
-							"Invalid username / password");
-					// out.write("Invalid username");
-					// response.sendError(403, "Invalid username / password");
-					System.out.println("Username doesn't exist");
-					break;
+					emp_Id = employeeService.getUser(username).getEmp_Id();
+					System.out.println(emp_Id);
+					auth = employeeService.Authenticate(emp_Id, Password); // DB call
+				} catch (NullPointerException e) {
+					e.printStackTrace();
 				}
-
-				Boolean auth = employeeService.Authenticate(emp_Id, Password); // DB call
+				
 
 				if (auth == null) {
-					new Message().infoToClient(HttpServletResponse.SC_NOT_FOUND, response,
+					new Message().infoToClient(HttpServletResponse.SC_FORBIDDEN, response,
 							"Invalid username / password");
 					// out.write("Invalid username");
 					// response.sendError(403, "Invalid username / password");
@@ -138,6 +139,7 @@ public class EmployeeController extends HttpServlet {
 				}
 
 				Session session = new Json().toPojo(request, Session.class);
+				session.setEmp_Id(emp_Id);
 				List<Session> sessionList = new SessionService().getEmpSession(emp_Id);
 
 				Computer comp = null;
@@ -156,7 +158,9 @@ public class EmployeeController extends HttpServlet {
 							comp = new ComputerService().getSystem(comp_Id);
 
 							if (comp.getAvailable().equals("Yes"))
-								new Message().infoToClient("comp_Id :" + comp_Id, response);
+							{
+								new Message().infoToClient("comp_Id :" + comp_Id + "," + emp_Id, response);
+							}
 							else
 								new Message().infoToClient("Available - No, comp_Id :" + comp_Id, response);
 						}
@@ -166,7 +170,7 @@ public class EmployeeController extends HttpServlet {
 
 				// User logging in for first time (-1)
 				if (session.getComp_Id() == -1 && comp_Id == -1) {
-					new Message().infoToClient("comp_Id :" + comp_Id, response);
+					new Message().infoToClient("comp_Id :" + comp_Id + "," + emp_Id, response);
 				} else if (session.getComp_Id() != -1) {
 					if (auth == true) {
 						/*
@@ -193,7 +197,9 @@ public class EmployeeController extends HttpServlet {
 								// user logs in
 								RequestDispatcher rd = request.getRequestDispatcher("/SessionController/addSession");
 								response.setContentType("text/plain");
-								response.getWriter().write("Logged in successfully");
+								response.setIntHeader("emp_Id", emp_Id);
+//								System.out.println("write");
+//								response.getWriter().write(emp_Id);
 								rd.forward(request, response);
 
 								SchedulerTask st = new SchedulerTask();
@@ -239,6 +245,7 @@ public class EmployeeController extends HttpServlet {
 								request.setAttribute("comp_Id", session.getComp_Id());
 								request.setAttribute("colName", "available");
 								request.setAttribute("status", "No");
+								response.setIntHeader("emp_Id", emp_Id);
 								response.setContentType("text/plain");
 								response.getWriter().write("Logged in successfully");
 								rd.forward(request, response);

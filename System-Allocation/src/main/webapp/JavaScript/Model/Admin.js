@@ -65,7 +65,7 @@ export class Admin {
   }
   login() {
     this.data = new D.AdminBuilder()
-      .setId(Number(U.gEBI(U.Admin.Id).value))
+      .setEmail(U.gEBI(U.Admin.Email).value)
       .setPassword(U.gEBI(U.Admin.Password).value)
       .getAdmin();
 
@@ -79,9 +79,9 @@ export class Admin {
     //console.log("After removing" + JSON.stringify(this.data));
     let params =
       "?" +
-      U.Admin.Id +
+      U.Admin.Email +
       "=" +
-      this.data[U.Admin.Id] +
+      this.data[U.Admin.Email] +
       "&" +
       U.Admin.Password +
       "=" +
@@ -112,7 +112,10 @@ export class Admin {
     this.response = this.XHR.sendRequest();
     //console.log(this.response);
     if (this.response.status === 200) {
-      sessionStorage.setItem(U.Admin.Id, this.data.admin_Id);
+      sessionStorage.setItem(
+        U.Admin.Id,
+        Number(this.response.body.replace("admin_Id :", ""))
+      );
       sessionStorage.setItem("who", "admin");
     }
 

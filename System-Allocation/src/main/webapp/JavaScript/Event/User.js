@@ -79,7 +79,7 @@ let comp_Id = null;
 export let firstTime = () => {
   //console.log("Keyup Listener");
   if (U.gEBI(U.User.Password) !== null) {
-    U.gEBI(U.User.Id).addEventListener("keyup", () => {
+    U.gEBI(U.User.Email).addEventListener("keyup", () => {
       keypress = false;
       sessionStorage.removeItem(U.System.Id);
       sessionStorage.removeItem("Username");
@@ -106,10 +106,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 let beforeLogin = (bool) => {
   if (bool) {
-    if (
-      U.getShift(localStorage.getItem(U.Session["Login Date"])) !==
-      U.getShift(U.getDate())
-    ) {
+    if (localStorage.getItem(U.Session["Login Date"]) !== U.getDate()) {
+      //console.log("");
       localStorage.clear();
       return true;
       //console.log("Session cleared");
@@ -123,7 +121,7 @@ let beforeLogin = (bool) => {
     } else return false;
   } else {
     if (
-      localStorage.getItem(U.User.Id) === U.gEBI(U.User.Id).value &&
+      localStorage.getItem(U.User.Id) === sessionStorage.getItem(U.User.Id) &&
       localStorage.getItem(U.System.Id) === comp_Id
     )
       return true;

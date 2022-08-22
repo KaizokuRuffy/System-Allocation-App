@@ -234,6 +234,42 @@ public class AdminDAO
 	
 		return null;
 	}
+	
+public Admin selectRecord(String admin_Email) {
+		
+//		System.out.println("Fetching User(Admin) details : ");
+		
+		String query = "SELECT * "
+					 + " FROM " + TableName.getAdmin()
+					 + " WHERE " + ColumnName.Email_ID.value + " = '" + admin_Email + "'";
+		Connection conn = JDBC_Connection.getConnection();
+		
+		try(PreparedStatement ps = conn.prepareStatement(query);
+			ResultSet rs = ps.executeQuery())
+		{
+			
+			if(rs.next())
+			{
+				Admin admin = new Admin();
+				admin.setAdmin_Id(rs.getInt(ColumnName.ID.toString()));
+				admin.setAdmin_Name(rs.getString(ColumnName.Name.toString()));
+				admin.setAdmin_Email(rs.getString(ColumnName.Email_ID.value.replaceAll("`", "")));
+				admin.setAdmin_ContactNo(rs.getString(ColumnName.Contact_No.value.replaceAll("`", "")));
+				admin.setAdmin_Password(rs.getString(ColumnName.Password.toString()));
+//				System.out.println(admin);
+				
+				return admin;
+			}
+		} 
+		catch (SQLException e) 
+		{
+			JDBC_Connection.close();
+			e.printStackTrace();
+		}
+	
+		return null;
+	}
+
 	@Deprecated
 	public void selectAll() {
 		

@@ -42,10 +42,20 @@ public class Json
 			e.printStackTrace();
 		}
 		
-//		System.out.println(json);
+		
+		//System.out.println(json);
 		
 		Gson gson = new Gson();
-		T t = gson.fromJson(json, clazz);
+		T t = null;
+		
+		try {
+			t = gson.fromJson(json, clazz);
+			//System.out.println(t);
+		} 
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 		//System.out.println(t);
 		
 		return t;
