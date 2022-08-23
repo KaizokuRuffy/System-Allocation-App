@@ -8,7 +8,11 @@ var SessionController = new Ctrl.Session();
 
 export let getAllSession = () => {
   U.gEBI("getAllSession").addEventListener("click", () => {
-    SessionController.getAll();
+    if (sessionStorage.getItem("who") === "user") {
+      SessionController.getEmpSession(
+        JSON.parse(sessionStorage.getItem("session"))[U.Session.emp_Id]
+      );
+    } else SessionController.getAll();
   });
 };
 

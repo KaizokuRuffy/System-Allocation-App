@@ -57,6 +57,38 @@ public class SessionController extends HttpServlet
 				}
 					
 				break;
+				
+			case "/getEmpSession":
+				
+				System.out.println("\n-- Fetching all session data --");
+				
+				int emp_Id = Integer.parseInt(request.getParameter("emp_Id"));
+				
+				List<Session> empSessionList = sessionService.getEmpSession(emp_Id);
+				if(empSessionList != null)
+				{
+					if(empSessionList.size() > 0)
+					{
+						new Message().infoToClient(response, empSessionList);
+						System.out.println("All session data fetched successfully");
+					}
+					else
+					{
+						new Message().infoToClient(HttpServletResponse.SC_NOT_FOUND, 
+															response, "No session data");
+						System.out.println("No session data in table");
+//						response.sendError(500, "No session");
+					}
+				}
+				else
+				{
+					new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
+															response, "Database error");
+					System.out.println("Database error");
+//					response.sendError(500, "Database error");
+				}
+					
+				break;
 		}
 	}
 	
@@ -126,7 +158,7 @@ public class SessionController extends HttpServlet
 			case "/updateSession" :
 				System.out.println("\n-- Updating session data --");
 				Session session = new Json().toPojo(request, Session.class);
-				
+//				System.out.println(session);
 				if(session != null)
 				{
 					if(sessionService.updateSession(session))

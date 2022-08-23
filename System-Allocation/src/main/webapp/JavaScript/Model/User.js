@@ -196,10 +196,10 @@ export class User {
     return this.response;
   }
   add() {
-    let id = U.gEBI(U.User.Id).value;
+    // let id = U.gEBI(U.User.Id).value;
 
     this.data = new D.UserBuilder()
-      .setId(id === "" ? -1 : Number(id))
+      .setId(-1)
       .setName(U.gEBI(U.User.Name).value)
       .setAdhaarId(U.gEBI(U.User.AdhaarId).value)
       .setEmail(U.gEBI(U.User.Email).value)

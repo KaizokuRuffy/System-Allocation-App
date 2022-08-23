@@ -9,4 +9,7 @@ export class Session {
   getAll() {
     this.View.getAll(this.Model.getAll());
   }
+  getEmpSession(emp_Id) {
+    this.View.getAll(this.Model.getEmpSession(emp_Id));
+  }
 }

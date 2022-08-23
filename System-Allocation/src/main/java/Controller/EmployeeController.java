@@ -3,6 +3,7 @@ package Controller;
 import java.io.IOException;
 // import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.TimerTask;
 
@@ -18,6 +19,7 @@ import Beans.Computer;
 import Beans.Employee;
 import Beans.Session;
 import Controller.Util.Counter;
+import Controller.Util.DATE;
 import Controller.Util.Json;
 import Controller.Util.Message;
 import Controller.Util.SchedulerTask;
@@ -121,7 +123,7 @@ public class EmployeeController extends HttpServlet {
 				
 				try {
 					emp_Id = employeeService.getUser(username).getEmp_Id();
-					System.out.println(emp_Id);
+					//System.out.println(emp_Id);
 					auth = employeeService.Authenticate(emp_Id, Password); // DB call
 				} catch (NullPointerException e) {
 					e.printStackTrace();
@@ -150,7 +152,16 @@ public class EmployeeController extends HttpServlet {
 				int comp_Id = -1;
 
 				for (Session temp : sessionList) {
-					if (temp.getLogIn_Date().equals(session.getLogIn_Date())) {
+					if(session.getComp_Id() != -1 && temp.getLogIn_Date().equals(session.getLogIn_Date())
+							&& !DATE.getShift(temp.getLogOut_Time()).equals(DATE.getShift())
+							&& temp.getComp_Id() == session.getComp_Id())
+						comp_Id = temp.getComp_Id();
+					
+//					System.out.println(DATE.getShift(temp.getLogOut_Time()));
+//					System.out.println(DATE.getShift());
+					if (temp.getLogIn_Date().equals(session.getLogIn_Date()) && 
+												DATE.getShift(temp.getLogOut_Time()).equals(DATE.getShift())) {
+						//System.out.println("Inside this if");
 						// User already logged in (N)
 						comp_Id = temp.getComp_Id();
 
@@ -158,9 +169,8 @@ public class EmployeeController extends HttpServlet {
 							comp = new ComputerService().getSystem(comp_Id);
 
 							if (comp.getAvailable().equals("Yes"))
-							{
 								new Message().infoToClient("comp_Id :" + comp_Id + "," + emp_Id, response);
-							}
+							
 							else
 								new Message().infoToClient("Available - No, comp_Id :" + comp_Id, response);
 						}
@@ -173,6 +183,7 @@ public class EmployeeController extends HttpServlet {
 					new Message().infoToClient("comp_Id :" + comp_Id + "," + emp_Id, response);
 				} else if (session.getComp_Id() != -1) {
 					if (auth == true) {
+						System.out.println(comp_Id);
 						/*
 						 * Session session = new Json().toPojo(request, Session.class); List<Session>
 						 * sessionList = new SessionService().getEmpSession(emp_Id);
@@ -182,6 +193,32 @@ public class EmployeeController extends HttpServlet {
 						 */
 
 						if (comp != null && comp.getAvailable().equals("Yes")) {
+							
+							boolean flag = false;
+							
+							if(comp_Id == -1)
+							{
+								List<Session> sl = new SessionService().getAllSessions();
+								for(Session temp : sl)
+									if(temp.getComp_Id() == comp.getComp_Id() 
+									&& temp.getLogIn_Date().equals(session.getLogIn_Date())
+									&& DATE.getShift(temp.getLogOut_Time())
+									.equals(DATE.getShift(session.getLogIn_Time()))
+									) 
+									{
+										new Message().infoToClient(HttpServletResponse.SC_BAD_REQUEST,
+												response, "System already in use");
+										// out.write("Cannot login to different system");
+										// response.sendError(403, "Cannot login to different system");
+										System.err.println("System already in use");
+										
+										flag = true;
+										break;
+									}
+							}
+							if (flag)
+								break;
+							
 							if (comp_Id == -1) {
 								System.out.println("Logged in successfully");
 
@@ -265,7 +302,9 @@ public class EmployeeController extends HttpServlet {
 								 */
 								Counter.getcounter().atLogin();
 							} else if (comp.getComp_Id() != comp_Id) {
-
+								
+								//System.out.println(comp_Id);
+								
 								new Message().infoToClient(HttpServletResponse.SC_BAD_REQUEST,
 										response, "Cannot login to different system");
 								// out.write("Cannot login to different system");

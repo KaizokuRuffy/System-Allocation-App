@@ -42,7 +42,7 @@ public class LoginFilter implements Filter {
 	private static List<String> adminURLs = Arrays
 			.asList(new String[] { "/adminLogout", "/getAdmin", "/create", "/addAdmin", "/getAllUsers", "/addUser",
 					"/getAllSystems", "/addSystem", "/updateStatus", });
-	private static List<String> employeeURLs = Arrays.asList(new String[] { "/userLogout" });
+	private static List<String> employeeURLs = Arrays.asList(new String[] { "/userLogout" , "/getEmpSession" });
 
 	private static Consumer<String> exclude = (String urls) -> {
 		String[] s = urls.split(",");

@@ -118,7 +118,11 @@ let beforeLogin = (bool) => {
       localStorage.clear();
       //console.log("Session cleared");
       return true;
-    } else return false;
+    } else if (
+      localStorage.getItem(U.User.Id) === sessionStorage.getItem(U.User.Id)
+    )
+      return true;
+    else return false;
   } else {
     if (
       localStorage.getItem(U.User.Id) === sessionStorage.getItem(U.User.Id) &&

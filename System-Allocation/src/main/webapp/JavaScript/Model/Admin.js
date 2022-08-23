@@ -173,10 +173,8 @@ export class Admin {
     return this.response;
   }
   add() {
-    let id = U.gEBI(U.Admin.Id).value;
-
     this.data = new D.AdminBuilder()
-      .setId(id === "" ? -1 : Number(id))
+      .setId(-1)
       .setName(U.gEBI(U.Admin.Name).value)
       .setEmail(U.gEBI(U.Admin.Email).value)
       .setContactNo(U.gEBI(U.Admin["Mobile No"]).value)

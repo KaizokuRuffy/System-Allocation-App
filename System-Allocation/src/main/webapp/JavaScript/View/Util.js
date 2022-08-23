@@ -29,6 +29,7 @@ export let displayAsList = function (fields, data, element, name) {
   for (let i = 0; i < field_key.length - 1; i++) {
     let tr = document.createElement("tr");
     tr.setAttribute("id", field_key[i]);
+
     tbody.appendChild(tr);
 
     for (let j = 0; j < 2; j++) {
@@ -46,12 +47,14 @@ export let displayAsList = function (fields, data, element, name) {
         tr.appendChild(td);
       }
     }
+    if (tr.getAttribute("id") === "Id") tr.hidden = true;
   }
   element.appendChild(table);
 };
 
 export let displayAsTable = function (fields, data, element, name) {
   //tb[name] = data;
+  if (sessionStorage.getItem("who") === "user") delete fields["emp_Id"];
 
   removeAllChildNodes(element);
   element.setAttribute("align", "center");
@@ -83,7 +86,9 @@ export let displayAsTable = function (fields, data, element, name) {
     th.setAttribute("id", field_key[i]);
     th.setAttribute("class", "header");
     th.style.fontFamily = "Times new Roman";
-    th.appendChild(document.createTextNode(field_key[i]));
+    if (field_key[i] === "MAC") th.appendChild(document.createTextNode("OS"));
+    else th.appendChild(document.createTextNode(field_key[i]));
+
     thead.appendChild(th);
 
     len[fields[field_key[i]]] = field_key[i].length;
@@ -119,7 +124,8 @@ export let displayAsTable = function (fields, data, element, name) {
       ip.className = "Filter";
       ip.style.fontFamily = "Times New Roman";
       ip.id = fields[field_key[i]];
-      ip.placeholder = field_key[i];
+      if (field_key[i] === "MAC") ip.placeholder = "OS";
+      else ip.placeholder = field_key[i];
 
       /* if (name === "Employee" && fields[field_key[i]] === "emp_Id")
         ip.addEventListener("keyup", (e) => {
@@ -233,6 +239,8 @@ export let displayAsTable = function (fields, data, element, name) {
   Array.prototype.forEach.call(els, (el) => {
     el.style.width = len[el.id] * 9 + "px";
   });
+
+  if (sessionStorage.getItem("who") === "user") fields["emp_Id"] = "emp_Id";
 
   element.style.paddingBottom = "50px";
 };

@@ -42,7 +42,8 @@ public class SessionDAO
 			+ ColumnName.Total_Time.value + " varchar(255), "
 			+ ColumnName.Shift + " varchar(255), "
 			+ "UNIQUE (" + ColumnName.Comp_ID.value + "," + ColumnName.LogIn_Date.value + "," + ColumnName.Shift + "),"
-	 		+ " PRIMARY KEY (" + ColumnName.SNO + "," + ColumnName.Emp_ID.value + "," + ColumnName.LogIn_Date.value + ") )" ;	
+	 		+ " PRIMARY KEY (" + ColumnName.SNO + "," + ColumnName.Emp_ID.value + ","
+	 									+ ColumnName.Comp_ID.value + "," + ColumnName.LogIn_Date.value + ") )" ;	
 	
 	public static int noOfRows()
 	{
@@ -198,9 +199,10 @@ public class SessionDAO
 				  + ColumnName.LogOut_Time.value + " = ?, " + ColumnName.Total_Time.value + " = ? "
 				 + " WHERE " + ColumnName.Emp_ID.value + " = ? "
 		    	 + " AND " + ColumnName.Comp_ID.value + " = ? "
-			     + " AND " + ColumnName.LogIn_Date.value + " = ? "
-			     + " AND " + ColumnName.LogIn_Time.value + " = ? ";
+			     + " AND " + ColumnName.LogIn_Date.value + " = ? ";
+//			     + " AND " + ColumnName.LogIn_Time.value + " = ? ";
 
+		
 		try(Connection conn = JDBC_Connection.getConnection();
 			PreparedStatement ps = conn.prepareStatement(query);)
 		{
@@ -218,9 +220,12 @@ public class SessionDAO
 			ps.setInt(5, session.getComp_Id());
 //			ps.setString(12, ColumnName.LogIn_Date.value);
 			ps.setObject(6, session.getLogIn_Date());
-			ps.setObject(7, session.getLogIn_Time());
+//			ps.setObject(7, session.getLogIn_Time());
+			
+			//System.out.println(ps);
 			
 			int rs = ps.executeUpdate();
+			
 			
 //			if(rs == 1)
 //				System.out.println("Current session data is updated successfully");

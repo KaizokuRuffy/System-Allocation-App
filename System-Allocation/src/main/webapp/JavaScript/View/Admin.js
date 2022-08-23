@@ -24,11 +24,11 @@ export class Admin {
       button.innerText = "Register";
       div.appendChild(button);
 
-      let adminId = U.gEBI("admin_Id");
+      let admin_Email = U.gEBI("admin_Email");
       let adminPassword = U.gEBI("admin_Password");
       let adminLogin = U.gEBI("adminLogin");
       adminLogin.disabled = true;
-      adminId.disabled = true;
+      admin_Email.disabled = true;
       adminPassword.disabled = true;
 
       // console.log("isPresent");
