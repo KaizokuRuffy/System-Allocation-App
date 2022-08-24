@@ -3,7 +3,7 @@ package Controller;
 import java.io.IOException;
 // import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Date;
+//import java.util.Date;
 import java.util.List;
 import java.util.TimerTask;
 
@@ -146,13 +146,16 @@ public class EmployeeController extends HttpServlet {
 
 				Computer comp = null;
 
-				if (session.getComp_Id() != -1)
+				if (!"-1".equals(session.getComp_Id()))
 					comp = new ComputerService().getSystem(session.getComp_Id());
 
-				int comp_Id = -1;
+				String comp_Id = "-1";
 
 				for (Session temp : sessionList) {
-					if(session.getComp_Id() != -1 && temp.getLogIn_Date().equals(session.getLogIn_Date())
+					
+//					System.out.println(temp);
+					
+					if(!"-1".equals(session.getComp_Id() ) && temp.getLogIn_Date().equals(session.getLogIn_Date())
 							&& !DATE.getShift(temp.getLogOut_Time()).equals(DATE.getShift())
 							&& temp.getComp_Id() == session.getComp_Id())
 						comp_Id = temp.getComp_Id();
@@ -165,7 +168,7 @@ public class EmployeeController extends HttpServlet {
 						// User already logged in (N)
 						comp_Id = temp.getComp_Id();
 
-						if (session.getComp_Id() == -1) {
+						if ("-1".equals(session.getComp_Id())) {
 							comp = new ComputerService().getSystem(comp_Id);
 
 							if (comp.getAvailable().equals("Yes"))
@@ -179,9 +182,9 @@ public class EmployeeController extends HttpServlet {
 				}
 
 				// User logging in for first time (-1)
-				if (session.getComp_Id() == -1 && comp_Id == -1) {
+				if ("-1".equals(session.getComp_Id()) &&  "-1".equals(comp_Id)) {
 					new Message().infoToClient("comp_Id :" + comp_Id + "," + emp_Id, response);
-				} else if (session.getComp_Id() != -1) {
+				} else if (!"-1".equals(session.getComp_Id())) {
 					if (auth == true) {
 						System.out.println(comp_Id);
 						/*
@@ -196,7 +199,7 @@ public class EmployeeController extends HttpServlet {
 							
 							boolean flag = false;
 							
-							if(comp_Id == -1)
+							if("-1".equals(comp_Id))
 							{
 								List<Session> sl = new SessionService().getAllSessions();
 								for(Session temp : sl)
@@ -219,7 +222,7 @@ public class EmployeeController extends HttpServlet {
 							if (flag)
 								break;
 							
-							if (comp_Id == -1) {
+							if ("-1".equals(comp_Id)) {
 								System.out.println("Logged in successfully");
 
 								final int id = emp_Id;
@@ -262,7 +265,7 @@ public class EmployeeController extends HttpServlet {
 								}, 1000 * 60 * 60 * 24L); // *60*60*24L);
 
 								Counter.getcounter().atLogin();
-							} else if (comp.getComp_Id() == comp_Id) {
+							} else if (comp.getComp_Id().equals(comp_Id)) {
 								System.out.println("Logged in successfully");
 
 								final int id = emp_Id;

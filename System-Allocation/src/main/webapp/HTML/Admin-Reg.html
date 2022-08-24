@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <script type="module" src="../JavaScript/Event/Admin-Reg.js"></script>
+
     <style>
       td {
         padding-bottom: 20px;
@@ -22,35 +22,68 @@
     </h1>
 
     <div align="center">
-      <table>
-        <!-- <tr>
-          <td>ID :-</td>
-          <td><input id="admin_Id" type="text" /></td>
-        </tr> -->
-        <tr>
-          <td>Name :-</td>
-          <td><input type="text" id="admin_Name" /></td>
-        </tr>
-        <tr>
-          <td>Email ID :-</td>
-          <td><input type="text" id="admin_Email" /></td>
-        </tr>
-        <tr>
-          <td>Contact No :-</td>
-          <td><input type="text" id="admin_ContactNo" /></td>
-        </tr>
-        <tr>
-          <td>Password :-</td>
-          <td><input type="password" id="admin_Password" /></td>
-        </tr>
-      </table>
-      <button
-        id="addAdmin"
-        type="button"
-        style="width: 85px; margin-left: 60px"
-      >
-        Submit
-      </button>
+      <form>
+        <table>
+          <!-- <tr>
+            <td>ID :-</td>
+            <td><input id="admin_Id" type="text" /></td>
+          </tr> -->
+          <tr>
+            <td>Name :-</td>
+            <td>
+              <input
+                type="text"
+                id="admin_Name"
+                pattern="[A-Za-z\s\d]+"
+                required
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>Email ID :-</td>
+            <td>
+              <input
+                type="text"
+                pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+                id="admin_Email"
+                title="Email should contain `@` and `.`"
+                required
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>Contact No :-</td>
+            <td>
+              <input
+                type="text"
+                id="admin_ContactNo"
+                required
+                title="Enter 10-digit number without country code"
+                pattern="\d{10}"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>Password :-</td>
+            <td>
+              <input
+                type="password"
+                id="admin_Password"
+                minlength="4"
+                required
+              />
+            </td>
+          </tr>
+        </table>
+        <button
+          id="addAdmin"
+          type="submit"
+          style="width: 85px; margin-left: 60px"
+        >
+          Submit
+        </button>
+      </form>
     </div>
+    <script type="module" src="../JavaScript/Event/Admin-Reg.js"></script>
   </body>
 </html>

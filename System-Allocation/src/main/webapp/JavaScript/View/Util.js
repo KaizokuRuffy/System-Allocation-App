@@ -197,6 +197,12 @@ export let displayAsTable = function (fields, data, element, name) {
         select.appendChild(opt2);
         td.appendChild(select);
         tr.appendChild(td);
+
+        if (
+          fields[field_key[j]] === "working" &&
+          obj[fields[field_key[j]]] === "No"
+        )
+          td.previousSibling.firstChild.disabled = true;
       } else {
         let ip = document.createElement("input");
         ip.className = fields[field_key[j]];

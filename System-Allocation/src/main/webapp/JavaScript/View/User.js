@@ -21,7 +21,7 @@ export class User {
           );
         } else sessionStorage.setItem("Available", "No");
       } else if (response.body.includes("-1")) {
-        sessionStorage.setItem(U.System.Id, -1);
+        sessionStorage.setItem(U.System.Id, "-1");
         // console.log(response.body.indexOf(","));
         // console.log(response.body.length + 1);
         // console.log(
@@ -174,13 +174,13 @@ export class User {
   }
 
   add(response) {
-    if (response.status === 201) window.location.replace("../HTML/Admin.html");
+    if (response.status === 201) window.alert("Account created successfully");
     else if (response.status === 403) {
       window.alert("Session Timeout");
-      window.location.replace("../index.html");
+      window.close();
     } else if (response.status === 500) {
       window.alert(JSON.stringify(response.body).replaceAll('"', ""));
-      window.location.href = "";
+      window.close();
     }
   }
 }

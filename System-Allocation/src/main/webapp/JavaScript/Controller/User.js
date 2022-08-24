@@ -7,7 +7,7 @@ export class User {
     this.View = new V.User();
   }
   firstLogin() {
-    this.View.firstLogin(this.Model.login(-1));
+    this.View.firstLogin(this.Model.login("-1"));
   }
   login(comp_Id) {
     //console.log(this.Model.login());

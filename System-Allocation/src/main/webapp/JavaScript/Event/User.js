@@ -67,7 +67,7 @@ export let getUser = () => {
 
 export let regUser = () => {
   U.gEBI("regUser").addEventListener("click", () => {
-    window.location.href = "../HTML/User-Reg.html";
+    window.open("../HTML/User-Reg.html", "_blank");
   });
 };
 

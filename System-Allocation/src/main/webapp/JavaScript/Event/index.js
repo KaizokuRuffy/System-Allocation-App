@@ -32,6 +32,7 @@ let create = () => {
   let temp = U.gEBI("regAdmin");
   if (temp !== null)
     temp.addEventListener("click", () => {
+      sessionStorage.setItem("first admin", "");
       AdminController.create();
     });
 };

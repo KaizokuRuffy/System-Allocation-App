@@ -44,7 +44,7 @@ export class System {
     // let id = U.gEBI(U.System.Id).value;
 
     this.data = new D.SystemBuilder()
-      .setId(-1)
+      .setId(U.gEBI(U.System.Id).value)
       .setMAC(U.gEBI(U.System.MAC).value)
       .setModel(U.gEBI(U.System.Model).value)
       .setPassword(U.gEBI(U.System.Password).value)

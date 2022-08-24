@@ -35,7 +35,7 @@ export class User {
 
     this.data = new D.SessionBuilder()
       .setEmp_Id(-1)
-      .setComp_Id(Number(comp_Id))
+      .setComp_Id(comp_Id)
       .setLogIn_Date(U.getDate())
       .setLogIn_Time(U.getTime())
       .getSession();

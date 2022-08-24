@@ -25,19 +25,20 @@ export class System {
     }
   }
   add(response) {
-    if (response.status === 201) window.location.replace("../HTML/Admin.html");
+    if (response.status === 201) window.alert("System added successfully");
     else if (response.status === 403) {
       window.alert("Session Timeout");
-      window.location.replace("../index.html");
+      window.close();
     } else if (response.status === 500) {
       window.alert(JSON.stringify(response.body).replaceAll('"', ""));
-      window.location.href = "";
+      window.close();
     }
   }
   updateStatus(response) {
     if (response.status === 200) {
       //new SC().getAll();
       window.alert("Updated successfully");
+      return true;
       //updateStatus();
     } else if (response.status === 403) {
       window.alert("Session Timeout");
