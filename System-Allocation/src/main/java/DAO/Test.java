@@ -75,9 +75,9 @@ public class Test
 		System.out.println("------- Resource Operations -------");
 		
 		//Storing the computer data in database
-		computerDAO.insertInto(new Computer(1, "10:65:30:33:58:cd", "sdfw4fsd", "Yes", "Yes", 
+		computerDAO.insertInto(new Computer("1", "10:65:30:33:58:cd", "sdfw4fsd", "Yes", "Yes", 
 													"Site 24x7", "Latitude 7480", 2018));
-		computerDAO.insertInto(new Computer(2, "23:55:78:45:15:re", "fg343c2dff", "Yes", "Yes", 
+		computerDAO.insertInto(new Computer("2", "23:55:78:45:15:re", "fg343c2dff", "Yes", "Yes", 
 				"Site 24x7", "Latitude 2230", 2016));
 		
 		System.out.println();
@@ -87,8 +87,8 @@ public class Test
 		System.out.println();
 		
 		//Changing availability/working status of the computer
-		computerDAO.updateStatus(1, ComputerDAO.ColumnName.Working.toString(), "No");
-		computerDAO.updateStatus(2, ComputerDAO.ColumnName.Available.toString(), "No");
+		computerDAO.updateStatus("1", ComputerDAO.ColumnName.Working.toString(), "No");
+		computerDAO.updateStatus("2", ComputerDAO.ColumnName.Available.toString(), "No");
 		System.out.println();
 		 
 		computerDAO.selectAll();
@@ -97,7 +97,7 @@ public class Test
 		System.out.println("------- Session Operations -------");
 		
 		//Session operations
-		Session session = new Session(1, 1, Date.valueOf("2022-07-12"), "08:57");
+		Session session = new Session(1, "1", Date.valueOf("2022-07-12"), "08:57");
 		
 		//Creating a session record in Session table
 		sessionDAO.insertInto(session);
@@ -111,7 +111,7 @@ public class Test
 		sessionDAO.updateRecord(session);
 		System.out.println();
 		
-		session = new Session(1, 2, Date.valueOf("2022-07-13"), "08:50");
+		session = new Session(1, "2", Date.valueOf("2022-07-13"), "08:50");
 		sessionDAO.insertInto(session);
 		sessionDAO.selectRecord(1, 2, Date.valueOf("2022-07-13"));
 		session.setLogOut_Date(Date.valueOf("2022-07-13"));
@@ -119,7 +119,7 @@ public class Test
 		sessionDAO.updateRecord(session);
 		System.out.println();
 		
-		session = new Session(1, 3, Date.valueOf("2022-07-14"), "08:37");
+		session = new Session(1, "3", Date.valueOf("2022-07-14"), "08:37");
 		sessionDAO.insertInto(session);
 		sessionDAO.selectRecord(1, 3, Date.valueOf("2022-07-14"));
 		session.setLogOut_Date(Date.valueOf("2022-07-14"));

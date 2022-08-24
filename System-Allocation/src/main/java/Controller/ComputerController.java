@@ -119,21 +119,18 @@ public class ComputerController extends HttpServlet
 		{
 			case "/updateStatus":
 				
-				int comp_Id = 0;
+				String comp_Id = null;
 				String colName = null;
 				String status = null;
 				boolean flag = false;
 				
-				try
-				{
-					comp_Id = Integer.parseInt(request.getParameter("comp_Id"));
-					colName = request.getParameter("colName");
-					status = request.getParameter("status");
-				}
-				catch(NumberFormatException e)
-				{
+				comp_Id = request.getParameter("comp_Id");
+				colName = request.getParameter("colName");
+				status = request.getParameter("status");
+				
+				if(comp_Id == null && colName == null && status == null) {
 					flag = true;
-					comp_Id = (Integer)request.getAttribute("comp_Id");
+					comp_Id = (String) request.getAttribute("comp_Id");
 					colName = (String) request.getAttribute("colName");
 					status = (String) request.getAttribute("status");
 				}
@@ -142,7 +139,7 @@ public class ComputerController extends HttpServlet
 				
 				if(flag)
 				{
-//					System.out.println(comp_Id + " " + colName + " " + status);
+					System.out.println(comp_Id + " " + colName + " " + status);
 					if(computerService.updateStatus(comp_Id, colName, status))
 					{
 //						Integer emp_Id = Integer.parseInt(response.getHeader("emp_Id"));
@@ -158,7 +155,7 @@ public class ComputerController extends HttpServlet
 						System.out.println("Status of system '" + comp_Id + 
 													"' is updated succesfully");
 				
-						final int id = comp_Id;
+						final String id = comp_Id;
 						final String cname = colName;
 						
 						Date date = null;
@@ -199,6 +196,7 @@ public class ComputerController extends HttpServlet
 				}
 				else
 				{
+					System.out.println(comp_Id + " " + colName + " " + status);
 					if(computerService.updateStatus(comp_Id, colName, status))
 					{
 						new Message().infoToClient("Status updated successfully",response);
@@ -207,8 +205,8 @@ public class ComputerController extends HttpServlet
 					else 
 					{
 						new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
-											response, "System not present in database. Wrong id entered.");
-						System.out.println("System not present in database. Wrong id entered.");
+											response, "Database error (or) system not present");
+						System.out.println("Database error (or) system not present");
 					}
 					
 //					request.getSession().invalidate();

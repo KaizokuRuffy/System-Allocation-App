@@ -8,7 +8,7 @@ public class Session implements Serializable
 	private static final long serialVersionUID = 1L;
 	private int emp_Id;
 	private String emp_Name;
-	private int comp_Id;
+	private String comp_Id;
 	private Date logIn_Date;
 	private Date logOut_Date;
 	private String logIn_Time;
@@ -32,11 +32,11 @@ public class Session implements Serializable
 		this.logOut_Date = logOut_Date;
 	}
 
-	public int getComp_Id() {
+	public String getComp_Id() {
 		return comp_Id;
 	}
 
-	public void setComp_Id(int comp_Id) {
+	public void setComp_Id(String comp_Id) {
 		this.comp_Id = comp_Id;
 	}
 
@@ -93,7 +93,7 @@ public class Session implements Serializable
 		
 	}
 	
-	public Session(int emp_Id, int comp_Id, Date logIn_Date, 
+	public Session(int emp_Id, String comp_Id, Date logIn_Date, 
 										String logIn_Time) {
 		super();
 		this.emp_Id = emp_Id;
@@ -102,7 +102,7 @@ public class Session implements Serializable
 		this.logIn_Time = logIn_Time;
 	}
 
-	public Session(int emp_Id, String emp_Name, int comp_Id, Date logIn_Date, Date logOut_Date, String logIn_Time,
+	public Session(int emp_Id, String emp_Name, String comp_Id, Date logIn_Date, Date logOut_Date, String logIn_Time,
 			String logOut_Time, String total_Time, String shift) {
 		super();
 		this.emp_Id = emp_Id;

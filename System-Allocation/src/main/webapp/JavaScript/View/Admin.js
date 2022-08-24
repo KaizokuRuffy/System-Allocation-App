@@ -47,10 +47,12 @@ export class Admin {
     // }
   }
   create(response) {
-    if (response.status !== 201) {
+    if (response.status == 201 || response.status == 200)
+      window.open("HTML/Admin-Reg.html", "_blank");
+    else {
       window.alert(JSON.stringify(response.body));
       window.location.replace("");
-    } else window.location.href = "HTML/Admin-Reg.html";
+    }
   }
   login(response) {
     if (response.status === 200) {
@@ -122,13 +124,18 @@ export class Admin {
     }
   }
   add(response) {
-    if (response.status === 201) window.location.replace(response.redirect);
-    else if (response.status === 403) {
+    if (response.status === 201) {
+      window.alert("Account created successfully");
+      if (sessionStorage.getItem("first admin") !== null) {
+        sessionStorage.removeItem("first admin");
+        window.close();
+      }
+    } else if (response.status === 403) {
       window.alert("Session Timeout");
-      window.location.replace("../index.html");
+      window.close();
     } else {
       window.alert(JSON.stringify(response.body).replaceAll('"', ""));
-      window.location.href = "";
+      window.close();
     }
   }
 }

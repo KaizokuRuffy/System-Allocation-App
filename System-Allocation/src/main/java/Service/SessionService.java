@@ -50,7 +50,7 @@ public class SessionService
 		List<Session> temp = sessionDAO.select(session.getEmp_Id());
 		
 		for(Session s : temp)
-			if(s.getLogIn_Date().equals(session.getLogIn_Date()) && s.getComp_Id() == session.getComp_Id())
+			if(s.getLogIn_Date().equals(session.getLogIn_Date()) && s.getComp_Id().equals(session.getComp_Id()) )
 			{
 				session.setLogIn_Time(s.getLogIn_Time());
 				break;

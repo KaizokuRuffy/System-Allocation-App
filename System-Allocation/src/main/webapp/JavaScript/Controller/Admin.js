@@ -24,12 +24,12 @@ export class Admin {
     this.View.logout(this.Model.logout());
   }
   add() {
-    let isPresentResp = this.Model.isPresent();
-    let addResp = this.Model.add();
+    // let isPresentResp = this.Model.isPresent();
+    // let addResp = ;
 
-    if (isPresentResp.body.includes("No")) addResp.redirect = "../index.html";
-    else addResp.redirect = "../HTML/Admin.html";
+    // if (isPresentResp.body.includes("No")) addResp.redirect = "../index.html";
+    // else addResp.redirect = "../HTML/Admin.html";
 
-    this.View.add(addResp);
+    this.View.add(this.Model.add());
   }
 }

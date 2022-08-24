@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Computer implements Serializable
 {
 	private static final long serialVersionUID = 1L;
-	int comp_Id;
+	String comp_Id;
 	String MAC;
 	private String comp_Password;
 	private String available;
@@ -14,11 +14,11 @@ public class Computer implements Serializable
 	String model;
 	int year;
 	
-	public int getComp_Id() {
+	public String getComp_Id() {
 		return comp_Id;
 	}
 
-	public void setComp_Id(int comp_Id) {
+	public void setComp_Id(String comp_Id) {
 		this.comp_Id = comp_Id;
 	}
 
@@ -95,7 +95,7 @@ public class Computer implements Serializable
 		this.year = year;
 	}
 
-	public Computer(int comp_Id, String mAC, String comp_Password, String available, 
+	public Computer(String comp_Id, String mAC, String comp_Password, String available, 
 			String working, String comp_Loc, String model, int year) 
 	{
 		super();

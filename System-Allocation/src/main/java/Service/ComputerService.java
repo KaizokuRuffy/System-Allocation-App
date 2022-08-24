@@ -10,12 +10,15 @@ public class ComputerService
 	private ComputerDAO computerDAO = new ComputerDAO();
 	
 	public boolean addSystem(Computer comp)
-	{
-		if(comp.getComp_Id() == -1)
-			comp.setComp_Id(computerDAO.noOfRows() + 1);
-		
-		comp.setAvailable("Yes");
-		comp.setWorking("Yes");
+	{	
+//		System.out.println(comp);
+
+		if(comp.getWorking().equals(""))
+			comp.setWorking("Yes");
+		if(comp.getWorking().equals("Yes"))
+			comp.setAvailable("Yes");
+		if(comp.getWorking().equals("No"))
+			comp.setAvailable("No");
 		
 		if(computerDAO.insertInto(comp) == 1)
 			return true;
@@ -31,7 +34,7 @@ public class ComputerService
 		return computerList;
 	}
 	
-	public boolean updateStatus(int comp_Id, String colName, String value)
+	public boolean updateStatus(String comp_Id, String colName, String value)
 	{
 		
 		if(computerDAO.updateStatus(comp_Id, colName, value) == 1)
@@ -40,7 +43,7 @@ public class ComputerService
 		return false;
 	}
 	
-	public Computer getSystem(int comp_Id)
+	public Computer getSystem(String comp_Id)
 	{
 		return computerDAO.selectRecord(comp_Id);
 	}

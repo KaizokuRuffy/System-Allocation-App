@@ -12,7 +12,7 @@ export class System {
   }
 
   updateStatus(comp) {
-    this.View.updateStatus(this.Model.updateStatus(comp));
+    return this.View.updateStatus(this.Model.updateStatus(comp));
   }
 
   getAll() {

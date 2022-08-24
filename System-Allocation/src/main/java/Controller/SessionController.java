@@ -164,14 +164,17 @@ public class SessionController extends HttpServlet
 					if(sessionService.updateSession(session))
 					{
 						System.out.println("Session data for employee '" + session.getEmp_Id() + ", is updated successfully");
+						new Message().infoToClient("User logged out and session of user updated successfully", response);
 //						new Message().infoToClient(response);
 						
-						RequestDispatcher rd = request.getRequestDispatcher("/SystemController/updateStatus");
-						request.setAttribute("comp_Id", session.getComp_Id());
-						request.setAttribute("colName", "available");
-						request.setAttribute("status", "Yes");
-						response.getWriter().append("Session data updated successfully");
-						rd.forward(request, response);
+						/*
+						 * RequestDispatcher rd =
+						 * request.getRequestDispatcher("/SystemController/updateStatus");
+						 * request.setAttribute("comp_Id", session.getComp_Id());
+						 * request.setAttribute("colName", "available"); request.setAttribute("status",
+						 * "Yes"); response.getWriter().append("Session data updated successfully");
+						 * rd.forward(request, response);
+						 */
 						
 //						request.getSession().invalidate();
 					}

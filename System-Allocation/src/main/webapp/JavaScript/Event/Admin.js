@@ -19,7 +19,7 @@ let adminLogout = U.gEBI("adminLogout").addEventListener("click", () =>
 );
 
 let regAdmin = U.gEBI("regAdmin").addEventListener("click", () => {
-  window.location.href = "../HTML/Admin-Reg.html";
+  window.open("../HTML/Admin-Reg.html", "_blank");
 });
 
 document.addEventListener("DOMContentLoaded", () => {
