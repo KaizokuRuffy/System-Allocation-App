@@ -19,6 +19,15 @@ export class User {
         } else sessionStorage.setItem("Available", "No");
       } else if (response.body.includes("-1")) {
         sessionStorage.setItem(U.System.Id, "-1");
+<<<<<<< HEAD
+=======
+        // console.log(response.body.indexOf(","));
+        // console.log(response.body.length + 1);
+        // console.log(
+        //   response.body.substr(response.body.indexOf(",") + 1),
+        //   response.body.length + 1
+        // );
+>>>>>>> refs/remotes/origin/Form-Validation
         sessionStorage.setItem(
           U.User.Id,
           Number(

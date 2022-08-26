@@ -37,6 +37,10 @@ export class System {
     if (response.status === 200) {
       window.alert("Updated successfully");
       return true;
+<<<<<<< HEAD
+=======
+      //updateStatus();
+>>>>>>> refs/remotes/origin/Form-Validation
     } else if (response.status === 403) {
       window.alert("Session Timeout");
       window.location.replace("../index.html");

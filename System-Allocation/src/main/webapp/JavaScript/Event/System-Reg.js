@@ -7,6 +7,7 @@ U.System.init();
 let SystemController = new Ctrl.System();
 
 function add() {
+<<<<<<< HEAD
   if (U.gEBI("comp_Password").value !== U.gEBI("confirm_Password").value)
     U.gEBI("confirm_Password").setCustomValidity("Password mismatch");
   else U.gEBI("confirm_Password").setCustomValidity("");
@@ -33,6 +34,17 @@ function add() {
     U.gEBI("model").checkValidity() &&
     U.gEBI("year").checkValidity() &&
     U.gEBI("confirm_Password").checkValidity()
+=======
+  if (
+    U.gEBI("comp_Id").checkValidity() &&
+    U.gEBI("MAC").checkValidity() &&
+    U.gEBI("available").checkValidity() &&
+    U.gEBI("working").checkValidity() &&
+    U.gEBI("comp_Password").checkValidity() &&
+    U.gEBI("comp_Loc").checkValidity() &&
+    U.gEBI("model").checkValidity() &&
+    U.gEBI("year").checkValidity()
+>>>>>>> refs/remotes/origin/Form-Validation
   )
     SystemController.add();
   else console.log("Invalid data");

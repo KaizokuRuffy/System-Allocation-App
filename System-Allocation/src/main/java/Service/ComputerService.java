@@ -11,6 +11,11 @@ public class ComputerService
 	
 	public boolean addSystem(Computer comp)
 	{	
+<<<<<<< HEAD
+=======
+//		System.out.println(comp);
+
+>>>>>>> refs/remotes/origin/Form-Validation
 		if(comp.getWorking().equals(""))
 			comp.setWorking("Yes");
 		if(comp.getWorking().equals("Yes"))

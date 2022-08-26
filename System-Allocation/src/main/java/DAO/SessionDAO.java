@@ -64,6 +64,10 @@ public class SessionDAO {
 	}
 
 	public int insertInto(Session session) {
+<<<<<<< HEAD
+=======
+		// System.out.println("Current session data stored in database");
+>>>>>>> refs/remotes/origin/Form-Validation
 		String query = "INSERT INTO " + TableName.getSession() + " VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (Connection conn = JDBC_Connection.getConnection();
@@ -116,6 +120,10 @@ public class SessionDAO {
 				session.setShift(rs.getString(ColumnName.Shift.toString()));
 
 				sessionList.add(session);
+<<<<<<< HEAD
+=======
+				// System.out.println(session);
+>>>>>>> refs/remotes/origin/Form-Validation
 			}
 
 			return sessionList;
@@ -138,6 +146,10 @@ public class SessionDAO {
 				+ " AND " + TableName.getEmployee() + "." + EmployeeDAO.ColumnName.ID.toString()
 				+ " = '" + emp_Id + "' ";
 
+<<<<<<< HEAD
+=======
+		// System.out.println(query);
+>>>>>>> refs/remotes/origin/Form-Validation
 		Connection conn = JDBC_Connection.getConnection();
 
 		try (PreparedStatement ps = conn.prepareStatement(query);
@@ -157,7 +169,15 @@ public class SessionDAO {
 				session.setShift(rs.getString(ColumnName.Shift.toString()));
 
 				sessionList.add(session);
+<<<<<<< HEAD
+=======
+				// System.out.println(session);
+>>>>>>> refs/remotes/origin/Form-Validation
 			}
+<<<<<<< HEAD
+=======
+			// System.out.println(sessionList);
+>>>>>>> refs/remotes/origin/Form-Validation
 			return sessionList;
 		} catch (SQLException e) {
 			JDBC_Connection.close();
@@ -175,19 +195,58 @@ public class SessionDAO {
 				+ " WHERE " + ColumnName.Emp_ID.value + " = ? "
 				+ " AND " + ColumnName.Comp_ID.value + " = ? "
 				+ " AND " + ColumnName.LogIn_Date.value + " = ? ";
+<<<<<<< HEAD
+=======
+		// + " AND " + ColumnName.LogIn_Time.value + " = ? ";
+>>>>>>> refs/remotes/origin/Form-Validation
 
 		try (Connection conn = JDBC_Connection.getConnection();
 				PreparedStatement ps = conn.prepareStatement(query);) {
 
+<<<<<<< HEAD
+=======
+			// ps.setString(1, TableName.getSession());
+			// ps.setString(2, ColumnName.LogOut_Date.value);
+>>>>>>> refs/remotes/origin/Form-Validation
 			ps.setObject(1, session.getLogOut_Date());
+<<<<<<< HEAD
+=======
+			// ps.setString(4, ColumnName.LogOut_Time.value);
+>>>>>>> refs/remotes/origin/Form-Validation
 			ps.setString(2, session.getLogOut_Time());
+<<<<<<< HEAD
+=======
+			// ps.setString(6, ColumnName.Total_Time.value);
+>>>>>>> refs/remotes/origin/Form-Validation
 			ps.setString(3, session.getTotal_Time());
+<<<<<<< HEAD
+=======
+			// ps.setString(8, ColumnName.Emp_ID.value);
+>>>>>>> refs/remotes/origin/Form-Validation
 			ps.setInt(4, session.getEmp_Id());
+<<<<<<< HEAD
 			ps.setString(5, session.getComp_Id());
+=======
+			// ps.setString(10, ColumnName.Comp_ID.value);
+			ps.setString(5, session.getComp_Id());
+			// ps.setString(12, ColumnName.LogIn_Date.value);
+>>>>>>> refs/remotes/origin/Form-Validation
 			ps.setObject(6, session.getLogIn_Date());
+<<<<<<< HEAD
+=======
+			// ps.setObject(7, session.getLogIn_Time());
+
+			// System.out.println(ps);
+>>>>>>> refs/remotes/origin/Form-Validation
 
 			int rs = ps.executeUpdate();
 
+<<<<<<< HEAD
+=======
+			// if(rs == 1)
+			// System.out.println("Current session data is updated successfully");
+			System.out.println(rs);
+>>>>>>> refs/remotes/origin/Form-Validation
 			return rs;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -219,6 +278,19 @@ public class SessionDAO {
 			conn = JDBC_Connection.getConnection();
 			ps = conn.prepareStatement(query);
 
+<<<<<<< HEAD
+=======
+			// ps.setString(1, TableName.getSession());
+			// ps.setString(2, TableName.getEmployee());
+			// ps.setString(3, EmployeeDAO.ColumnName.Name.toString());
+			// ps.setString(4, TableName.getSession());
+			// ps.setString(5, TableName.getEmployee());
+			// ps.setString(6, TableName.getSession());
+			// ps.setString(7, ColumnName.Emp_ID.value);
+			// ps.setString(8, TableName.getEmployee());
+			// ps.setString(9, EmployeeDAO.ColumnName.ID.toString());
+
+>>>>>>> refs/remotes/origin/Form-Validation
 			rs = ps.executeQuery();
 
 			if (rs.next()) {
@@ -231,6 +303,11 @@ public class SessionDAO {
 				session.setLogOut_Time(rs.getString(ColumnName.LogOut_Time.value.replaceAll("`", "")));
 				session.setTotal_Time(rs.getString(ColumnName.Total_Time.value.replaceAll("`", "")));
 				session.setShift(rs.getString(ColumnName.Shift.toString()));
+<<<<<<< HEAD
+=======
+
+				// System.out.println(session);
+>>>>>>> refs/remotes/origin/Form-Validation
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
