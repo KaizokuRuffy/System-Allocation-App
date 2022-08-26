@@ -42,66 +42,26 @@ public class Json
 			e.printStackTrace();
 		}
 		
-		
-		//System.out.println(json);
-		
 		Gson gson = new Gson();
 		T t = null;
 		
 		try {
 			t = gson.fromJson(json, clazz);
-			//System.out.println(t);
 		} 
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
-		//System.out.println(t);
 		
 		return t;
 	}
 	
 	public <T> T toPojo(String json, Class<T> clazz)
 	{
-//		String json = null;
-//		
-//		try 
-//		{
-//			json = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-//		} 
-//		catch (IOException e) 
-//		{
-//			e.printStackTrace();
-//		}
-		
-//		System.out.println(json);
 		
 		Gson gson = new Gson();
 		T t = gson.fromJson(json, clazz);
-		//System.out.println(t);
 		
 		return t;
 	}
-	
-	/*
-	public static void main(String[] args) // throws JsonMappingException, JsonProcessingException 
-	{
-		String s = " { \"admin_Id\" : 1, "
-				+ "\"admin_Name\": \"Kishore\", "
-				+ "\"admin_Email\": \"kishorekumarjain23@gmail.com\","
-				+ "\"admin_ContactNo\": \"9080971682\","
-				+ "\"admin_Password\": \"sofdsfdl\" } ";
-		
-		JsonNode node = parse(" \"admin_Id\" : 1, "
-				+ "\"admin_Name\": \"Kishore\", "
-				+ "\"admin_Email\": \"kishorekumarjain23@gmail.com\","
-				+ "\"admin_ContactNo\": \"9080971682\","
-				+ "\"admin_Password\": \"sofdsfdl\" ");
-		
-		Admin admin = new Gson().fromJson(s, Admin.class);
-		Admin admin = toPojo(s, Admin.class);
-		System.out.println(admin);
-		System.out.println();
-		System.out.println(toJSON(admin));
-	} */
 }

@@ -45,7 +45,6 @@ public class Cipher {
 			
 		    try 
 		    {
-//		    	System.out.println(keysetFilename);
 		    	File secret_key = new File(keysetFilename);
 		    	secret_key.getParentFile().mkdirs(); 
 		    	secret_key.createNewFile();

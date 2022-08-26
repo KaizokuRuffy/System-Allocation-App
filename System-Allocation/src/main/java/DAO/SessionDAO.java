@@ -64,7 +64,6 @@ public class SessionDAO {
 	}
 
 	public int insertInto(Session session) {
-		// System.out.println("Current session data stored in database");
 		String query = "INSERT INTO " + TableName.getSession() + " VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (Connection conn = JDBC_Connection.getConnection();
@@ -117,7 +116,6 @@ public class SessionDAO {
 				session.setShift(rs.getString(ColumnName.Shift.toString()));
 
 				sessionList.add(session);
-				// System.out.println(session);
 			}
 
 			return sessionList;
@@ -140,7 +138,6 @@ public class SessionDAO {
 				+ " AND " + TableName.getEmployee() + "." + EmployeeDAO.ColumnName.ID.toString()
 				+ " = '" + emp_Id + "' ";
 
-		// System.out.println(query);
 		Connection conn = JDBC_Connection.getConnection();
 
 		try (PreparedStatement ps = conn.prepareStatement(query);
@@ -160,9 +157,7 @@ public class SessionDAO {
 				session.setShift(rs.getString(ColumnName.Shift.toString()));
 
 				sessionList.add(session);
-				// System.out.println(session);
 			}
-			// System.out.println(sessionList);
 			return sessionList;
 		} catch (SQLException e) {
 			JDBC_Connection.close();
@@ -180,33 +175,19 @@ public class SessionDAO {
 				+ " WHERE " + ColumnName.Emp_ID.value + " = ? "
 				+ " AND " + ColumnName.Comp_ID.value + " = ? "
 				+ " AND " + ColumnName.LogIn_Date.value + " = ? ";
-		// + " AND " + ColumnName.LogIn_Time.value + " = ? ";
 
 		try (Connection conn = JDBC_Connection.getConnection();
 				PreparedStatement ps = conn.prepareStatement(query);) {
 
-			// ps.setString(1, TableName.getSession());
-			// ps.setString(2, ColumnName.LogOut_Date.value);
 			ps.setObject(1, session.getLogOut_Date());
-			// ps.setString(4, ColumnName.LogOut_Time.value);
 			ps.setString(2, session.getLogOut_Time());
-			// ps.setString(6, ColumnName.Total_Time.value);
 			ps.setString(3, session.getTotal_Time());
-			// ps.setString(8, ColumnName.Emp_ID.value);
 			ps.setInt(4, session.getEmp_Id());
-			// ps.setString(10, ColumnName.Comp_ID.value);
 			ps.setString(5, session.getComp_Id());
-			// ps.setString(12, ColumnName.LogIn_Date.value);
 			ps.setObject(6, session.getLogIn_Date());
-			// ps.setObject(7, session.getLogIn_Time());
-
-			// System.out.println(ps);
 
 			int rs = ps.executeUpdate();
 
-			// if(rs == 1)
-			// System.out.println("Current session data is updated successfully");
-			System.out.println(rs);
 			return rs;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -238,16 +219,6 @@ public class SessionDAO {
 			conn = JDBC_Connection.getConnection();
 			ps = conn.prepareStatement(query);
 
-			// ps.setString(1, TableName.getSession());
-			// ps.setString(2, TableName.getEmployee());
-			// ps.setString(3, EmployeeDAO.ColumnName.Name.toString());
-			// ps.setString(4, TableName.getSession());
-			// ps.setString(5, TableName.getEmployee());
-			// ps.setString(6, TableName.getSession());
-			// ps.setString(7, ColumnName.Emp_ID.value);
-			// ps.setString(8, TableName.getEmployee());
-			// ps.setString(9, EmployeeDAO.ColumnName.ID.toString());
-
 			rs = ps.executeQuery();
 
 			if (rs.next()) {
@@ -260,8 +231,6 @@ public class SessionDAO {
 				session.setLogOut_Time(rs.getString(ColumnName.LogOut_Time.value.replaceAll("`", "")));
 				session.setTotal_Time(rs.getString(ColumnName.Total_Time.value.replaceAll("`", "")));
 				session.setShift(rs.getString(ColumnName.Shift.toString()));
-
-				// System.out.println(session);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

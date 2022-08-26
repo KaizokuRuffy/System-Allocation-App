@@ -2,19 +2,6 @@ import * as D from "./Data/D.js";
 import * as U from "./Util.js";
 import { GET, Accept } from "./M.js";
 
-/* export const GET = "GET";
-export const POST = "POST";
-export const PUT = "PUT";
-const DELETE = "DELETE";
-export const Content_type = {
-  urlencoded: "application/x-www-form-urlencoded",
-  json: "application/json",
-};
-export const Accept = {
-  text: "text/plain",
-  json: "application/json",
-}; */
-
 export class Session {
   constructor(data, request, response) {
     this.data = data;

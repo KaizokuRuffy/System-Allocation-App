@@ -45,7 +45,6 @@ public class SessionController extends HttpServlet
 						new Message().infoToClient(HttpServletResponse.SC_NOT_FOUND, 
 															response, "No session data");
 						System.out.println("No session data in table");
-//						response.sendError(500, "No session");
 					}
 				}
 				else
@@ -53,7 +52,6 @@ public class SessionController extends HttpServlet
 					new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
 															response, "Database error");
 					System.out.println("Database error");
-//					response.sendError(500, "Database error");
 				}
 					
 				break;
@@ -77,7 +75,6 @@ public class SessionController extends HttpServlet
 						new Message().infoToClient(HttpServletResponse.SC_NOT_FOUND, 
 															response, "No session data");
 						System.out.println("No session data in table");
-//						response.sendError(500, "No session");
 					}
 				}
 				else
@@ -85,7 +82,6 @@ public class SessionController extends HttpServlet
 					new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
 															response, "Database error");
 					System.out.println("Database error");
-//					response.sendError(500, "Database error");
 				}
 					
 				break;
@@ -117,13 +113,12 @@ public class SessionController extends HttpServlet
 					if(sessionService.addSession(session))
 					{
 						System.out.println("Session data of employee '" + session.getEmp_Id() + "' is added to database successfully");
-//						new Message().infoToClient(response);
+
 						
 						RequestDispatcher rd = request.getRequestDispatcher("/SystemController/updateStatus");
 						request.setAttribute("comp_Id", session.getComp_Id());
 						request.setAttribute("colName", "available");
 						request.setAttribute("status", "No");
-						//response.getWriter().append("Session data added successfully");
 						rd.forward(request, response);
 						
 					}
@@ -139,8 +134,6 @@ public class SessionController extends HttpServlet
 					new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
 																response, "JSON parse error");
 					System.out.println("JSON parse error");
-//					System.out.println("JSON to POJO");
-//					System.out.println(session);
 				}
 				
 				break;
@@ -158,32 +151,19 @@ public class SessionController extends HttpServlet
 			case "/updateSession" :
 				System.out.println("\n-- Updating session data --");
 				Session session = new Json().toPojo(request, Session.class);
-//				System.out.println(session);
 				if(session != null)
 				{
 					if(sessionService.updateSession(session))
 					{
 						System.out.println("Session data for employee '" + session.getEmp_Id() + ", is updated successfully");
 						new Message().infoToClient("User logged out and session of user updated successfully", response);
-//						new Message().infoToClient(response);
-						
-						/*
-						 * RequestDispatcher rd =
-						 * request.getRequestDispatcher("/SystemController/updateStatus");
-						 * request.setAttribute("comp_Id", session.getComp_Id());
-						 * request.setAttribute("colName", "available"); request.setAttribute("status",
-						 * "Yes"); response.getWriter().append("Session data updated successfully");
-						 * rd.forward(request, response);
-						 */
-						
-//						request.getSession().invalidate();
+
 					}
 					else
 					{
 						new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR
 								, response,"Session data doesn't exist (or) database error");
 						System.out.println("Session data doesn't exist (or) database error");
-//						response.sendError(500, "Session data doesn't exist (or) database error");
 					}
 				}
 				else {

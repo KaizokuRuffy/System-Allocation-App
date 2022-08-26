@@ -2,19 +2,6 @@ import * as D from "./Data/D.js";
 import * as U from "./Util.js";
 import { GET, Accept, POST, Content_type, PUT } from "./M.js";
 
-/* export const GET = "GET";
-export const POST = "POST";
-export const PUT = "PUT";
-const DELETE = "DELETE";
-export const Content_type = {
-  urlencoded: "application/x-www-form-urlencoded",
-  json: "application/json",
-};
-export const Accept = {
-  text: "text/plain",
-  json: "application/json",
-}; */
-
 export class System {
   constructor(data, request, response) {
     this.data = data;
@@ -41,8 +28,6 @@ export class System {
     return this.response;
   }
   add() {
-    // let id = U.gEBI(U.System.Id).value;
-
     this.data = new D.SystemBuilder()
       .setId(U.gEBI(U.System.Id).value)
       .setMAC(U.gEBI(U.System.MAC).value)
@@ -66,8 +51,6 @@ export class System {
           .getUrl()
       );
 
-    //console.log(this.data);
-    //console.log(this.request);
     this.response = new U.Res();
     this.XHR = new U.XHR(this.request, this.response);
     this.response = this.XHR.sendRequest();

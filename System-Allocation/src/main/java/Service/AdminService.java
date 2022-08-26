@@ -35,8 +35,6 @@ public class AdminService
 		int[] res = AdminDAO.createTable();
 		int count = 0;
 		
-		//System.out.println(Arrays.toString(res));
-		
 		for(int i = 0; i < res.length; i++)
 		if(res[i] == 0)
 			count++;
@@ -73,15 +71,6 @@ public class AdminService
 		if(isAdminPresent)
 			return true;
 		
-		/*
-		if(adminDAO.isDatabaseEmpty() || adminDAO.noOfRows() == 0)
-			return false;
-		
-		System.out.println("isEmpty -> "+isEmpty);
-		System.out.println("adminDAO.isDatabaseEmpty() -> " + adminDAO.isDatabaseEmpty());
-		System.out.println("isEmpty() -> " +isEmpty());
-		*/
-		
 		if(isEmpty())
 			return false;
 		else if(adminDAO.noOfRows() == 0)
@@ -93,7 +82,6 @@ public class AdminService
 	public Boolean Authenticate(int admin_Id, String Password)
 	{
 		String admin_Password = null;
-		//StringBuilder temp = null;
 		
 		try 
 		{
@@ -117,7 +105,6 @@ public class AdminService
 	
 	public boolean createUser(Admin admin)
 	{
-		//System.out.println(adminDAO.noOfRows());
 		if(admin.getAdmin_Id() == -1)
 			admin.setAdmin_Id(adminDAO.noOfRows() + 1);
 		

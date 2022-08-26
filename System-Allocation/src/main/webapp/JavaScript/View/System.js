@@ -1,6 +1,5 @@
 import * as U from "../Model/Util.js";
 import * as Util from "./Util.js";
-//import { System as SC } from "../Controller/C.js";
 
 export class System {
   constructor() {
@@ -36,10 +35,8 @@ export class System {
   }
   updateStatus(response) {
     if (response.status === 200) {
-      //new SC().getAll();
       window.alert("Updated successfully");
       return true;
-      //updateStatus();
     } else if (response.status === 403) {
       window.alert("Session Timeout");
       window.location.replace("../index.html");

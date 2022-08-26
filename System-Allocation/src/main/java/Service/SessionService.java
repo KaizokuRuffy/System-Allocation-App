@@ -55,14 +55,12 @@ public class SessionService
 				session.setLogIn_Time(s.getLogIn_Time());
 				break;
 			}
-//		System.out.println(session);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat SDF = new SimpleDateFormat("yyyy-mm-dd HH:mm");
 
 		Date d1 = null;
 		try 
 		{
-//			System.out.println(sdf.format(session.getLogIn_Date()) + " " + session.getLogIn_Time());
 			d1 = SDF.parse(sdf.format(session.getLogIn_Date()) + " " + session.getLogIn_Time());
 		} 
 		catch (ParseException e1) 
@@ -73,17 +71,14 @@ public class SessionService
 		Date d2 = null;
 		try 
 		{
-//			System.out.println(sdf.format (session.getLogOut_Date()) + " " + session.getLogOut_Time());
 			d2 = SDF.parse(sdf.format (session.getLogOut_Date()) + " " + session.getLogOut_Time());
 		} 
 		catch (ParseException e1) 
 		{
 			e1.printStackTrace();
 		}
-			
-//		System.out.println(d1 + " --> " + d2);
+	
 		long diff = (d2.getTime() - d1.getTime());
-//		System.out.println(diff);
 		session.setTotal_Time((diff/(1000*60*60)) + " Hrs "+ 
 				             ((diff%(1000*60*60))/(60000) + " mins"));
 		

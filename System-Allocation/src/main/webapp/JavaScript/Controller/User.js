@@ -10,7 +10,6 @@ export class User {
     this.View.firstLogin(this.Model.login("-1"));
   }
   login(comp_Id) {
-    //console.log(this.Model.login());
     this.View.login(this.Model.login(comp_Id));
   }
   logout() {

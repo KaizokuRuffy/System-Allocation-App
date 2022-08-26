@@ -31,20 +31,13 @@ export class Admin {
       admin_Email.disabled = true;
       adminPassword.disabled = true;
 
-      // console.log("isPresent");
       let empTitle = document.getElementsByClassName("employee");
       let empLogin = U.gEBI("employee");
       empTitle[0].remove();
       empLogin.remove();
-
-      //var tdTag = U.gEBI("admin");
-      //tdTag.style.paddingBottom = "35px";
     } else if (response.status !== 200) {
       window.alert("Something went wrong");
     }
-    // else {
-    //   window.location.href = "";
-    // }
   }
   create(response) {
     if (response.status == 201 || response.status == 200)
@@ -56,13 +49,8 @@ export class Admin {
   }
   login(response) {
     if (response.status === 200) {
-      //window.location.replace("http://127.0.0.1:8887/HTML/Admin.html");
       window.location.replace("HTML/Admin.html");
     } else {
-      //window.alert("Invalid username or password");
-      /* function insertAfter(referenceNode, newNode) {
-        insert(referenceNode, newNode);
-      } */
       let bool = true;
 
       try {
@@ -75,7 +63,6 @@ export class Admin {
       var msg = document.createElement("td");
       msg.setAttribute("id", "Amsg");
       msg.style.color = "Red";
-      //msg.style.paddingLeft = "20px";
       msg.innerText = "Invlaid username / password";
       msg.style.paddingLeft = "70px";
       var ele = U.gEBI("button");
@@ -92,14 +79,8 @@ export class Admin {
     }
   }
   get(response) {
-    /* console.log("In V");
-    console.log(response);
-    console.log(response.body);
-    console.log(response.status); */
     if (response.status === 200) {
       let display = U.gEBI("display");
-      /* display.style.fontSize = "25px";
-      display.innerText = response.body; */
       Util.displayAsList(
         this.fields,
         JSON.parse(response.body),
@@ -139,10 +120,6 @@ export class Admin {
     }
   }
 }
-
-// function insert(referenceNode, newNode) {
-//     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
-//   }
 
 export function refresh() {
   console.log("refresh called");

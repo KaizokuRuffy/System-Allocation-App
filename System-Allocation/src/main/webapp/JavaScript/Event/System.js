@@ -32,22 +32,11 @@ export let updateStatus = function () {
         .getSystem();
 
       if (SystemController.updateStatus(comp)) {
-        // console.log(item.parentElement.previousSibling.firstChild.firstChild);
-        // console.log(
-        //   item.parentElement.previousSibling.firstChild.firstChild[
-        //     e.target.value
-        //   ]
-        // );
         if (e.target.value === "No") {
           let options =
             item.parentElement.previousSibling.firstChild.childNodes;
           if (options[0].value === "No") options[0].selected = true;
           else options[1].selected = true;
-
-          // item.insertBefore(item.lastChild, item.firstChild);
-
-          // let parent = item.parentElement.previousSibling.firstChild;
-          // parent.insertBefore(parent.lastChild, parent.firstChild);
 
           item.parentElement.previousSibling.firstChild.disabled = true;
         } else if (e.target.value === "Yes") {
@@ -57,17 +46,9 @@ export let updateStatus = function () {
 
           if (options[0].value === "Yes") options[0].selected = true;
           else options[1].selected = true;
-
-          // item.insertBefore(item.lastChild, item.firstChild);
-
-          // let parent = item.parentElement.previousSibling.firstChild;
-          // parent.insertBefore(parent.lastChild, parent.firstChild);
         }
         swap_Options(item);
         swap_Options(item.parentElement.previousSibling.firstChild);
-        // item.parentElement.previousSibling.firstChild.value = e.target.value;
-        // item.parentElement.previousSibling.firstChild.innerText =
-        //   e.target.value;
       }
     });
   });
@@ -85,13 +66,9 @@ export let updateStatus = function () {
         (options[1].value === "Yes" && options[1].selected === true)
       ) {
         SystemController.updateStatus(comp);
-
-        // item.insertBefore(item.lastChild, item.firstChild);
       } else {
         if (item[0].value === "No") item[0].selected = true;
         else item[1].selected = true;
-
-        // item.insertBefore(item.lastChild, item.firstChild);
         window.alert("System is not working cannot change availability status");
       }
       swap_Options(item);

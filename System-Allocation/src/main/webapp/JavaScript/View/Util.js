@@ -20,7 +20,6 @@ export let displayAsList = function (fields, data, element, name) {
     temp.value = data[fields[field_key[i]]];
     input[field_key[i]] = temp;
   }
-  //console.log(input);
   let table = document.createElement("table");
   table.setAttribute("id", name + "Profile");
   let tbody = document.createElement("tbody");
@@ -53,7 +52,6 @@ export let displayAsList = function (fields, data, element, name) {
 };
 
 export let displayAsTable = function (fields, data, element, name) {
-  //tb[name] = data;
   if (sessionStorage.getItem("who") === "user") delete fields["emp_Id"];
 
   removeAllChildNodes(element);
@@ -127,12 +125,6 @@ export let displayAsTable = function (fields, data, element, name) {
       if (field_key[i] === "MAC") ip.placeholder = "OS";
       else ip.placeholder = field_key[i];
 
-      /* if (name === "Employee" && fields[field_key[i]] === "emp_Id")
-        ip.addEventListener("keyup", (e) => {
-          if (e.key === "Enter") new User().getPlus(e.target.value);
-        });
-      else  */
-
       ip.addEventListener("keyup", (e) => filter(e));
 
       cell.appendChild(ip);
@@ -140,16 +132,8 @@ export let displayAsTable = function (fields, data, element, name) {
     }
   }
   thead.appendChild(fltr);
-  // console.log("th :");
-  // console.log(len);
-  //console.log(name);
-  // console.log(
-  //   sessionStorage.getItem("who") + sessionStorage.getItem("session")
-  // );
-
   for (let i = 0; i < data.length; i++) {
     if (name == "Session" && sessionStorage.getItem("who") === "user") {
-      //console.log(i + " " + JSON.stringify(data[i]));
       let temp = JSON.parse(sessionStorage.getItem("session"));
 
       if (data[i][fields["emp_Id"]] !== temp[fields["emp_Id"]]) continue;
@@ -167,9 +151,6 @@ export let displayAsTable = function (fields, data, element, name) {
           data[i][fields["Login Time"]]
       );
     tbody.appendChild(tr);
-
-    //tr.setAttribute("id", field_key[i]);
-    //tr.appendChild(document.createTextNode(fields[field_key[i]]));
 
     for (let j = 0; j < field_key.length - 1; j++) {
       let obj = data[i];
@@ -222,10 +203,7 @@ export let displayAsTable = function (fields, data, element, name) {
         tr.appendChild(td);
       }
     }
-    // console.log("td");
-    // console.log(len);
   }
-  //console.log(len);
   element.appendChild(table);
   for (let i = 0; i < field_key.length; i++) {
     let els = document.getElementsByClassName(fields[field_key[i]]);
@@ -233,11 +211,6 @@ export let displayAsTable = function (fields, data, element, name) {
     Array.prototype.forEach.call(els, (el) => {
       let factor = Number(el.style.fontSize.slice(0, -2));
       el.style.width = len[fields[field_key[i]]] * 9 + "px";
-      // console.log("before");
-      // console.log(el.style.width);
-      // //el.getAttribute("style").width = len[fields[field_key[i]]];
-      // console.log("after");
-      // console.log(el.style.width);
     });
   }
 
@@ -250,19 +223,6 @@ export let displayAsTable = function (fields, data, element, name) {
 
   element.style.paddingBottom = "50px";
 };
-
-/* export let getObject = (Class) => {
-  switch (Class) {
-    case "Admin":
-      return new D.Admin();
-    case "Employee":
-      return new D.User();
-    case "System":
-      return new D.System();
-    case "Session":
-      return new D.Session();
-  }
-}; */
 
 function filter(event) {
   let filter_value = event.target.value;

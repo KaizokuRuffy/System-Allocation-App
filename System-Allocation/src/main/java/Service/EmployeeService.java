@@ -23,7 +23,6 @@ public class EmployeeService
 	public Boolean Authenticate(int emp_Id, String Password)
 	{
 		String emp_Password = null;
-		//StringBuilder temp = null;
 		
 		try 
 		{
@@ -38,10 +37,6 @@ public class EmployeeService
 		{
 			return null;
 		}
-		
-//		System.out.println("Entered password -- " + Password);
-//		System.out.println("Password in db -- " + emp_Password);
-		
 		if(Password.equals(emp_Password))
 			return true;
 		
@@ -63,7 +58,6 @@ public class EmployeeService
 			return true;
 		
 		new File(cipher.getKeysetFilename()).delete();
-		//System.out.println("Json KeySet file deleted");
 		
 		return false;
 	}

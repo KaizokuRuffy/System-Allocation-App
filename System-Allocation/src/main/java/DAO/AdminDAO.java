@@ -48,16 +48,9 @@ public class AdminDAO
 			st.addBatch(EmployeeDAO.getCreateTable());
 			st.addBatch(ComputerDAO.getCreateTable());
 			st.addBatch(SessionDAO.getCreateTable());
-	
-			//System.out.println(SessionDAO.getCreateTable());
-			
+
 			result = st.executeBatch();
-			
-//			if(result != null)
-//			{
-//				System.out.println("Tables successfully created " + Arrays.toString(result));
-//			}
-			
+		
 			return result;
 		}
 		catch(Exception e)
@@ -74,8 +67,6 @@ public class AdminDAO
 		String show = "SELECT count(*) "
 				+ " FROM INFORMATION_SCHEMA.TABLES "
 				+ " WHERE TABLE_SCHEMA = '" + TableName.getDatabase() +"'"  ;
-		
-//		System.out.println(show);
 		
 		Connection conn = JDBC_Connection.getConnection();
 		 
@@ -128,9 +119,6 @@ public class AdminDAO
 	}
 	
 	public Map<String,String> getPassword(int admin_ID) {
-		
-//		System.out.println("Getting password of Admin " + admin_ID);
-		
 		String query = "SELECT " + ColumnName.Password + ", " + ColumnName.Name
 					 + " FROM " + TableName.getAdmin()
 					 + " WHERE " + ColumnName.ID + " = " + admin_ID;
@@ -144,7 +132,6 @@ public class AdminDAO
 			{
 				String admin_Password = new String(rs.getString(ColumnName.Password.toString()));
 				String admin_Name = rs.getString(ColumnName.Name.toString());
-//				System.out.println(ColumnName.Password + " " +admin_Password);
 				
 				Map<String,String> map = new HashMap<>();
 				map.put("name", admin_Name);
@@ -183,13 +170,7 @@ public class AdminDAO
 			ps.setString(5, admin.getAdmin_Password());
 
 			int rs = ps.executeUpdate();
-			
-//			System.out.println("Insert into admin ");
-//			System.out.println(rs + " insetInto(Admin admin)");
-//			if(rs == 1)
-//				System.out.println(admin.getAdmin_Name() + ", your account "
-//									+ "has been created successfully !!!");
-			
+
 			return rs;
 		} 
 		catch (SQLException e) 
@@ -201,9 +182,7 @@ public class AdminDAO
 	}
 	
 	public Admin selectRecord(int admin_ID) {
-		
-//		System.out.println("Fetching User(Admin) details : ");
-		
+
 		String query = "SELECT * "
 					 + " FROM " + TableName.getAdmin()
 					 + " WHERE " + ColumnName.ID + " = " + admin_ID;
@@ -221,7 +200,6 @@ public class AdminDAO
 				admin.setAdmin_Email(rs.getString(ColumnName.Email_ID.value.replaceAll("`", "")));
 				admin.setAdmin_ContactNo(rs.getString(ColumnName.Contact_No.value.replaceAll("`", "")));
 				admin.setAdmin_Password(rs.getString(ColumnName.Password.toString()));
-//				System.out.println(admin);
 				
 				return admin;
 			}
@@ -236,9 +214,7 @@ public class AdminDAO
 	}
 	
 public Admin selectRecord(String admin_Email) {
-		
-//		System.out.println("Fetching User(Admin) details : ");
-		
+
 		String query = "SELECT * "
 					 + " FROM " + TableName.getAdmin()
 					 + " WHERE " + ColumnName.Email_ID.value + " = '" + admin_Email + "'";
@@ -256,7 +232,6 @@ public Admin selectRecord(String admin_Email) {
 				admin.setAdmin_Email(rs.getString(ColumnName.Email_ID.value.replaceAll("`", "")));
 				admin.setAdmin_ContactNo(rs.getString(ColumnName.Contact_No.value.replaceAll("`", "")));
 				admin.setAdmin_Password(rs.getString(ColumnName.Password.toString()));
-//				System.out.println(admin);
 				
 				return admin;
 			}

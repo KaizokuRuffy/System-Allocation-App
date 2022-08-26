@@ -3,19 +3,6 @@ import * as U from "./Util.js";
 
 import { GET, Accept, POST, Content_type, PUT } from "./M.js";
 
-/* export const GET = "GET";
-export const POST = "POST";
-export const PUT = "PUT";
-const DELETE = "DELETE";
-export const Content_type = {
-  urlencoded: "application/x-www-form-urlencoded",
-  json: "application/json",
-};
-export const Accept = {
-  text: "text/plain",
-  json: "application/json",
-}; */
-
 export class User {
   constructor(data, request, response) {
     this.data = data;
@@ -64,19 +51,11 @@ export class User {
       this.response.status === 200 &&
       !this.response.body.includes("comp_Id")
     ) {
-      // console.log(NaN);
-      // console.log(Number(this.response.body));
-      // console.log(Number(this.response.body) != NaN);
-      // this.data[U.Session.emp_Id] =
-      //   Number(this.response.body) != NaN
-      //     ? Number(this.response.body)
-      //     : Number(localStorage.getItem(U.User.Id));
       this.data[U.Session.emp_Id] = Number(this.response.body);
       afterLogin(comp_Id);
       sessionStorage.setItem("session", JSON.stringify(this.data));
       sessionStorage.setItem("who", "user");
     }
-    //sessionStorage.clear();
 
     return this.response;
   }
@@ -85,7 +64,6 @@ export class User {
 
     this.data[U.Session["Logout Date"]] = U.getDate();
     this.data[U.Session["Logout Time"]] = U.getTime();
-    //console.log(this.data);
 
     this.request = new U.ReqBuilder()
       .setMethod(POST)
@@ -131,13 +109,11 @@ export class User {
     return this.response;
   }
   get() {
-    //console.log(JSON.parse(sessionStorage.getItem("session")));
     let params =
       "?" +
       U.User.Id +
       "=" +
       JSON.parse(sessionStorage.getItem("session"))[U.Session.emp_Id];
-    //let params = "?" + U.Admin.Id + "=" + 1;
     this.request = new U.ReqBuilder()
       .setMethod(GET)
       .setHeader(
@@ -156,18 +132,13 @@ export class User {
       )
       .getReq();
 
-    //console.log(this.request.header);
     this.response = new U.Res();
     this.XHR = new U.XHR(this.request, this.response);
-    //console.log(JSON.stringify(this.XHR));
     this.response = this.XHR.sendRequest();
-    //console.log(this.response);
-    //console.log(this.response.body);
     return this.response;
   }
   getPlus(emp_Id) {
     let params = "?" + U.User.Id + "=" + emp_Id;
-    //let params = "?" + U.Admin.Id + "=" + 1;
     this.request = new U.ReqBuilder()
       .setMethod(GET)
       .setHeader(
@@ -186,18 +157,12 @@ export class User {
       )
       .getReq();
 
-    //console.log(this.request.header);
     this.response = new U.Res();
     this.XHR = new U.XHR(this.request, this.response);
-    //console.log(JSON.stringify(this.XHR));
     this.response = this.XHR.sendRequest();
-    //console.log(this.response);
-    //console.log(this.response.body);
     return this.response;
   }
   add() {
-    // let id = U.gEBI(U.User.Id).value;
-
     this.data = new D.UserBuilder()
       .setId(-1)
       .setName(U.gEBI(U.User.Name).value)
@@ -221,8 +186,6 @@ export class User {
           .setPath("addUser")
           .getUrl()
       );
-    //console.log(this.data);
-    //console.log(this.request);
     this.response = new U.Res();
     this.XHR = new U.XHR(this.request, this.response);
     this.response = this.XHR.sendRequest();

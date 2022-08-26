@@ -48,7 +48,6 @@ public class ComputerController extends HttpServlet
 					{
 						new Message().infoToClient(HttpServletResponse.SC_NOT_FOUND, 
 								response, "No resources data in database. Add system details and then try fetching data.");	
-//						response.sendError(500, "No resources data in database. Add system details and then try fetching data.");
 						System.out.println("No resource data present in table");
 					}
 				}
@@ -57,7 +56,6 @@ public class ComputerController extends HttpServlet
 					new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
 										response, "Database error");
 					System.out.println("Database error");
-					//response.sendError(500, "Database error");
 				}
 				
 				break;
@@ -82,7 +80,6 @@ public class ComputerController extends HttpServlet
 				
 				System.out.println("\n-- Saving resource details to database --");
 				Computer comp = new Json().toPojo(request, Computer.class);
-				//System.out.println("asdad");
 				if(comp != null)
 				{
 					if(computerService.addSystem(comp))
@@ -96,7 +93,6 @@ public class ComputerController extends HttpServlet
 						new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
 										response, "Duplicate resource cannot be added. MAC address should be unique");
 						System.out.println("Duplicate resource cannot be added.");
-//						response.sendError(500, "Database error");
 					}
 				}
 				else {
@@ -142,15 +138,13 @@ public class ComputerController extends HttpServlet
 					System.out.println(comp_Id + " " + colName + " " + status);
 					if(computerService.updateStatus(comp_Id, colName, status))
 					{
-//						Integer emp_Id = Integer.parseInt(response.getHeader("emp_Id"));
-//						new Message().infoToClient(emp_Id.toString(),response);
+
 						try {
 							Integer emp_Id = Integer.parseInt(response.getHeader("emp_Id"));
 							new Message().infoToClient(emp_Id.toString(),response);
 						} catch (NumberFormatException e) {
 							new Message().infoToClient("System updated successfully",response);
 						}
-//						response.getWriter().append(emp_Id.toString());
 						
 						System.out.println("Status of system '" + comp_Id + 
 													"' is updated succesfully");
@@ -159,10 +153,6 @@ public class ComputerController extends HttpServlet
 						final String cname = colName;
 						
 						Date date = null;
-//						System.out.println(new Date());
-//						System.out.println(DATE.getDate(8, 0, 0));
-//						System.out.println(DATE.getDate(16, 0, 0));
-//						System.out.println(DATE.getDate(23, 59, 59));
 						
 						if(DATE.getDate(8, 0, 0).toString().compareTo(new Date().toString()) >= 0)
 							date = DATE.getDate(8, 0, 0);
@@ -170,9 +160,7 @@ public class ComputerController extends HttpServlet
 							date = DATE.getDate(16, 0, 0);
 						else if(DATE.getDate(23, 59, 59).toString().compareTo(new Date().toString()) >= 0)
 							date = DATE.getDate(23, 59, 59);
-						
-						
-						//System.out.println(date);
+
 						
 						SchedulerTask st = new SchedulerTask();
 						st.schedule(new TimerTask() {
@@ -184,14 +172,13 @@ public class ComputerController extends HttpServlet
 																"' is updated succesfully");
 								}
 							}
-						}, date); //1000*60*60*8L);
+						}, date);
 					}
 					else
 					{
 						new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
 											response, "System not present in database. Wrong id entered.");
 						System.out.println("System not present in database. Wrong id entered.");
-//						response.sendError(403, "System not present in database");
 					}
 				}
 				else
@@ -209,7 +196,6 @@ public class ComputerController extends HttpServlet
 						System.out.println("Database error (or) system not present");
 					}
 					
-//					request.getSession().invalidate();
 				}
 				
 				break;

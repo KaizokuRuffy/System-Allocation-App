@@ -23,12 +23,9 @@ public class Message {
 		response.setContentType("text/plain");
 		
 		out.write(Message);
-		//out.write("\n" + response.getStatus() + "");
 		System.out.println(response.getStatus() + " - " + Message);
 	}
 
-	//HttpServletRequest request, 
-	//For 200 OK Status code response with response body as JSON
 	public <T> void infoToClient(HttpServletResponse response, T obj) {
 		String json = new Json().toJSON(obj);
 		PrintWriter out = null;
@@ -58,7 +55,6 @@ public class Message {
 		response.setStatus(status_Code);
 		response.setContentType("text/plain");
 		out.write(Message);
-		//System.out.println(response.getStatus() + " - " + Message);
 	}
 
 }

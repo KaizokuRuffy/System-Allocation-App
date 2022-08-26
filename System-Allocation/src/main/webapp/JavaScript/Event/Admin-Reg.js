@@ -19,7 +19,6 @@ function add() {
     AdminController.add();
   else console.log("Invalid data");
 }
-//var valid = false;
 
 let addAdmin = document
   .getElementById("addAdmin")

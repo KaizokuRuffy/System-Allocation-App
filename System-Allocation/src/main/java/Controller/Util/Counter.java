@@ -38,8 +38,6 @@ public class Counter
 							  {
 								  if(Counter.getcounter().getLoginCount() == 0)
 									  JDBC_Connection.close();
-//									  else
-//										  Counter.getcounter().userNotPresent();
 							  }
 							  catch (Exception ex) 
 							  {
@@ -48,7 +46,6 @@ public class Counter
 						  }
 					 }, 5000L);
 				}
-//					JDBC_Connection.close();
 			}
 	}
 	
@@ -56,7 +53,6 @@ public class Counter
 	{
 		synchronized (counter) {
 			loginCount++;
-//			System.out.println(loginCount);
 		}
 	}
 	
@@ -64,7 +60,6 @@ public class Counter
 	{
 		synchronized (counter) {
 			loginCount--;
-//			System.out.println(loginCount);
 		}
 		Counter.getcounter().userNotPresent();
 	}

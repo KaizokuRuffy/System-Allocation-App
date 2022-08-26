@@ -78,30 +78,3 @@ public class Admin implements Serializable {
 	}
 
 }
-
-/*
- * public boolean auth(String password)
- * {
- * if(password.equals(this.admin_Password))
- * return true;
- * 
- * return false;
- * }
- * 
- * int request ()
- * {
- * //Call to database to check if computer is available
- * int id = 0;
- * 
- * return id;
- * }
- * 
- * boolean request (String comp_id)
- * {
- * //Call to database to check if computer is available
- * boolean availability = true;
- * 
- * return availability;
- * }
- * 
- */

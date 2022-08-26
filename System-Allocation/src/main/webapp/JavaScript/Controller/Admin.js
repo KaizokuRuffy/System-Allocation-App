@@ -13,7 +13,6 @@ export class Admin {
     this.View.create(this.Model.create());
   }
   login() {
-    //console.log(this.Model.login());
     this.View.login(this.Model.login());
   }
   get() {
@@ -24,12 +23,6 @@ export class Admin {
     this.View.logout(this.Model.logout());
   }
   add() {
-    // let isPresentResp = this.Model.isPresent();
-    // let addResp = ;
-
-    // if (isPresentResp.body.includes("No")) addResp.redirect = "../index.html";
-    // else addResp.redirect = "../HTML/Admin.html";
-
     this.View.add(this.Model.add());
   }
 }

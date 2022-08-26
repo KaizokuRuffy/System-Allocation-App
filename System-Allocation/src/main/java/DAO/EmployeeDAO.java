@@ -71,9 +71,7 @@ public class EmployeeDAO
 	}
 	
 	public Map<String,String> getPassword(int emp_Id) {
-		
-//		System.out.println("Getting password of Employee " + emp_Id);
-		
+
 		String query = " SELECT " + ColumnName.Password + ", " + ColumnName.Name
 				 + " FROM " + TableName.getEmployee()
 				 + " WHERE " + ColumnName.ID + " = " + emp_Id;
@@ -87,7 +85,6 @@ public class EmployeeDAO
 			{
 				String emp_Password = new String(rs.getString(ColumnName.Password.toString()));
 				String emp_Name = rs.getString(ColumnName.Name.toString());
-//				System.out.println(ColumnName.Password + " " + emp_Password);
 				
 				Map<String,String> map = new HashMap<>();
 				map.put("name", emp_Name);
@@ -105,9 +102,7 @@ public class EmployeeDAO
 	}
 	
 	public int insertInto(Employee emp) {
-		
-//		System.out.println("Creating Employee account");
-		
+
 		String query = " INSERT INTO " + TableName.getEmployee() + 
 					   " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -131,11 +126,7 @@ public class EmployeeDAO
 			ps.setString(9, emp.getEmp_WorkLoc());
 			
 			int rs = ps.executeUpdate();
-		
-//			if(rs == 1)
-//				System.out.println(emp.getEmp_Name() + ", your account "
-//						+ "has been created successfully !!!");
-			
+
 			return rs;
 		} 
 		catch (SQLException e) 
@@ -147,8 +138,6 @@ public class EmployeeDAO
 	}
 	
 	public Employee selectRecord(int emp_Id) {
-		
-//		System.out.println("Fetching User(Employee) details : ");
 		
 		String query = " SELECT * "
 					 + " FROM " + TableName.getEmployee()
@@ -174,9 +163,7 @@ public class EmployeeDAO
 				emp.setEmp_Dept(rs.getString(ColumnName.Department.toString()));;
 				emp.setEmp_WorkLoc(rs.getString
 										(ColumnName.Work_Location.value.replaceAll("`", "")));;
-										
-//				System.out.println(emp);
-										
+							
 				return emp;
 			}
 			
@@ -190,9 +177,7 @@ public class EmployeeDAO
 	}
 	
 public Employee selectRecord(String emp_Email) {
-		
-//		System.out.println("Fetching User(Employee) details : ");
-		
+
 		String query = " SELECT * "
 					 + " FROM " + TableName.getEmployee()
 					 + " WHERE " + ColumnName.Email_ID.value + " = '" + emp_Email + "'" ;
@@ -217,9 +202,7 @@ public Employee selectRecord(String emp_Email) {
 				emp.setEmp_Dept(rs.getString(ColumnName.Department.toString()));;
 				emp.setEmp_WorkLoc(rs.getString
 										(ColumnName.Work_Location.value.replaceAll("`", "")));;
-										
-//				System.out.println(emp);
-										
+				
 				return emp;
 			}
 			
@@ -233,9 +216,7 @@ public Employee selectRecord(String emp_Email) {
 	}
 	
 	public List<Employee> selectAll() {
-		
-//		System.out.println("Fetching All(Employee) details ");
-		
+
 		String query = " SELECT * "
 				 + " FROM " + TableName.getEmployee() ;
 
@@ -264,7 +245,6 @@ public Employee selectRecord(String emp_Email) {
 				employeeList.add(emp);
 			}
 			
-//			System.out.println(employeeList);
 			return employeeList;
 		} 
 		catch (SQLException e) 

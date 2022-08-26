@@ -11,7 +11,6 @@ export const Controller = {
 
 export class XHR {
   constructor(request, response) {
-    //console.log(JSON.stringify(request) + " " + JSON.stringify(response));
     this.Request = request;
     this.Response = response;
   }
@@ -32,20 +31,6 @@ export class XHR {
       )
         xhr.setRequestHeader("Accept", this.Request.header.Accept);
     }
-    /* if (
-      this.Request.header.CORS !== null &&
-      this.Request.header.CORS !== undefined
-    )
-      xhr.setRequestHeader(
-        "Access-Control-Allow-Origin",
-        this.Request.header.CORS
-      ); */
-
-    /* if (
-      this.Request.header.Accept !== null &&
-      this.Request.header.Accept !== undefined
-    )
-      xhr.responseType = this.Request.header.Accept; */
 
     if (this.Request.body !== null && this.Request.body != undefined)
       xhr.send(this.Request.body);
@@ -154,10 +139,6 @@ export class HeaderBuilder {
     this.Accept = accept;
     return this;
   }
-  /* setCORS(CORS) {
-    this.CORS = CORS;
-    return this;
-  } */
   getHeader() {
     return new Header(this.Content, this.Accept);
   }
@@ -189,7 +170,6 @@ export var Admin = {
   Password: null,
 
   init() {
-    //console.log("Admin init()");
     initialize(this, new D.Admin());
   },
 };
@@ -206,7 +186,6 @@ export var User = {
   WorkLoc: null,
 
   init() {
-    //console.log("User init()");
     initialize(this, new D.User());
   },
 };
@@ -222,7 +201,6 @@ export var System = {
   Year: null,
 
   init() {
-    //console.log("System init()");
     initialize(this, new D.System());
   },
 };
@@ -239,7 +217,6 @@ export var Session = {
   Shift: null,
 
   init() {
-    //console.log("Session init()");
     initialize(this, new D.Session());
   },
 };
@@ -262,11 +239,6 @@ export let initAll = function () {
   User.init();
   Session.init();
   System.init();
-
-  /* console.log(Admin);
-  console.log(User);
-  console.log(Session);
-  console.log(System); */
 };
 
 export let gEBI = (id) => {

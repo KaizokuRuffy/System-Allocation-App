@@ -48,8 +48,6 @@ public class EmployeeController extends HttpServlet {
 				if (emp == null) {
 					new Message().infoToClient(HttpServletResponse.SC_NOT_FOUND,
 							response, "Invalid username (or) database empty");
-					// response.sendError(HttpServletResponse.SC_NOT_FOUND, "Invalid username (or)
-					// database empty");
 					System.out.println("Invalid username (or) database empty");
 				} else {
 					if (request.getSession(false).getAttribute("status").equals("employee logged in")) {
@@ -62,9 +60,6 @@ public class EmployeeController extends HttpServlet {
 						list.add(emp);
 						list.add(sessionList);
 
-						// String s1 = new Gson().toJson(list);
-						// s1 = s1.substring(1, s1.length() - 1);
-						// s1 = "{" + s1 + "}";
 						new Message().infoToClient(response, list);
 					}
 				}
@@ -84,15 +79,14 @@ public class EmployeeController extends HttpServlet {
 					} else {
 						new Message().infoToClient(HttpServletResponse.SC_NOT_FOUND, response,
 								"No users in database. Create users and then try fetching data.");
-						// response.sendError(HttpServletResponse.SC_NOT_FOUND,
-						// "No users in database. Create users and then try fetching data.");
+
 						System.out.println("No users in database. reate users and then try fetching data.");
 					}
 				} else {
 					new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response,
 							"Database error");
 					System.out.println("Database error");
-					// response.sendError(500, "Database is empty");
+
 				}
 
 				break;
@@ -104,7 +98,6 @@ public class EmployeeController extends HttpServlet {
 			throws ServletException, IOException {
 
 		final String CRUD = request.getPathInfo();
-		// PrintWriter out = response.getWriter();
 
 		switch (CRUD) {
 			case "/userLogin":
@@ -115,7 +108,6 @@ public class EmployeeController extends HttpServlet {
 				String Password = null;
 
 				username = request.getParameter("emp_Email");
-				//emp_Id = Integer.parseInt(request.getParameter("emp_Id"));// var
 				Password = new String(request.getParameter("emp_Password"));// var
 				Boolean auth = null;
 				
@@ -123,7 +115,6 @@ public class EmployeeController extends HttpServlet {
 				
 				try {
 					emp_Id = employeeService.getUser(username).getEmp_Id();
-					//System.out.println(emp_Id);
 					auth = employeeService.Authenticate(emp_Id, Password); // DB call
 				} catch (NullPointerException e) {
 					e.printStackTrace();
@@ -133,8 +124,6 @@ public class EmployeeController extends HttpServlet {
 				if (auth == null) {
 					new Message().infoToClient(HttpServletResponse.SC_FORBIDDEN, response,
 							"Invalid username / password");
-					// out.write("Invalid username");
-					// response.sendError(403, "Invalid username / password");
 					System.out.println("Invalid username!!! Enter correct username");
 
 					break;
@@ -154,8 +143,6 @@ public class EmployeeController extends HttpServlet {
 
 				for (Session temp : sessionList) {
 					
-//					System.out.println(temp);
-					
 					if(!"-1".equals(session.getComp_Id() ) && temp.getLogIn_Date().equals(session.getLogIn_Date())
 							&& !DATE.getShift(temp.getLogOut_Time()).equals(DATE.getShift())
 							&& temp.getComp_Id() == session.getComp_Id()) {
@@ -163,12 +150,9 @@ public class EmployeeController extends HttpServlet {
 						temp_Id = temp.getEmp_Id();
 					}
 					
-//					System.out.println(DATE.getShift(temp.getLogOut_Time()));
-//					System.out.println(DATE.getShift());
 					if (temp.getLogIn_Date().equals(session.getLogIn_Date()) && 
 												DATE.getShift(temp.getLogOut_Time()).equals(DATE.getShift())) {
-						//System.out.println("Inside this if");
-						// User already logged in (N)
+				
 						comp_Id = temp.getComp_Id();
 						temp_Id = temp.getEmp_Id();
 
@@ -191,15 +175,7 @@ public class EmployeeController extends HttpServlet {
 					new Message().infoToClient("comp_Id :" + comp_Id + "," + emp_Id, response);
 				} else if (!"-1".equals(session.getComp_Id())) {
 					if (auth == true) {
-						System.out.println(comp_Id);
-						/*
-						 * Session session = new Json().toPojo(request, Session.class); List<Session>
-						 * sessionList = new SessionService().getEmpSession(emp_Id);
-						 * for(Session temp : sessionList) {
-						 * if(temp.getLogIn_Date().equals(session.getLogIn_Date())) comp_Id =
-						 * temp.getComp_Id(); }
-						 */
-						System.out.println(session.getEmp_Id() + " " + temp_Id);
+						
 						if (comp != null && (comp.getAvailable().equals("Yes")) ||
 								((comp.getAvailable().equals("No"))) && session.getEmp_Id() == temp_Id) {
 							
@@ -217,8 +193,6 @@ public class EmployeeController extends HttpServlet {
 									{
 										new Message().infoToClient(HttpServletResponse.SC_BAD_REQUEST,
 												response, "System already in use");
-										// out.write("Cannot login to different system");
-										// response.sendError(403, "Cannot login to different system");
 										System.err.println("System already in use");
 										
 										flag = true;
@@ -236,7 +210,6 @@ public class EmployeeController extends HttpServlet {
 								HttpSession sess = request.getSession(true);
 								sess.setAttribute("status", "employee logged in");
 								sess.setMaxInactiveInterval(60 * 60 * 8);
-								// System.out.println(request.getSession().getId());
 
 								request.setAttribute("Session", new Json().toJSON(session));
 								// Calling 'SessionController' servlet to add session data to database as the
@@ -244,8 +217,6 @@ public class EmployeeController extends HttpServlet {
 								RequestDispatcher rd = request.getRequestDispatcher("/SessionController/addSession");
 								response.setContentType("text/plain");
 								response.setIntHeader("emp_Id", emp_Id);
-//								System.out.println("write");
-//								response.getWriter().write(emp_Id);
 								rd.forward(request, response);
 
 								SchedulerTask st = new SchedulerTask();
@@ -254,11 +225,8 @@ public class EmployeeController extends HttpServlet {
 									public void run() {
 										boolean flag = true;
 										try {
-											// System.out.println(emp_Id + " In try block");
-											// System.out.println(emp_Id + " " + sess.getAttribute("status"));
 											sess.getAttribute("status");//Checking if session is already invalidated or not.
 										} catch (IllegalStateException e) {
-											// System.out.println(emp_Id + " In catch block");
 											flag = false;
 										}
 										if (flag) {
@@ -279,13 +247,6 @@ public class EmployeeController extends HttpServlet {
 								HttpSession sess = request.getSession(true);
 								sess.setAttribute("status", "employee logged in");
 								sess.setMaxInactiveInterval(60 * 60 * 8);
-								// System.out.println(request.getSession().getId());
-
-								// Calling 'SessionController' servlet to add session data to database as the
-								// user logs in
-								// RequestDispatcher rd =
-								// request.getRequestDispatcher("/SessionController/addSession");
-								// rd.forward(request, response);
 
 								RequestDispatcher rd = request.getRequestDispatcher("/SystemController/updateStatus");
 								request.setAttribute("comp_Id", session.getComp_Id());
@@ -296,19 +257,6 @@ public class EmployeeController extends HttpServlet {
 								response.getWriter().write("Logged in successfully");
 								rd.forward(request, response);
 
-								/*
-								 * SchedulerTask st = new SchedulerTask(); st.schedule(new TimerTask() {
-								 * 
-								 * @Override public void run() { boolean flag = true; try { //
-								 * System.out.println(emp_Id + " In try block"); // System.out.println(emp_Id +
-								 * " " + sess.getAttribute("status")); sess.getAttribute("status"); } catch
-								 * (IllegalStateException e) { // System.out.println(emp_Id +
-								 * " In catch block"); flag = false; } if (flag) {
-								 * System.err.println("Session of user '" + id + "' invalidated");
-								 * sess.invalidate(); Counter.getcounter().atLogout(); }
-								 * 
-								 * } }, 1000 * 60 * 60 * 24L); // *60*60*24L);
-								 */
 								Counter.getcounter().atLogin();
 							} else if (comp.getComp_Id() != comp_Id) {
 								
@@ -316,25 +264,18 @@ public class EmployeeController extends HttpServlet {
 								
 								new Message().infoToClient(HttpServletResponse.SC_BAD_REQUEST,
 										response, "Cannot login to different system");
-								// out.write("Cannot login to different system");
-								// response.sendError(403, "Cannot login to different system");
 								System.err.println("Cannot login to different system");
 							}
 						} else {
 							new Message().infoToClient(HttpServletResponse.SC_CONFLICT, response,
 									comp == null ? "System not present" : "System not available");
 
-							// out.write(comp == null ? "System not present" : "System not available");
-							// response.sendError(403, comp == null ? "System not present" : "System not
-							// available");
 							System.err.println(comp == null ? "System not present" : "System not available");
 						}
 
 					} else if (auth == false) {
 						new Message().infoToClient(HttpServletResponse.SC_FORBIDDEN,
 								response, "Invalid username / password");
-						// out.write("Invalid username / password");
-						// response.sendError(403, "Invalid username / password");
 						System.out.println("Invalid password!!! Enter password again");
 					}
 				}
@@ -344,8 +285,6 @@ public class EmployeeController extends HttpServlet {
 			case "/userLogout":
 
 				System.out.println("\n-- User logging out of the web site --");
-				// System.out.println(request.getSession().getId());
-				// request.getSession().invalidate();
 
 				// Calling 'SessionController' servlet to update session data to database as the
 				// user logs out
@@ -366,9 +305,6 @@ public class EmployeeController extends HttpServlet {
 
 				Employee emp = new Json().toPojo(request, Employee.class);
 
-				// System.out.println(adminJson);
-				// System.out.println(admin);
-
 				if (emp != null) {
 					if (employeeService.createUser(emp)) // DB call
 					{
@@ -378,7 +314,6 @@ public class EmployeeController extends HttpServlet {
 					} else {
 						new Message().infoToClient(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, response,
 								"Duplicate user not allowed. Adhaar ID, Email, Mobile no should be unique");
-						// response.sendError(500, "Duplicate user not allowed");
 						System.out.println("Duplicate user not allowed");
 					}
 				} else {

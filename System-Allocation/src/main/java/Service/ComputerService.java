@@ -11,8 +11,6 @@ public class ComputerService
 	
 	public boolean addSystem(Computer comp)
 	{	
-//		System.out.println(comp);
-
 		if(comp.getWorking().equals(""))
 			comp.setWorking("Yes");
 		if(comp.getWorking().equals("Yes"))

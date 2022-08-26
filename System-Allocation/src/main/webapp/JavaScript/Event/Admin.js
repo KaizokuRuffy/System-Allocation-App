@@ -4,10 +4,8 @@ import * as user from "./User.js";
 import * as system from "./System.js";
 import * as session from "./Session.js";
 
-//U.initAll();
 U.Admin.init();
 var AdminController = new Ctrl.Admin();
-//if (sessionStorage.getItem("who") === "admin")
 AdminController.get();
 
 let getAdmin = U.gEBI("getAdmin").addEventListener("click", () => {

@@ -58,7 +58,6 @@ public class ComputerDAO {
 		Connection conn = JDBC_Connection.getConnection();
 
 		try (PreparedStatement ps = conn.prepareStatement(query)) {
-			// System.out.println("Adding computer details to database");
 
 			ps.setString(1, comp.getComp_Id());
 			ps.setString(2, comp.getMAC());
@@ -70,10 +69,6 @@ public class ComputerDAO {
 			ps.setInt(8, comp.getYear());
 
 			int rs = ps.executeUpdate();
-
-			// if(rs == 1)
-			// System.out.println("Details of computer '" + comp.getMAC()
-			// + "' uploaded successfully ");
 
 			return rs;
 		} catch (SQLException e) {
@@ -107,7 +102,6 @@ public class ComputerDAO {
 				comp.setModel(rs.getString(ColumnName.Model.toString()));
 				comp.setYear(rs.getInt(ColumnName.Year.toString()));
 
-				// System.out.println(comp);
 				computerList.add(comp);
 			}
 			return computerList;
@@ -145,11 +139,7 @@ public class ComputerDAO {
 		try (PreparedStatement ps = conn.prepareStatement(query);) {
 
 			ps.setString(1, value);
-			// System.out.println(ps);
 			int rs = ps.executeUpdate();
-
-			// if(rs == 1)
-			// System.out.println(ColName + " Status changed");
 
 			return rs;
 		} catch (SQLException e) {

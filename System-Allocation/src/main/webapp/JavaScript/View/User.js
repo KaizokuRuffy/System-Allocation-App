@@ -7,9 +7,6 @@ export class User {
   }
 
   firstLogin(response) {
-    //console.log(response.body);
-    // let store = null;
-    //console.log(JSON.parse().includes("-1"));
     if (response.status === 200) {
       if (!response.body.includes("-1")) {
         if (!response.body.includes("Available - No")) {
@@ -22,12 +19,6 @@ export class User {
         } else sessionStorage.setItem("Available", "No");
       } else if (response.body.includes("-1")) {
         sessionStorage.setItem(U.System.Id, "-1");
-        // console.log(response.body.indexOf(","));
-        // console.log(response.body.length + 1);
-        // console.log(
-        //   response.body.substr(response.body.indexOf(",") + 1),
-        //   response.body.length + 1
-        // );
         sessionStorage.setItem(
           U.User.Id,
           Number(
@@ -45,7 +36,6 @@ export class User {
     if (response.status === 200) {
       window.location.replace("HTML/User.html");
     } else if (response.status === 403 || response.status === 404) {
-      // console.log(response);
       let bool = true;
       try {
         U.gEBI("Umsg").remove();
@@ -56,7 +46,6 @@ export class User {
       var msg = document.createElement("td");
       msg.setAttribute("id", "Umsg");
       msg.style.color = "Red";
-      //msg.style.paddingLeft = "20px";
       msg.innerText = "Invlaid username / password";
       msg.style.paddingLeft = "70px";
       msg.style.paddingBottom = "20px";
@@ -76,7 +65,6 @@ export class User {
       response.status === 409 ||
       response.status === 500
     ) {
-      //console.log("Duplicate entry");
       window.alert(JSON.stringify(response.body).replaceAll('"', ""));
     } else {
       window.alert(response.replaceAll('"', ""));
@@ -93,14 +81,8 @@ export class User {
     }
   }
   get(response) {
-    /* console.log("In V");
-    console.log(response);
-    console.log(response.body);
-    console.log(response.status); */
     if (response.status === 200) {
       let display = U.gEBI("display");
-      /* display.style.fontSize = "25px";
-      display.innerText = response.body; */
       Util.displayAsList(
         this.fields,
         JSON.parse(response.body),
@@ -115,15 +97,8 @@ export class User {
     }
   }
   getPlus(response) {
-    /* console.log("In V");
-    console.log(response);
-    console.log(response.body);
-    console.log(response.status); */
     if (response.status === 200) {
       let display = U.gEBI("display");
-      /* display.style.fontSize = "25px";
-      display.innerText = response.body; */
-      //console.log(JSON.parse(response.body));
       let data = JSON.parse(response.body);
       let emp = [];
       emp[0] = data[0];
@@ -133,7 +108,6 @@ export class User {
       U.gEBI("Filter").remove();
 
       if (session.length != 0) {
-        //  console.log(session.length != 0);
         let heading = document.createElement("h2");
 
         heading.innerText = "'" + emp[0][U.User.Name] + "'" + " - Session data";

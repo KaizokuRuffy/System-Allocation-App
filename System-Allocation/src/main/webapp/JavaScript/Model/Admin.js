@@ -2,21 +2,6 @@ import * as D from "./Data/D.js";
 import * as U from "./Util.js";
 import { GET, Accept, POST, Content_type, PUT } from "./M.js";
 
-/* export const GET = "GET";
-export const POST = "POST";
-export const PUT = "PUT";
-const DELETE = "DELETE";
-
-export const Content_type = {
-  urlencoded: "application/x-www-form-urlencoded",
-  json: "application/json",
-};
-
-export const Accept = {
-  text: "text/plain",
-  json: "application/json",
-}; */
-
 export class Admin {
   constructor(data, request, response, XHR) {
     this.data = data;
@@ -69,14 +54,6 @@ export class Admin {
       .setPassword(U.gEBI(U.Admin.Password).value)
       .getAdmin();
 
-    //console.log(sessionStorage.getItem(U.Admin.Id));
-    /* this.data = new D.AdminBuilder()
-      .setId(U.gEBI(U.Admin.Id).value)
-      .setPassword(U.gEBI(U.Admin.Pass).value)
-      .getAdmin(); */
-    //console.log("Before removing " + JSON.stringify(this.data));
-    //this.data.remove();
-    //console.log("After removing" + JSON.stringify(this.data));
     let params =
       "?" +
       U.Admin.Email +
@@ -86,8 +63,6 @@ export class Admin {
       U.Admin.Password +
       "=" +
       this.data[U.Admin.Password];
-
-    //console.log(params);
     this.request = new U.ReqBuilder()
       .setMethod(POST)
       .setHeader(
@@ -108,9 +83,7 @@ export class Admin {
 
     this.response = new U.Res();
     this.XHR = new U.XHR(this.request, this.response);
-    //console.log(JSON.stringify(this.XHR));
     this.response = this.XHR.sendRequest();
-    //console.log(this.response);
     if (this.response.status === 200) {
       sessionStorage.setItem(
         U.Admin.Id,
@@ -124,7 +97,6 @@ export class Admin {
 
   get() {
     let params = "?" + U.Admin.Id + "=" + sessionStorage.getItem(U.Admin.Id);
-    //let params = "?" + U.Admin.Id + "=" + 1;
     this.request = new U.ReqBuilder()
       .setMethod(GET)
       .setHeader(
@@ -143,12 +115,9 @@ export class Admin {
       )
       .getReq();
 
-    //console.log(this.request.header);
     this.response = new U.Res();
     this.XHR = new U.XHR(this.request, this.response);
-    //console.log(JSON.stringify(this.XHR));
     this.response = this.XHR.sendRequest();
-    //console.log(this.response);
     return this.response;
   }
 

@@ -4,8 +4,6 @@ import * as U from "../Model/Util.js";
 U.Session.init();
 var SessionController = new Ctrl.Session();
 
-//if (sessionStorage.getItem("who") === "user") UserController.get();
-
 export let getAllSession = () => {
   U.gEBI("getAllSession").addEventListener("click", () => {
     if (sessionStorage.getItem("who") === "user") {
