@@ -58,10 +58,6 @@ public class ComputerDAO {
 		Connection conn = JDBC_Connection.getConnection();
 
 		try (PreparedStatement ps = conn.prepareStatement(query)) {
-<<<<<<< HEAD
-=======
-			// System.out.println("Adding computer details to database");
->>>>>>> refs/remotes/origin/Form-Validation
 
 			ps.setString(1, comp.getComp_Id());
 			ps.setString(2, comp.getMAC());
@@ -74,13 +70,6 @@ public class ComputerDAO {
 
 			int rs = ps.executeUpdate();
 
-<<<<<<< HEAD
-=======
-			// if(rs == 1)
-			// System.out.println("Details of computer '" + comp.getMAC()
-			// + "' uploaded successfully ");
-
->>>>>>> refs/remotes/origin/Form-Validation
 			return rs;
 		} catch (SQLException e) {
 			JDBC_Connection.close();
@@ -113,10 +102,6 @@ public class ComputerDAO {
 				comp.setModel(rs.getString(ColumnName.Model.toString()));
 				comp.setYear(rs.getInt(ColumnName.Year.toString()));
 
-<<<<<<< HEAD
-=======
-				// System.out.println(comp);
->>>>>>> refs/remotes/origin/Form-Validation
 				computerList.add(comp);
 			}
 			return computerList;
@@ -154,18 +139,10 @@ public class ComputerDAO {
 		try (PreparedStatement ps = conn.prepareStatement(query);) {
 
 			ps.setString(1, value);
-<<<<<<< HEAD
-=======
-			// System.out.println(ps);
->>>>>>> refs/remotes/origin/Form-Validation
+
 			int rs = ps.executeUpdate();
 
-<<<<<<< HEAD
-=======
-			// if(rs == 1)
-			// System.out.println(ColName + " Status changed");
 
->>>>>>> refs/remotes/origin/Form-Validation
 			return rs;
 		} catch (SQLException e) {
 			JDBC_Connection.close();

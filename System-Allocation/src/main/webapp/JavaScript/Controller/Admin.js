@@ -23,15 +23,6 @@ export class Admin {
     this.View.logout(this.Model.logout());
   }
   add() {
-<<<<<<< HEAD
-=======
-    // let isPresentResp = this.Model.isPresent();
-    // let addResp = ;
-
-    // if (isPresentResp.body.includes("No")) addResp.redirect = "../index.html";
-    // else addResp.redirect = "../HTML/Admin.html";
-
->>>>>>> refs/remotes/origin/Form-Validation
     this.View.add(this.Model.add());
   }
 }

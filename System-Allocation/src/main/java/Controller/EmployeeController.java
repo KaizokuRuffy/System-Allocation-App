@@ -139,14 +139,9 @@ public class EmployeeController extends HttpServlet {
 					comp = new ComputerService().getSystem(session.getComp_Id());
 
 				String comp_Id = "-1";
-<<<<<<< HEAD
 				int temp_Id = -1;
-=======
->>>>>>> refs/remotes/origin/Form-Validation
 
 				for (Session temp : sessionList) {
-<<<<<<< HEAD
-=======
 					
 //					System.out.println(temp);
 					
@@ -154,7 +149,6 @@ public class EmployeeController extends HttpServlet {
 							&& !DATE.getShift(temp.getLogOut_Time()).equals(DATE.getShift())
 							&& temp.getComp_Id() == session.getComp_Id())
 						comp_Id = temp.getComp_Id();
->>>>>>> refs/remotes/origin/Form-Validation
 					
 					if(!"-1".equals(session.getComp_Id() ) && temp.getLogIn_Date().equals(session.getLogIn_Date())
 							&& !DATE.getShift(temp.getLogOut_Time()).equals(DATE.getShift())
