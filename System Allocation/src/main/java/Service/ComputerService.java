@@ -41,7 +41,19 @@ public class ComputerService
 		return false;
 	}
 	
-	public Computer getSystem(String comp_Id)
+	public List<Computer> getSystems(String shift, String backup, String unallocated){
+		
+		if("Yes".equals(unallocated))
+			return computerDAO.getUnallocateSystems(shift, backup);
+		
+		else if("No".equals(unallocated))
+			return computerDAO.getAllocatedSystems(shift, backup);
+		
+		return null;
+	}
+	
+	public Computer getSystem(String comp_Id
+			)
 	{
 		return computerDAO.selectRecord(comp_Id);
 	}

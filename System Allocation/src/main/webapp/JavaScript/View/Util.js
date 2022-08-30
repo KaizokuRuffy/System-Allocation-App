@@ -1,5 +1,13 @@
-import * as D from "../Model/Data/D.js";
+import * as Util from "../Model/Util.js";
 import { User } from "../Controller/C.js";
+import * as U from "../Event/Util.js";
+import * as D from "../Model/Data/D.js";
+
+Util.initAll();
+const updateColumn = {
+  Employee: [Util.User["Computer Id"], Util.User.Shift],
+  System: [Util.System.Available, Util.System.Backup, Util.System.Working],
+};
 
 export let displayAsList = function (fields, data, element, name) {
   removeAllChildNodes(element);
@@ -77,8 +85,6 @@ export let displayAsTable = function (fields, data, element, name) {
 
   let len = Object.create(data[0]);
 
-  //console.log(len);
-
   for (let i = 0; i < field_key.length - 1; i++) {
     let th = document.createElement("th");
     th.setAttribute("id", field_key[i]);
@@ -91,7 +97,11 @@ export let displayAsTable = function (fields, data, element, name) {
 
     len[fields[field_key[i]]] = field_key[i].length;
 
-    if (field_key[i] === "Available" || field_key[i] === "Working") {
+    if (
+      field_key[i] === "Available" ||
+      field_key[i] === "Working" ||
+      field_key[i] === "Shift"
+    ) {
       let cell = document.createElement("td");
       let select = document.createElement("select");
       select.className = "Filter";
@@ -103,14 +113,11 @@ export let displayAsTable = function (fields, data, element, name) {
       def.selected = true;
       select.appendChild(def);
 
-      let opt1 = document.createElement("option");
-      opt1.value = "Yes";
-      opt1.innerText = "Yes";
-      select.appendChild(opt1);
-      let opt2 = document.createElement("option");
-      opt2.value = "No";
-      opt2.innerText = "No";
-      select.appendChild(opt2);
+      let optionsList = options[fields[field_key[i]]];
+
+      for (let value in optionsList) {
+        select.appendChild(createOption(optionsList[value]));
+      }
 
       select.addEventListener("change", (e) => filter(e));
 
@@ -132,6 +139,7 @@ export let displayAsTable = function (fields, data, element, name) {
     }
   }
   thead.appendChild(fltr);
+
   for (let i = 0; i < data.length; i++) {
     if (name == "Session" && sessionStorage.getItem("who") === "user") {
       let temp = JSON.parse(sessionStorage.getItem("session"));
@@ -146,9 +154,10 @@ export let displayAsTable = function (fields, data, element, name) {
       tr.setAttribute(
         "id",
         data[i][fields["emp_Id"]] +
+          "_" +
           data[i][fields["comp_Id"]] +
-          data[i][fields["Login Date"]] +
-          data[i][fields["Login Time"]]
+          +"_" +
+          data[i][fields["Login Date"]]
       );
     tbody.appendChild(tr);
 
@@ -164,21 +173,31 @@ export let displayAsTable = function (fields, data, element, name) {
 
       if (
         fields[field_key[j]] === "working" ||
-        fields[field_key[j]] === "available"
+        fields[field_key[j]] === "available" ||
+        fields[field_key[j]] === "emp_Shift" ||
+        (fields[field_key[j]] === Util.User["Computer Id"] &&
+          name === "Employee")
       ) {
         let select = document.createElement("select");
         select.className = fields[field_key[j]];
-        let opt1 = document.createElement("option");
-        opt1.value = obj[fields[field_key[j]]];
-        opt1.innerText = obj[fields[field_key[j]]];
-        select.appendChild(opt1);
-        let opt2 = document.createElement("option");
-        opt2.value = obj[fields[field_key[j]]] === "Yes" ? "No" : "Yes";
-        opt2.innerText = obj[fields[field_key[j]]] === "Yes" ? "No" : "Yes";
-        select.appendChild(opt2);
+
+        let optionsList = [];
+        if (fields[field_key[j]] !== Util.User["Computer Id"])
+          optionsList = options[fields[field_key[j]]];
+        else optionsList[0] = obj[fields[field_key[j]]];
+
+        for (let value in optionsList) {
+          let opt = createOption(optionsList[value]);
+          select.appendChild(opt);
+
+          if (optionsList[value] === obj[fields[field_key[j]]])
+            opt.selected = true;
+          if (fields[field_key[j]] === Util.User["Computer Id"] && value === 0)
+            opt.selected = true;
+        }
+
         td.appendChild(select);
         tr.appendChild(td);
-
         if (
           fields[field_key[j]] === "working" &&
           obj[fields[field_key[j]]] === "No"
@@ -201,10 +220,13 @@ export let displayAsTable = function (fields, data, element, name) {
 
         td.appendChild(ip);
         tr.appendChild(td);
+
+        // EventListener(name, ip.className, ip);
       }
     }
   }
   element.appendChild(table);
+
   for (let i = 0; i < field_key.length; i++) {
     let els = document.getElementsByClassName(fields[field_key[i]]);
 
@@ -222,6 +244,8 @@ export let displayAsTable = function (fields, data, element, name) {
   if (sessionStorage.getItem("who") === "user") fields["emp_Id"] = "emp_Id";
 
   element.style.paddingBottom = "50px";
+
+  storeAsList();
 };
 
 function filter(event) {
@@ -252,3 +276,123 @@ export function removeAllChildNodes(parent) {
     parent.removeChild(parent.firstChild);
   }
 }
+
+var options = {
+  available: ["Yes", "No"],
+  working: ["Yes", "No"],
+  emp_Shift: ["Morning", "Evening", "Night"],
+};
+
+export function createOption(value) {
+  let opt = document.createElement("option");
+  opt.value = value;
+  opt.innerText = value;
+  return opt;
+}
+
+export var storeAsList = (columns, ID) => {
+  let display = document.getElementById("display");
+  let table = display.firstChild;
+  let id = table.id.substr(0, table.id.indexOf(" "));
+
+  let List = [];
+  let tr =
+    document.getElementById("display").firstChild.childNodes[1].childNodes;
+
+  let Class =
+    id === "System"
+      ? new D.System()
+      : id === "Session"
+      ? new D.Session()
+      : new D.User();
+
+  for (let i = 0; i < tr.length; i++) {
+    let td = tr[i].childNodes;
+    if ((ID !== undefined && tr[i].id === ID) || ID === undefined)
+      for (let j = 0; j < td.length; j++) {
+        if (columns === undefined) {
+          if (typeof Class === typeof new D.System()) {
+            Class[[td[j].firstChild.className]] = td[j].firstChild.value;
+          } else if (typeof Class === typeof new D.Session()) {
+            Class[[td[j].firstChild.className]] = td[j].firstChild.value;
+          } else if (typeof Class === typeof new D.User()) {
+            Class[[td[j].firstChild.className]] = td[j].firstChild.value;
+          }
+          List[i] = Class;
+        } else {
+          for (let temp in columns) {
+            if (td[j].firstChild.className === columns[temp]) {
+              if (typeof Class === typeof new D.System()) {
+                Class[[td[j].firstChild.className]] = td[j].firstChild.value;
+              } else if (typeof Class === typeof new D.Session()) {
+                Class[[td[j].firstChild.className]] = td[j].firstChild.value;
+              } else if (typeof Class === typeof new D.User()) {
+                Class[[td[j].firstChild.className]] = td[j].firstChild.value;
+              }
+              break;
+            } else Class[[td[j].firstChild.className]] = undefined;
+          }
+          List[i] = Class;
+        }
+      }
+  }
+  return List;
+};
+
+export var EventListener = (table_name, column_name, ele) => {
+  let cols = updateColumn[table_name];
+  let event;
+  let action;
+
+  if (table_name === "Employee") {
+    if (column_name === Util.User.Shift) {
+      event = "change";
+      action = UserEvent.updateShift;
+    } else if (column_name === Util.User["Computer Id"]) {
+      event = "change";
+      action = UserEvent.updateSystemID;
+    }
+  }
+  if (table_name === "System") {
+    if (column_name === Util.System.Available) {
+      event = "change";
+      action = SystemEvent.updateAvailable;
+    } else if (column_name === Util.System.Working) {
+      event = "change";
+      action = SystemEvent.updateWorking;
+    }
+  }
+
+  if (event !== undefined && action !== undefined)
+    for (let col in cols) {
+      if (col === column_name) {
+        ele.addEventListener(event, action);
+        break;
+      }
+    }
+};
+
+/* const updateColumn = {
+  Admin: [Util.Admin.Email, Util.Admin["Mobile No"], Util.Admin.Password],
+  Employee: [
+    Util.User["Computer Id"],
+    Util.User.Dept,
+    Util.User.Email,
+    Util.User["Mobile No"],
+    Util.User.Password,
+    Util.User.Role,
+    Util.User.Shift,
+    Util.User.WorkLoc,
+  ],
+  System: [
+    Util.System.Available,
+    Util.System.Backup,
+    Util.System.Location,
+    Util.System.MAC,
+    Util.System.Model,
+    Util.System.Password,
+    Util.System.Working,
+    Util.System.Year,
+  ],
+};
+ */

@@ -1,1 +1,1 @@
-{"primaryKeyId":194051195,"key":[{"keyData":{"typeUrl":"type.googleapis.com/google.crypto.tink.AesGcmKey","value":"GhDczO7RmsMTo2LtEtlCRJH6","keyMaterialType":"SYMMETRIC"},"status":"ENABLED","keyId":194051195,"outputPrefixType":"TINK"}]}
+{"primaryKeyId":1427534419,"key":[{"keyData":{"typeUrl":"type.googleapis.com/google.crypto.tink.AesGcmKey","value":"GhDgLyIDEsjkinH3wGiBczIz","keyMaterialType":"SYMMETRIC"},"status":"ENABLED","keyId":1427534419,"outputPrefixType":"TINK"}]}

@@ -5,14 +5,16 @@ import java.io.Serializable;
 public class Computer implements Serializable
 {
 	private static final long serialVersionUID = 1L;
-	String comp_Id;
-	String MAC;
+	
+	private String comp_Id;
+	private String MAC;
 	private String comp_Password;
 	private String available;
 	private String working;
-	String comp_Loc;
-	String model;
-	int year;
+	private String backup;
+	private String comp_Loc;
+	private String model;
+	private Integer year;
 	
 	public String getComp_Id() {
 		return comp_Id;
@@ -54,6 +56,14 @@ public class Computer implements Serializable
 		this.working = working;
 	}
 
+	public String getBackup() {
+		return backup;
+	}
+
+	public void setBackup(String backup) {
+		this.backup = backup;
+	}
+
 	public String getComp_Loc() {
 		return comp_Loc;
 	}
@@ -83,38 +93,10 @@ public class Computer implements Serializable
 		
 	}
 
-	public Computer(String mAC, String comp_Password, String available, String working, String comp_Loc, String model,
-			int year) {
-		super();
-		MAC = mAC;
-		this.comp_Password = comp_Password;
-		this.available = available;
-		this.working = working;
-		this.comp_Loc = comp_Loc;
-		this.model = model;
-		this.year = year;
-	}
-
-	public Computer(String comp_Id, String mAC, String comp_Password, String available, 
-			String working, String comp_Loc, String model, int year) 
-	{
-		super();
-		this.comp_Id = comp_Id;
-		MAC = mAC;
-		this.comp_Password = comp_Password;
-		this.available = available;
-		this.working = working;
-		this.comp_Loc = comp_Loc;
-		this.model = model;
-		this.year = year;
-	}
-	
 	@Override
-	public String toString() 
-	{
+	public String toString() {
 		return "Computer [comp_Id=" + comp_Id + ", MAC=" + MAC + ", comp_Password=" + comp_Password + ", available="
-				+ available + ", working=" + working + ", comp_Loc=" + comp_Loc + ", model=" + model + ", year=" + year
-				+ "]";
-	}
-	
+				+ available + ", working=" + working + ", backup=" + backup + ", comp_Loc=" + comp_Loc + ", model="
+				+ model + ", year=" + year + "]";
+	}	
 }

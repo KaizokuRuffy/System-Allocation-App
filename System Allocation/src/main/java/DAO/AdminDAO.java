@@ -5,11 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import Beans.Admin;
 import DAO.Util.JDBC_Connection;
+import DAO.Util.Shift;
 import DAO.Util.TableName;
 
 public class AdminDAO 
@@ -40,7 +42,9 @@ public class AdminDAO
 	public static int[] createTable()  
 	{
 		Connection conn = JDBC_Connection.getConnection();
-		 
+		
+		String shift = "CREATE TABLE IF NOT EXISTS " + TableName.getShift() +  " ( SNO INT AUTO_INCREMENT, Shift VARCHAR(255), PRIMARY KEY(SNO))";
+		
 		try (Statement st = conn.createStatement())
 		{
 			int[] result = null;
@@ -48,8 +52,14 @@ public class AdminDAO
 			st.addBatch(EmployeeDAO.getCreateTable());
 			st.addBatch(ComputerDAO.getCreateTable());
 			st.addBatch(SessionDAO.getCreateTable());
-
+			st.addBatch(shift);
+			st.addBatch("INSERT INTO `data`." + TableName.getShift() + " (`Shift`) VALUES ('" + Shift.Morning +"')");
+			st.addBatch("INSERT INTO `data`." + TableName.getShift() + " (`Shift`) VALUES ('" + Shift.Evening +"')");
+			st.addBatch("INSERT INTO `data`." + TableName.getShift() + " (`Shift`) VALUES ('" + Shift.Night +"')");
+			
 			result = st.executeBatch();
+			
+			System.out.println(Arrays.toString(result));
 		
 			return result;
 		}
@@ -79,7 +89,7 @@ public class AdminDAO
 			if(rs.next())
 				count = Integer.parseInt(rs.getString(1));
 			
-			if(count == 4)
+			if(count == 5)
 				return false;
 		} 
 		catch (SQLException e) 

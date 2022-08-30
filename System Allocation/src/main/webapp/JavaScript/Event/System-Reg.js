@@ -7,31 +7,34 @@ U.System.init();
 let SystemController = new Ctrl.System();
 
 function add() {
-  if (U.gEBI("comp_Password").value !== U.gEBI("confirm_Password").value)
+  if (U.gEBI(U.System.Password).value !== U.gEBI("confirm_Password").value)
     U.gEBI("confirm_Password").setCustomValidity("Password mismatch");
   else U.gEBI("confirm_Password").setCustomValidity("");
 
-  let year = Number(U.gEBI("year").value);
+  let year = Number(U.gEBI(U.System.Year).value);
   let max_year = new Date().getFullYear();
   let min_year = 2010;
   if (year < min_year || year > max_year) {
-    if (Number(U.gEBI("year").value) < min_year)
-      U.gEBI("year").setCustomValidity(
+    if (Number(U.gEBI(U.System.Year).value) < min_year)
+      U.gEBI(U.System.Year).setCustomValidity(
         "Year should be greater than " + min_year
       );
-    if (Number(U.gEBI("year").value) > max_year)
-      U.gEBI("year").setCustomValidity("Year should be less than " + max_year);
-  } else U.gEBI("year").setCustomValidity("");
+    if (Number(U.gEBI(U.System.Year).value) > max_year)
+      U.gEBI(U.System.Year).setCustomValidity(
+        "Year should be less than " + max_year
+      );
+  } else U.gEBI(U.System.Year).setCustomValidity("");
 
   if (
-    U.gEBI("comp_Id").checkValidity() &&
-    U.gEBI("MAC").checkValidity() &&
-    U.gEBI("available").checkValidity() &&
-    U.gEBI("working").checkValidity() &&
-    U.gEBI("comp_Password").checkValidity() &&
-    U.gEBI("comp_Loc").checkValidity() &&
-    U.gEBI("model").checkValidity() &&
-    U.gEBI("year").checkValidity() &&
+    U.gEBI(U.System.Id).checkValidity() &&
+    U.gEBI(U.System.MAC).checkValidity() &&
+    U.gEBI(U.System.Available).checkValidity() &&
+    U.gEBI(U.System.Working).checkValidity() &&
+    U.gEBI(U.System.Password).checkValidity() &&
+    U.gEBI(U.System.Location).checkValidity() &&
+    U.gEBI(U.System.Backup).checkValidity() &&
+    U.gEBI(U.System.Model).checkValidity() &&
+    U.gEBI(U.System.Year).checkValidity() &&
     U.gEBI("confirm_Password").checkValidity()
   )
     SystemController.add();

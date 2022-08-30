@@ -1,5 +1,6 @@
 import * as U from "../Model/Util.js";
 import * as Util from "./Util.js";
+import { systemOptions } from "./System.js";
 
 export class User {
   constructor() {
@@ -10,22 +11,22 @@ export class User {
     if (response.status === 200) {
       if (!response.body.includes("-1")) {
         if (!response.body.includes("Available - No")) {
-          let str = response.body.replace("comp_Id :", "");
-          sessionStorage.setItem(U.System.Id, str.substr(0, str.indexOf(",")));
+          let str = response.body.split(",");
+          sessionStorage.setItem(U.System.Id, str[0].replace("comp_Id :", ""));
           sessionStorage.setItem(
             U.User.Id,
-            Number(str.substr(str.indexOf(",") + 1), str.length + 1)
+            Number(str[1].replace("emp_Id:", ""))
           );
+          sessionStorage.setItem("CID", sessionStorage.getItem(U.System.Id));
         } else sessionStorage.setItem("Available", "No");
       } else if (response.body.includes("-1")) {
+        let str = response.body.split(",");
         sessionStorage.setItem(U.System.Id, "-1");
         sessionStorage.setItem(
           U.User.Id,
-          Number(
-            response.body.substr(response.body.indexOf(",") + 1),
-            response.body.length + 1
-          )
+          Number(str[1].replace("emp_Id:", ""))
         );
+        sessionStorage.setItem("CID", str[2].replace("CID:", ""));
       }
     } else if (response.status === 403) {
       sessionStorage.setItem("Username", JSON.stringify(response.body));
@@ -130,14 +131,13 @@ export class User {
   }
   getAll(response) {
     let display = U.gEBI("display");
+
     if (response.status === 200) {
       display.style.fontSize = "25px";
-      Util.displayAsTable(
-        this.fields,
-        JSON.parse(response.body),
-        display,
-        "Employee"
-      );
+      response = JSON.parse(response.body);
+      Util.displayAsTable(this.fields, response, display, "Employee");
+
+      systemOptions(response);
     } else if (response.status === 404 || response.status === 500) {
       Util.removeAllChildNodes(display);
       window.alert(JSON.stringify(response.body).replaceAll('"', ""));

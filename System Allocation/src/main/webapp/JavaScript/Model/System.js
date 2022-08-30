@@ -8,18 +8,39 @@ export class System {
     this.response = response;
     this.request = request;
   }
-  getAll() {
-    this.request = new U.ReqBuilder()
-      .setMethod(GET)
-      .setHeader(new U.HeaderBuilder().setAccept(Accept.json).getHeader())
-      .setUrl(
-        new U.UrlBuilder()
-          .setContext(U.Context)
-          .setServlet(U.Controller.System)
-          .setPath("getAllSystems")
-          .getUrl()
-      )
-      .getReq();
+  getAll(shift, backup) {
+    let params;
+    if (shift !== undefined && backup !== undefined)
+      params =
+        "?" +
+        (shift !== null ? "shift=" + shift : "") +
+        (backup !== null ? "&backup=" + backup : "") +
+        "&unallocated=Yes";
+    if (shift !== undefined && backup !== undefined)
+      this.request = new U.ReqBuilder()
+        .setMethod(GET)
+        .setHeader(new U.HeaderBuilder().setAccept(Accept.json).getHeader())
+        .setUrl(
+          new U.UrlBuilder()
+            .setContext(U.Context)
+            .setServlet(U.Controller.System)
+            .setPath("getAllSystems")
+            .setParams(params)
+            .getUrl()
+        )
+        .getReq();
+    else
+      this.request = new U.ReqBuilder()
+        .setMethod(GET)
+        .setHeader(new U.HeaderBuilder().setAccept(Accept.json).getHeader())
+        .setUrl(
+          new U.UrlBuilder()
+            .setContext(U.Context)
+            .setServlet(U.Controller.System)
+            .setPath("getAllSystems")
+            .getUrl()
+        )
+        .getReq();
     this.response = new U.Res();
     this.XHR = new U.XHR(this.request, this.response);
 
@@ -34,6 +55,7 @@ export class System {
       .setModel(U.gEBI(U.System.Model).value)
       .setPassword(U.gEBI(U.System.Password).value)
       .setWorking(U.gEBI(U.System.Working).value)
+      .setBackup(U.gEBI(U.System.Backup).value)
       .setAvailable(U.gEBI(U.System.Available).value)
       .setYear(U.gEBI(U.System.Year).value)
       .setLoc(U.gEBI(U.System.Location).value)

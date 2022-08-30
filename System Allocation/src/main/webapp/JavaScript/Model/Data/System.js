@@ -5,6 +5,7 @@ export class System {
     comp_Password,
     available,
     working,
+    backup,
     comp_Loc,
     model,
     year
@@ -16,6 +17,7 @@ export class System {
     else this.available = available;
     if (working === undefined) this.working = "Yes";
     else this.working = working;
+    this.backup = backup;
     this.comp_Loc = comp_Loc;
     this.model = model;
     this.year = year;
@@ -28,6 +30,7 @@ export class SystemBuilder {
   comp_Password;
   available;
   working;
+  backup;
   comp_Loc;
   model;
   year;
@@ -52,6 +55,10 @@ export class SystemBuilder {
     this.working = working;
     return this;
   }
+  setBackup(backup) {
+    this.backup = backup;
+    return this;
+  }
   setLoc(loc) {
     this.comp_Loc = loc;
     return this;
@@ -71,6 +78,7 @@ export class SystemBuilder {
       this.comp_Password,
       this.available,
       this.working,
+      this.backup,
       this.comp_Loc,
       this.model,
       this.year

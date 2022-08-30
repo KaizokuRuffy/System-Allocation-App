@@ -36,10 +36,10 @@ public class AdminService
 		int count = 0;
 		
 		for(int i = 0; i < res.length; i++)
-		if(res[i] == 0)
+		if(res[i] == 0 || res[i] == 1)
 			count++;
 		
-		if(count == 4)
+		if(count == 8)
 			return true;
 		else 
 			return false;
@@ -53,9 +53,7 @@ public class AdminService
 		
 		if(adminDAO.isDatabaseEmpty()) {
 			
-			String path = "C:\\Users\\Kishore\\git\\System-Allocation-App\\System-Allocation"
-					+ "\\src\\main\\java\\Service\\Util\\Secret Key\\";
-			File dir = new File(path);
+			File dir = new File(Cipher.getFilepath());
 			
 			if(dir.exists())
 				System.out.println(FileUtil.deleteDir(dir) ? "Keys deleted successfully" : "Keys couldn't be deleted");
