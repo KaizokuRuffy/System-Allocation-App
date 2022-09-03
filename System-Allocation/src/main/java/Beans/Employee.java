@@ -4,13 +4,18 @@ import java.io.Serializable;
 
 public class Employee implements Serializable
 {
+	public static final String[] varName = {"emp_Id", "comp_Id", "emp_Name", "emp_AdhaarId", "emp_Email", "emp_MobileNo",
+									"emp_Password", "emp_Shift", "emp_Role", "emp_Dept", "emp_WorkLoc"};
+	
 	private static final long serialVersionUID = 1L;
 	private int emp_Id;
+	private String comp_Id;
 	private String emp_Name;
 	private String emp_AdhaarId;
 	private String emp_Email;
 	private String emp_MobileNo;
 	private String emp_Password;
+	private String emp_Shift;
 	private String emp_Role;
 	private String emp_Dept;
 	private String emp_WorkLoc;
@@ -88,47 +93,35 @@ public class Employee implements Serializable
 		this.emp_WorkLoc = emp_WorkLoc;
 	}
 
+	public String getComp_Id() {
+		return comp_Id;
+	}
+
+	public void setComp_Id(String comp_Id) {
+		this.comp_Id = comp_Id;
+	}
+
 	@Override
 	public String toString() {
-		return "Employee [Id=" + emp_Id + ", Name=" + emp_Name + ", Adhaar Id=" + emp_AdhaarId + ", Email="
-				+ emp_Email + ", Mobile No=" + emp_MobileNo + ", Password=" + emp_Password + ", Role="
-				+ emp_Role + ", Department=" + emp_Dept + ", Work Location=" + emp_WorkLoc + "]";
+		return "Employee [emp_Id=" + emp_Id + ", comp_Id=" + comp_Id + ", emp_Name=" + emp_Name + ", emp_AdhaarId="
+				+ emp_AdhaarId + ", emp_Email=" + emp_Email + ", emp_MobileNo=" + emp_MobileNo + ", emp_Password="
+				+ emp_Password + ", emp_shift=" + emp_Shift + ", emp_Role=" + emp_Role + ", emp_Dept=" + emp_Dept
+				+ ", emp_WorkLoc=" + emp_WorkLoc + "]";
 	}
 
 	public Employee()
 	{
 		
 	}
-	
-	public Employee(String emp_Name, String emp_AdhaarId, String emp_Email, 
-				String emp_MobileNo, String emp_Password,
-					String emp_Role,String emp_Dept, String emp_WorkLoc) 
-	{
-		super();
-		this.emp_Name = emp_Name;
-		this.emp_AdhaarId = emp_AdhaarId;
-		this.emp_Email = emp_Email;
-		this.emp_MobileNo = emp_MobileNo;
-		this.emp_Password = new String(emp_Password);
-		this.emp_Role = emp_Role;
-		this.emp_Dept = emp_Dept;
-		this.emp_WorkLoc = emp_WorkLoc;
+
+	public String getEmp_Shift() {
+		return emp_Shift;
 	}
 
-	public Employee (int emp_Id, String emp_Name, String emp_AdhaarID, String emp_Email, 
-						String emp_MobileNo,String emp_Password, String emp_Role, 
-								String emp_Dept, String emp_WorkLoc) 
-	{
-		super();
-		this.emp_Id = emp_Id;
-		this.emp_Name = emp_Name;
-		this.emp_AdhaarId = emp_AdhaarID;
-		this.emp_Email = emp_Email;
-		this.emp_MobileNo = emp_MobileNo;
-		this.emp_Password = emp_Password;
-		this.emp_Role = emp_Role;
-		this.emp_Dept = emp_Dept;
-		this.emp_WorkLoc = emp_WorkLoc;
+	public void setEmp_Shift(String emp_Shift) {
+		this.emp_Shift = emp_Shift;
 	}
+
+
 	
 }

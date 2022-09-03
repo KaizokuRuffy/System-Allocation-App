@@ -1,9 +1,13 @@
 import * as Ctrl from "../Controller/C.js";
 import * as U from "../Model/Util.js";
 import * as session from "./Session.js";
+import { createOption, storeAsList } from "../View/Util.js";
+import { systemOptions } from "../View/System.js";
+import { getElementInRow } from "./Util.js";
 
 U.User.init();
 U.System.init();
+
 var UserController = new Ctrl.User();
 
 if (
@@ -40,6 +44,8 @@ export let userLogin = () => {
 export let getAllUsers = () => {
   U.gEBI("getAllUsers").addEventListener("click", () => {
     UserController.getAll();
+    updateShift();
+    updateSystemID();
   });
 };
 
@@ -75,6 +81,14 @@ export let firstTime = () => {
       if (!keypress) {
         keypress = true;
         UserController.firstLogin();
+
+        window.alert(
+          "Your allocated system is " + sessionStorage.getItem("CID")
+        );
+        sessionStorage.setItem(
+          U.User["Computer Id"],
+          sessionStorage.getItem("CID")
+        );
         comp_Id = sessionStorage.getItem(U.System.Id);
       }
     });
@@ -111,4 +125,35 @@ let beforeLogin = (bool) => {
       return true;
     return false;
   }
+};
+
+export let updateShift = function () {
+  let shift = document.getElementsByClassName(U.User.Shift);
+  Array.prototype.forEach.call(shift, (item) => {
+    item.addEventListener("change", (e) => {
+      item.setAttribute("shiftChanged", true);
+
+      let list = storeAsList(
+        [U.User.Shift, U.User.Id],
+        item.parentElement.parentElement.id
+      );
+
+      systemOptions(list, true);
+
+      let select = getElementInRow(
+        item.parentElement.parentElement,
+        U.User["Computer Id"]
+      );
+      let opt = createOption("");
+      select.insertBefore(opt, select.firstChild);
+      opt.selected = true;
+    });
+  });
+};
+
+export let updateSystemID = function () {
+  let comp_Id = document.getElementsByClassName(U.User["Computer Id"]);
+  Array.prototype.forEach.call(comp_Id, (item) => {
+    item.addEventListener("change", (e) => {});
+  });
 };

@@ -176,11 +176,13 @@ export var Admin = {
 
 export var User = {
   Id: null,
+  "Computer Id": null,
   Name: null,
   AdhaarId: null,
   Email: null,
   "Mobile No": null,
   Password: null,
+  Shift: null,
   Role: null,
   Dept: null,
   WorkLoc: null,
@@ -196,6 +198,7 @@ export var System = {
   Password: null,
   Available: null,
   Working: null,
+  Backup: null,
   Location: null,
   Model: null,
   Year: null,

@@ -8,6 +8,11 @@ public class TableName {
 	static final String Admin = "Admin";
 	static final String Computer = "`Resource Data`";
 	static final String Session = "`Session data`";
+	static final String Shift = "Shift";
+
+	public static String getShift() {
+		return Shift;
+	}
 
 	public static String getDatabase() {
 		return Database;

@@ -11,10 +11,11 @@ import java.util.List;
 import Beans.Computer;
 import DAO.Util.JDBC_Connection;
 import DAO.Util.TableName;
+import DAO.Util.Util;
 
 public class ComputerDAO {
 	static enum ColumnName {
-		ID, MAC, Password, Available, Working, Location, Model, Year;
+		ID, MAC, Password, Available, Working, Location, Model, Year, Backup;
 	}
 
 	private static String createTable = "CREATE TABLE IF NOT EXISTS " + TableName.getComputer() +
@@ -23,6 +24,7 @@ public class ComputerDAO {
 			+ ColumnName.Password + " varchar(255), "
 			+ ColumnName.Available + " varchar(255), "
 			+ ColumnName.Working + " varchar(255), "
+			+ ColumnName.Backup + " varchar(255), "
 			+ ColumnName.Location + " varchar(255), "
 			+ ColumnName.Model + " varchar(255), "
 			+ ColumnName.Year + " INT, "
@@ -53,7 +55,7 @@ public class ComputerDAO {
 	public int insertInto(Computer comp) {
 
 		String query = " INSERT INTO " + TableName.getComputer()
-				+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+				+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		Connection conn = JDBC_Connection.getConnection();
 
@@ -64,9 +66,10 @@ public class ComputerDAO {
 			ps.setString(3, comp.getComp_Password());
 			ps.setString(4, comp.getAvailable());
 			ps.setString(5, comp.getWorking());
-			ps.setString(6, comp.getComp_Loc());
-			ps.setString(7, comp.getModel());
-			ps.setInt(8, comp.getYear());
+			ps.setString(6, comp.getBackup());
+			ps.setString(7, comp.getComp_Loc());
+			ps.setString(8, comp.getModel());
+			ps.setInt(9, comp.getYear());
 
 			int rs = ps.executeUpdate();
 
@@ -98,10 +101,92 @@ public class ComputerDAO {
 				comp.setComp_Password(rs.getString(ColumnName.Password.toString()));
 				comp.setAvailable(rs.getString(ColumnName.Available.toString()));
 				comp.setWorking(rs.getString(ColumnName.Working.toString()));
+				comp.setBackup(rs.getString(ColumnName.Backup.toString()));
 				comp.setComp_Loc(rs.getString(ColumnName.Location.toString()));
 				comp.setModel(rs.getString(ColumnName.Model.toString()));
 				comp.setYear(rs.getInt(ColumnName.Year.toString()));
+				computerList.add(comp);
+			}
+			return computerList;
+		} catch (SQLException e) {
+			JDBC_Connection.close();
+			e.printStackTrace();
+		}
 
+		return null;
+	}
+	
+	public List<Computer> getUnallocateSystems(String shift, String backup){
+		
+		Util util = new Util();
+		String ColID = ColumnName.ID.toString();
+		String ColBackup = ColumnName.Backup.toString();
+		String EmpColCID = EmployeeDAO.ColumnName.Comp_Id.value;
+		String EmpColShift =  EmployeeDAO.ColumnName.Shift.toString();
+		String EmpColEID = EmployeeDAO.ColumnName.ID.toString();
+		
+		String System_Shift = "( SELECT R.?, " + (backup == null ? ("R." + ColBackup + ",") : "") +  
+						 " ? FROM ? R, ? " + (backup == null ? "": 
+						(" WHERE R." + ColBackup + " = '" + backup + "'" )) + " ORDER BY R.? )" ;
+		
+		System_Shift = util.replaceQuestionMark(System_Shift, new String[] { ColID, "Shift", 
+														TableName.getComputer(), "shift", ColID});
+		
+		String Employee = "(SELECT E.?, E.?, E.? FROM ? E)";
+		Employee = util.replaceQuestionMark(Employee, new String[] 
+									{ EmpColEID , EmpColCID, EmpColShift, TableName.getEmployee()});
+		
+		String query = "SELECT R.? " + (backup == null ? (", R." + ColBackup ) : "") 
+						+ " FROM " + System_Shift + " AS R LEFT JOIN " + Employee + " AS E ON R.? = E.? "
+						+ " AND R.? = E.? WHERE " 
+							+ (shift == null ? "" : (" R." + EmpColShift + " = '" + shift + "'" )) 
+							+ " AND E." + EmpColEID + " IS NULL " + " ORDER BY R.? ";
+		
+		query = util.replaceQuestionMark(query, new String[] {ColID, ColID, EmpColCID, 
+									EmpColShift, EmpColShift, ColID});
+		
+		Connection conn = JDBC_Connection.getConnection();
+
+		try (PreparedStatement ps = conn.prepareStatement(query);
+				ResultSet rs = ps.executeQuery()) {
+			List<Computer> computerList = new ArrayList<>();
+
+			while (rs.next()) {
+				Computer comp = new Computer();
+				comp.setComp_Id(rs.getString(ColumnName.ID.toString()));
+				if(backup == null)
+				comp.setBackup(rs.getString(ColumnName.Backup.toString()));
+				computerList.add(comp);
+			}
+			return computerList;
+		} catch (SQLException e) {
+			JDBC_Connection.close();
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	public List<Computer> getAllocatedSystems(String shift, String backup){
+		
+		Util util = new Util();
+		
+		String query = "SELECT E.`Computer ID` from Employee E where E.Shift = 'Night'" + (backup != null ? 
+				(" WHERE R." + ColumnName.Backup + " = '" + backup + "' " + (shift != null ? " AND " : "") ) : 
+					(shift != null ? " WHERE " : "")) +	(shift == null ? "" : 
+					(" R." + EmployeeDAO.ColumnName.Shift + " = '" + shift + "'" )) ;
+		
+		System.out.println(query);
+		
+		Connection conn = JDBC_Connection.getConnection();
+
+		try (PreparedStatement ps = conn.prepareStatement(query);
+				ResultSet rs = ps.executeQuery()) {
+			List<Computer> computerList = new ArrayList<>();
+
+			while (rs.next()) {
+				Computer comp = new Computer();
+				comp.setComp_Id(rs.getString(ColumnName.ID.toString()));
 				computerList.add(comp);
 			}
 			return computerList;
@@ -170,6 +255,7 @@ public class ComputerDAO {
 				comp.setComp_Password(rs.getString(ColumnName.Password.toString()));
 				comp.setModel(rs.getString(ColumnName.Model.toString()));
 				comp.setWorking(rs.getString(ColumnName.Working.toString()));
+				comp.setBackup(rs.getString(ColumnName.Backup.toString()));
 				comp.setYear(rs.getInt(ColumnName.Year.toString()));
 
 				return comp;

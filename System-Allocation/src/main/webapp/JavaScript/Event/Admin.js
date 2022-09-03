@@ -21,15 +21,17 @@ let regAdmin = U.gEBI("regAdmin").addEventListener("click", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  getAdmin;
-  regAdmin;
-  adminLogout;
+  if (AdminController !== undefined) {
+    getAdmin;
+    regAdmin;
+    adminLogout;
 
-  user.regUser();
-  user.getAllUsers();
+    user.regUser();
+    user.getAllUsers();
 
-  system.getAllSystems;
-  system.regSystem;
+    system.getAllSystems;
+    system.regSystem;
 
-  session.getAllSession;
+    session.getAllSession;
+  }
 });

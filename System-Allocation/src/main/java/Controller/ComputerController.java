@@ -34,8 +34,21 @@ public class ComputerController extends HttpServlet
 		{
 			case "/getAllSystems":
 				
-				System.out.println("\n-- Fetching all system data --");
-				List<Computer> computerList = computerService.getAllSystems();
+				String shift = request.getParameter("shift");
+				String backup = request.getParameter("backup");
+				String unallocated = request.getParameter("unallocated");
+				
+				List<Computer> computerList = null;
+				
+				if(shift == null && backup == null && unallocated == null)
+				{
+					System.out.println("\n-- Fetching all system data --");
+					computerList = computerService.getAllSystems();
+				}
+				else {
+					System.out.println("\n--- Fetching list of systems with based on allocation and backup status");
+					computerList = computerService.getSystems(shift, backup, unallocated);
+				}
 				
 				if(computerList != null)
 				{
@@ -46,9 +59,10 @@ public class ComputerController extends HttpServlet
 					}
 					else
 					{
-						new Message().infoToClient(HttpServletResponse.SC_NOT_FOUND, 
-								response, "No resources data in database. Add system details and then try fetching data.");	
-						System.out.println("No resource data present in table");
+						new Message().infoToClient(HttpServletResponse.SC_NOT_FOUND, response, shift != null ?
+								"No resources data in database. Add system details and then try fetching data."
+								: "No unallocated systems present" );	
+						System.out.println(shift != null ? "No resource data present in table" : "No unallocated systems present");
 					}
 				}
 				else
@@ -59,6 +73,7 @@ public class ComputerController extends HttpServlet
 				}
 				
 				break;
+
 		}
 	}
 	

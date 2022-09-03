@@ -41,7 +41,6 @@ public class Json
 		{
 			e.printStackTrace();
 		}
-		
 		Gson gson = new Gson();
 		T t = null;
 		

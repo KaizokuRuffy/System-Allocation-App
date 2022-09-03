@@ -14,8 +14,10 @@ export class System {
   updateStatus(comp) {
     return this.View.updateStatus(this.Model.updateStatus(comp));
   }
-
   getAll() {
     this.View.getAll(this.Model.getAll());
+  }
+  getUnallocatedSystems(shift, backup) {
+    this.View.getUnallocatedSystems(this.Model.getAll(shift, backup));
   }
 }

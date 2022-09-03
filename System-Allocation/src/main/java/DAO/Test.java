@@ -47,12 +47,12 @@ public class Test
 		//Employee operations
 		
 		//Creating Employee account
-		employeeDAO.insertInto(new Employee("Kishore", "404449399158", 
-					"kishorekumarjain.d@zohotrainees.com", "9080971682", 
-								"dfr32fwdf", "SDE","IT","Site 24x7"));
-		employeeDAO.insertInto(new Employee("Kumar", "809438960546", 
-				"kishorekumarjain23@gamil.com", "7598955385", 
-							"asdas3qf", "SDE","IT","Site 24x7"));
+//		employeeDAO.insertInto(new Employee("Kishore", "404449399158", 
+//					"kishorekumarjain.d@zohotrainees.com", "9080971682", 
+//								"dfr32fwdf", "SDE","IT","Site 24x7"));
+//		employeeDAO.insertInto(new Employee("Kumar", "809438960546", 
+//				"kishorekumarjain23@gamil.com", "7598955385", 
+//							"asdas3qf", "SDE","IT","Site 24x7"));
 		
 		System.out.println();
 		
@@ -75,10 +75,10 @@ public class Test
 		System.out.println("------- Resource Operations -------");
 		
 		//Storing the computer data in database
-		computerDAO.insertInto(new Computer("1", "10:65:30:33:58:cd", "sdfw4fsd", "Yes", "Yes", 
-													"Site 24x7", "Latitude 7480", 2018));
-		computerDAO.insertInto(new Computer("2", "23:55:78:45:15:re", "fg343c2dff", "Yes", "Yes", 
-				"Site 24x7", "Latitude 2230", 2016));
+//		computerDAO.insertInto(new Computer("1", "10:65:30:33:58:cd", "sdfw4fsd", "Yes", "Yes", 
+//													"Site 24x7", "Latitude 7480", 2018));
+//		computerDAO.insertInto(new Computer("2", "23:55:78:45:15:re", "fg343c2dff", "Yes", "Yes", 
+//				"Site 24x7", "Latitude 2230", 2016));
 		
 		System.out.println();
 		

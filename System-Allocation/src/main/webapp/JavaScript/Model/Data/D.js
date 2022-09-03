@@ -14,12 +14,3 @@ export var SystemBuilder = Sy.SystemBuilder;
 
 export var Session = Se.Session;
 export var SessionBuilder = Se.SessionBuilder;
-
-/* var rem = function (obj) {
-  let keys = Object.keys(obj);
-  for (const key in keys) {
-    if (obj[key] === undefined) {
-      delete obj[key];
-    }
-  }
-}; */

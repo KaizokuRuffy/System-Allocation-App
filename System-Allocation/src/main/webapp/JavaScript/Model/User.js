@@ -108,12 +108,15 @@ export class User {
 
     return this.response;
   }
-  get() {
+  get(email) {
     let params =
-      "?" +
-      U.User.Id +
-      "=" +
-      JSON.parse(sessionStorage.getItem("session"))[U.Session.emp_Id];
+      email === undefined
+        ? "?" +
+          U.User.Id +
+          "=" +
+          JSON.parse(sessionStorage.getItem("session"))[U.Session.emp_Id]
+        : "?" + U.User.Email + "=" + email;
+
     this.request = new U.ReqBuilder()
       .setMethod(GET)
       .setHeader(
@@ -166,10 +169,12 @@ export class User {
     this.data = new D.UserBuilder()
       .setId(-1)
       .setName(U.gEBI(U.User.Name).value)
+      .setCompId(U.gEBI(U.User["Computer Id"]).value)
       .setAdhaarId(U.gEBI(U.User.AdhaarId).value)
       .setEmail(U.gEBI(U.User.Email).value)
       .setMobileNo(U.gEBI(U.User["Mobile No"]).value)
       .setPassword(U.gEBI(U.User.Password).value)
+      .setShift(U.gEBI(U.User.Shift).value)
       .setRole(U.gEBI(U.User.Role).value)
       .setWorkLoc(U.gEBI(U.User.WorkLoc).value)
       .setDept(U.gEBI(U.User.Dept).value)

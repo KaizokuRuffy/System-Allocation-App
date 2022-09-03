@@ -22,6 +22,7 @@ import Controller.Util.Counter;
 import Controller.Util.DATE;
 import Controller.Util.Json;
 import Controller.Util.Message;
+import Controller.Util.Param;
 import Controller.Util.SchedulerTask;
 import Service.ComputerService;
 import Service.EmployeeService;
@@ -42,8 +43,20 @@ public class EmployeeController extends HttpServlet {
 			case "/getUser":
 				System.out.println("\n-- Fetching User profile --");
 
-				int emp_Id = Integer.parseInt(request.getParameter("emp_Id"));
-				Employee emp = employeeService.getUser(emp_Id);
+				int emp_Id = request.getParameter("emp_Id") != null ? Integer.parseInt(request.getParameter("emp_Id")) : -1;
+				String emp_Email = request.getParameter("emp_Email");
+				Employee emp = null;
+				
+				System.out.println(emp_Id);
+				System.out.println(emp_Email);
+				emp = emp_Id != -1 ? employeeService.getUser(emp_Id) : employeeService.getUser(emp_Email);
+				System.out.println(emp);
+//				try {
+//					emp_Id = Integer.parseInt(request.getParameter("emp_Id"));
+//					emp = employeeService.getUser(emp_Id);
+//				} catch (NumberFormatException e) {
+//					emp = employeeService.getUser(emp_Email);
+//				}
 
 				if (emp == null) {
 					new Message().infoToClient(HttpServletResponse.SC_NOT_FOUND,
@@ -110,11 +123,16 @@ public class EmployeeController extends HttpServlet {
 				username = request.getParameter("emp_Email");
 				Password = new String(request.getParameter("emp_Password"));// var
 				Boolean auth = null;
+				String CID = null;
+				String shift = null;
 				
 				int emp_Id = 0;
 				
 				try {
-					emp_Id = employeeService.getUser(username).getEmp_Id();
+					Employee emp =  employeeService.getUser(username);
+					emp_Id = emp.getEmp_Id();
+					CID = emp.getComp_Id();
+					shift = emp.getEmp_Shift();
 					auth = employeeService.Authenticate(emp_Id, Password); // DB call
 				} catch (NullPointerException e) {
 					e.printStackTrace();
@@ -143,8 +161,6 @@ public class EmployeeController extends HttpServlet {
 
 				for (Session temp : sessionList) {
 					
-//					System.out.println(temp);
-					
 					if(!"-1".equals(session.getComp_Id() ) && temp.getLogIn_Date().equals(session.getLogIn_Date())
 							&& !DATE.getShift(temp.getLogOut_Time()).equals(DATE.getShift())
 							&& temp.getComp_Id() == session.getComp_Id())
@@ -156,7 +172,6 @@ public class EmployeeController extends HttpServlet {
 						comp_Id = temp.getComp_Id();
 						temp_Id = temp.getEmp_Id();
 					}
-					
 					if (temp.getLogIn_Date().equals(session.getLogIn_Date()) && 
 												DATE.getShift(temp.getLogOut_Time()).equals(DATE.getShift())) {
 				
@@ -168,7 +183,7 @@ public class EmployeeController extends HttpServlet {
 
 							if (comp.getAvailable().equals("Yes") || (comp.getAvailable().equals("No") 
 											&& emp_Id == temp.getEmp_Id()))
-								new Message().infoToClient("comp_Id :" + comp_Id + "," + emp_Id, response);
+								new Message().infoToClient("comp_Id :" + comp_Id + ",emp_Id:" + emp_Id, response);
 							
 							else
 								new Message().infoToClient("Available - No, comp_Id :" + comp_Id, response);
@@ -179,12 +194,20 @@ public class EmployeeController extends HttpServlet {
 
 				// User logging in for first time (-1)
 				if ("-1".equals(session.getComp_Id()) &&  "-1".equals(comp_Id)) {
-					new Message().infoToClient("comp_Id :" + comp_Id + "," + emp_Id, response);
+					new Message().infoToClient("comp_Id :" + comp_Id + "," + "emp_Id:" 
+																+ emp_Id + ",CID:" + CID, response);
 				} else if (!"-1".equals(session.getComp_Id())) {
+					
+					if(!DATE.getShift(session.getLogIn_Time()).equals(shift)) {
+						new Message().infoToClient(HttpServletResponse.SC_BAD_REQUEST, response, 
+																"Cannot login in different shift");
+						break;
+					}
+					
 					if (auth == true) {
 						
-						if (comp != null && (comp.getAvailable().equals("Yes")) ||
-								((comp.getAvailable().equals("No"))) && session.getEmp_Id() == temp_Id) {
+						if (comp != null && ((comp.getAvailable().equals("Yes")) ||
+								((comp.getAvailable().equals("No"))) && session.getEmp_Id() == temp_Id)) {
 							
 							boolean flag = false;
 							
@@ -331,6 +354,24 @@ public class EmployeeController extends HttpServlet {
 
 				break;
 
+		}
+	}
+	
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) {
+		final String CRUD = request.getPathInfo();
+
+		switch (CRUD) {
+		
+		case "/updateUser" :
+			
+			Param param = new Param();
+			Employee emp = param.toPojo(new Employee(), request);
+			if(employeeService.updateUser(emp.getEmp_Id(), param.pojoToMap(emp)))
+				System.out.println("Employee updated successfully");
+			else
+				System.out.println("Database error");
+			
+			break;
 		}
 	}
 }

@@ -1,3 +1,5 @@
+import { gEBI } from "../Model/Util.js";
+
 export var swap_Options = (select) => {
   if (select.selectedIndex !== 0)
     select.insertBefore(select.options[1], select.options[0]);
@@ -16,4 +18,15 @@ export var togglePassword = () => {
       }
     });
   });
+};
+
+export var getElementInRow = (parent, childName) => {
+  let tr = gEBI("Filter");
+  let columnIndex = Array.prototype.indexOf.call(
+    tr.childNodes,
+    gEBI(childName).parentElement
+  );
+  let child = parent.childNodes[columnIndex].firstChild;
+
+  return child;
 };

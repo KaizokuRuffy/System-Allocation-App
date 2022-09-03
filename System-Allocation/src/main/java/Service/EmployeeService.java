@@ -8,6 +8,7 @@ import Beans.Employee;
 import DAO.EmployeeDAO;
 import Service.Util.Cipher;
 
+
 public class EmployeeService 
 {
 	private EmployeeDAO employeeDAO= new EmployeeDAO();
@@ -89,8 +90,6 @@ public class EmployeeService
 		return emp;
 	}
 	
-	
-	
 	public List<Employee> getAllUser()
 	{
 		List<Employee> employeeList = null;
@@ -106,5 +105,12 @@ public class EmployeeService
 		}
 		
 		return employeeList;
+	}
+	
+	public boolean updateUser(int emp_Id, Map<String, Object> update) {
+		if(employeeDAO.updateRecord(0, update) == 1)
+			return true;
+		
+		return false;
 	}
 }

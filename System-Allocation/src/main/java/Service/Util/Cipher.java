@@ -20,7 +20,10 @@ public class Cipher {
 	private String ciphertext;
 	private String ID;
 	private String Name;
-	
+	static private final String filePath = "C:\\Users\\Kishore\\Dropbox\\Workspace\\System Allocation\\System-Allocation"
+										+ "\\System Allocation\\src\\main\\java\\Service\\Util\\Secret Key\\";
+
+
 	String keysetFilename;
 	KeysetHandle keysetHandle;
 	Aead aead;
@@ -126,8 +129,7 @@ public class Cipher {
 		ID = iD;
 		Name = name;
 		 
-		keysetFilename = "C:\\Users\\Kishore\\git\\System-Allocation-App\\System-Allocation"
-							+ "\\src\\main\\java\\Service\\Util\\Secret Key\\" + who + "\\" + ID + Name + ".json";
+		keysetFilename = filePath + who + "\\" + ID + Name + ".json";
 	}
 	
 	public Cipher(String ciphertext, String iD, String name, String who) {
@@ -136,8 +138,7 @@ public class Cipher {
 		ID = iD;
 		Name = name;
 		 
-		keysetFilename = "C:\\Users\\Kishore\\git\\System-Allocation-App\\System-Allocation"
-							+ "\\src\\main\\java\\Service\\Util\\Secret Key\\" + who + "\\"  + ID + Name + ".json";
+		keysetFilename = filePath + who + "\\"  + ID + Name + ".json";
 	}
 
 	@Override
@@ -145,6 +146,10 @@ public class Cipher {
 		return "Cipher [plaintext=" + plaintext + ", ciphertext=" + ciphertext + ", ID=" + ID + ", Name=" + Name
 				+ ", keysetFilename=" + keysetFilename + ", keysetHandle=" + keysetHandle + ", aead=" + aead
 				+ ", encrypted=" + Arrays.toString(encrypted) + ", decrypted=" + Arrays.toString(decrypted) + "]";
+	}
+	
+	public static String getFilepath() {
+		return filePath;
 	}
 	
 }
