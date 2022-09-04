@@ -25,6 +25,7 @@ export let userLogin = () => {
         } else if (comp_Id === "-1" || comp_Id === null) {
           if (beforeLogin(true)) {
             let CID = window.prompt("Please enter Computer Id");
+<<<<<<< System-Allocation
             if (CID !== sessionStorage.getItem("CID") && CID !== null) {
               window.alert(
                 CID +
@@ -101,6 +102,72 @@ export let firstTime = () => {
             U.User["Computer Id"],
             sessionStorage.getItem("CID")
           );
+=======
+            UserController.login(CID);
+          } else {
+            window.alert(
+              "System already in use by " + localStorage.getItem(U.User.Id)
+            );
+          }
+        } else if (comp_Id !== "-1") {
+          if (beforeLogin(false)) UserController.login(comp_Id);
+          else window.alert("Cannot login to different system");
+        }
+      } else {
+        UserController.View.login(sessionStorage.getItem("Username"));
+      }
+    });
+};
+
+export let getAllUsers = () => {
+  U.gEBI("getAllUsers").addEventListener("click", () => {
+    UserController.getAll();
+    updateShift();
+    updateSystemID();
+  });
+};
+
+export let userLogout = () => {
+  U.gEBI("userLogout").addEventListener("click", () => UserController.logout());
+};
+
+export let getUser = () => {
+  U.gEBI("getUser").addEventListener("click", () => {
+    UserController.get();
+  });
+};
+
+export let regUser = () => {
+  U.gEBI("regUser").addEventListener("click", () => {
+    window.open("../HTML/User-Reg.html", "_blank");
+  });
+};
+
+let keypress = false;
+let comp_Id = null;
+
+export let firstTime = () => {
+  if (U.gEBI(U.User.Password) !== null) {
+    U.gEBI(U.User.Email).addEventListener("keyup", () => {
+      keypress = false;
+      sessionStorage.removeItem(U.System.Id);
+      sessionStorage.removeItem("Username");
+      sessionStorage.removeItem("Available");
+    });
+
+    U.gEBI(U.User.Password).addEventListener("keyup", () => {
+      if (!keypress) {
+        keypress = true;
+        UserController.firstLogin();
+
+        window.alert(
+          "Your allocated system is " + sessionStorage.getItem("CID")
+        );
+        sessionStorage.setItem(
+          U.User["Computer Id"],
+          sessionStorage.getItem("CID")
+        );
+>>>>>>> eee6ebf Updated User.js
         comp_Id = sessionStorage.getItem(U.System.Id);
       }
     });
